@@ -1,0 +1,265 @@
+.tabs-container {
+  .tab {
+    display: none;
+    &.is-active {
+      display: block;
+    }
+  }
+}
+
+%tab-selector-list {
+  @include list-reset;
+  > li {
+    float: left;
+    margin-right: rem($spacing-s/2);
+    @include font-size(19); // Main tab font size
+    line-height: rem(19);
+    font-weight: $font-bold;
+    color: $lightgrey;
+    display: block;
+    text-align: center;
+    border-radius: $radius $radius 0 0;
+    background: $darkgrey;
+    // position: relative;
+    cursor: pointer;
+    transition: all .25s ease-out;
+    a {
+      color: $white;
+    }
+    &.active, &.active a, &.active:hover {
+      background: $white;
+      color: $grey;
+    }
+    &:hover {
+      background: lighten($darkgrey, 5%);
+    }
+  }
+}
+
+//  Tab Selector Nav Items
+.tab-selector {
+  // position: absolute;
+  // display: block;
+  // width: 100%;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  max-width: 1140px;
+  &.search {
+    // top: rem(-71);
+  }
+  &.property {
+    // top: rem(-94);
+  }
+  > ul {
+    @include list-reset;
+    position: relative;
+    > li {
+//      background: transparentize($darkgrey, 0.1);
+      background: #bfbfbf;
+      // background: rgba(54, 54, 54, 0.9);
+      border-radius: $radius $radius 0 0;
+      color: $lightgrey;
+      font-weight: $font-medium;
+      float: left;
+      @include font-size(19); // Main tab font size
+      line-height: rem(19);
+      margin-right: rem($spacing-s/2);
+      text-align: center;
+      transition: $transition-fast;
+      a {
+//        color: $white;
+        color: #282828;
+        display: block;
+        padding: .65em 1em;
+        &.active {
+          background: $white;
+          color: $brandcolor;
+          border-radius: $radius $radius 0 0;
+          span {
+            color: darken($white, 50%);
+          }
+        }
+        span {
+          display: block;
+          font-weight: $font-regular;
+          margin-top: rem(4);
+          font-size: 70%;
+//          color: darken($white, 20%); // Main tab sub font size
+          color: #636363;
+        }
+      }
+      &:hover {
+        background: transparentize($darkgrey, 0);
+      }
+    }
+    &:after {
+      clear: both;
+      content: "";
+      display: table;
+    }
+  }
+}
+
+.tab-content {
+  margin-top: 1rem;
+  // padding-top: 3.5rem;
+}
+
+// Tabs in property > general
+.tab-selector2 ul li {
+  cursor: pointer;
+  border-radius: $radius;
+  @include font-size(15); // Main tab font size
+  font-weight: $font-regular;
+  line-height: rem(15);
+  margin-bottom: rem(10);
+  a {
+    padding: .65em;
+  }
+  &.active {
+    background: $brandcolor-darker;
+  }
+}
+
+.tab-selector3 {
+  width: 100%;
+  position: absolute;
+  left: rem($spacing-m);
+  top: rem(-82);
+  > ol, > ul {
+    @extend %tab-selector-list;
+  }
+  > ol {
+    > li {
+      padding: rem(14) rem($spacing-s*1.25);
+      &:hover, &.active {
+        color: $grey;
+        background: $white;
+        .close:before {
+          color: $grey;
+        }
+      }
+    }
+  }
+  li {
+    &:hover, &.active {
+      label {
+        color: $brandcolor;
+      }
+    }
+  }
+  strong, label {
+    display: block;
+    font-size: 75%;
+    color: $white;
+  }
+}
+
+//  Tab selector inline
+//  This selector is used within .main-content and actions within him open another page template (i.e. search results)
+//  Tab selector
+.tab-selector-inline {
+  position: relative;
+  width: 100%;
+  ul {
+    @include list-reset;
+    // border-bottom: 5px solid $bordercolor;
+    @include clearfix;
+  }
+  li {
+    float: left;
+    margin-right: rem($spacing-s);
+    @include font-size(22);
+    font-weight: $font-regular;
+    color: lighten($brandcolor, 20%);
+    text-align: center;
+    padding: rem($spacing-s/1.5) rem($spacing-s);
+    position: relative;
+    cursor: pointer;
+    border-bottom: 5px solid $bordercolor;
+    margin-bottom: rem(-5);
+    transition: $transition-fast;
+    &:hover {
+      color: $white;
+      border-bottom: 5px solid $darkgrey;
+    }
+    &.active {
+      color: $brandcolor;
+      border-bottom: 5px solid $brandcolor;
+      @at-root .image-tabs#{&} {
+        color: $white;
+        border-bottom: 5px solid $white;
+      }
+    }
+    @at-root .image-tabs#{&} {
+      font-size: rem(14);
+      // font-weight: bold;
+      margin-right: rem(16);
+    }
+    @at-root .gallery-tabs#{&} {
+      font-size: rem(9.5);
+      font-weight: bold;
+    }
+    @at-root .conc#{&} {
+      &:hover {
+        color: $brandcolor;
+      }
+    }
+    @at-root .calc#{&} {
+/*      padding: rem($spacing-s) / 1.1 0;*/
+      padding-bottom: rem($spacing-s) / 3;
+      border-bottom: 1px solid rgba($bordercolor, 0.5);
+      margin-right: rem($spacing-m);
+      &.active {
+/*        color: $white; */
+      }
+    }
+    @at-root .widget.gallery .gallery-tabs#{&} {
+      width: calc(33% - rem(4));
+      margin-right: rem(4);
+      &:hover {
+        color: $brandcolor;
+      }
+    }
+  }
+}
+
+.tabs_nj {
+  overflow: hidden;
+  ul {
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    display: block;
+    .labels:after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+    label {
+      display: block;
+      cursor: pointer;
+    }
+  }
+  .tab-content {
+    display: none;
+  }
+  input[type=radio] {
+    display: none;
+  }
+  [id^=tab]:checked ~ div[id^=tab-content] {
+    display: block;
+  }
+  [id^=tab]:checked ~ [id^=label] {
+    background: #08C;
+    color: white;
+  }
+  .content {
+    overflow: hidden;
+  }
+}

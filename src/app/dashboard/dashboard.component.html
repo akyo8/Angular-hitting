@@ -1,0 +1,144 @@
+<!-- Page Title -->
+<div id="page-title">
+  <div class="container">
+    <h1>{{ pageTitle }}</h1>
+  </div>
+</div>
+<!-- /Page Title -->
+
+<!-- Main -->
+<div id="main" class="section-main">
+  <div class="container">
+
+    <!-- Main content -->
+    <div class="main-content" role="main">
+
+      <div class="widget dashboard">
+        <header>
+          <h2>Properties on your watchlist</h2>
+          <div class="actions">
+            <a [routerLink]="['/search']" class="button right">Search</a>
+          </div>
+        </header>
+        <article
+            *ngFor="let property of searchService.watchlistProperties"
+            [ngClass]="{'price-change-positive': true, 'price-change-negative': false, 'is-dimmed': hoveredArticle && searchService.getPropertyId(searchService.getWatchlistProperty(property)) !== hoveredArticle}"
+            (click)="viewProperty(searchService.getWatchlistProperty(property))"
+            (mouseenter)="hoveredArticle = searchService.getPropertyId(searchService.getWatchlistProperty(property))"
+            (mouseleave)="hoveredArticle = null">
+          <header>
+            <h3>{{searchService.getWatchlistProperty(property).address?.line1}}</h3>
+            <p class="meta address">{{searchService.getWatchlistProperty(property).address?.line2}}</p>
+            <img *ngIf="searchService.getWatchlistProperty(property).resources?.photos?.urls?.length > 0"
+                src="{{searchService.getWatchlistProperty(property).resources.photos.urls[0]}}" alt="" />
+            <div class="information">
+              <p class="meta price"><em *ngIf="propertyService.hasListPrice(searchService.getWatchlistProperty(property))">$</em>{{propertyService.getListPrice(searchService.getWatchlistProperty(property))}}</p>
+              <p class="meta price-change" *ngIf="false">???</p>
+            </div>
+            <div class="actions">
+              <a (click)="toggleWatchlistSearchListing(searchService.getWatchlistProperty(property).identifier.bippoId); $event.stopPropagation(); $event.preventDefault()"
+                class="button icon watchlist remove">Remove from watchlist</a>
+              <a class="button icon buy">Buy this property</a>
+            </div>
+          </header>
+          <ol class="additional-information">
+            <li>{{roundDom(searchService.getWatchlistProperty(property).mls?.dom)}} DOM</li>
+            <li>{{roundDom(searchService.getWatchlistProperty(property).mls?.cdom)}} CDOM</li>
+            <li>{{searchService.getWatchlistProperty(property).building?.conditionCode}} {{searchService.getWatchlistProperty(property).building?.conditionValue | number : '.1-1'}}</li>
+            <li>MLS: {{propertyService.getStatus(searchService, searchService.getWatchlistProperty(property))}}</li>
+            <li>{{searchService.getWatchlistProperty(property).building?.size?.bldgSize | number : '1.0-0'}} SQ FT</li>
+            <li *ngIf="searchService.getWatchlistProperty(property).lot?.lotSizeInSQFT">{{searchService.getWatchlistProperty(property).lot.lotSizeInSQFT | number : '1.0-0'}} SQ FT LOT</li>
+            <li>{{searchService.getWatchlistProperty(property).mls?.school?.schoolDistrict}}</li>
+            <li>{{searchService.getWatchlistProperty(property).building?.rooms?.beds}} bed</li>
+            <li>{{searchService.getWatchlistProperty(property).building?.rooms?.bathsTotal}} bath</li>
+            <li>{{propertyService.getGarageSpaces(searchService.getWatchlistProperty(property))}} car</li>
+            <li>ARV $ 205,000</li>
+          </ol>
+        </article>
+      </div>
+
+      <div class="widget dashboard">
+        <header>
+          <h2>Auction properties</h2>
+          <div class="actions">
+            <a href="#" class="button right" style="opacity: .2">Search</a>
+          </div>
+        </header>
+        <article *ngFor="let acm of searchService.auctionMeta" (click)="viewAuctionCounty(acm)"
+            [ngClass]="{'price-change-positive': true, 'price-change-negative': false, 'is-dimmed': hoveredArticle && acm.county !== hoveredArticle}"
+            (mouseenter)="hoveredArticle = acm.county"
+            (mouseleave)="hoveredArticle = null">
+          <header>
+            <h3>{{acm.county}} County</h3>
+            <p class="meta address">{{acm.description}}</p>
+                                       <!-- TODO: remove temporary fallback photo url or make a proper solution for the issue -->
+            <img src="{{acm.photoUrl || 'https://s3.amazonaws.com/badphotos/TX/dallas/69144487-Photo-69144487-0.jpeg'}}" alt="" />
+            <div class="information">
+              <p class="meta price">{{acm.numProperties}} Auction properties</p>
+            </div>
+          </header>
+        </article>
+      </div>
+
+      <div class="widget dashboard">
+        <header>
+          <h2>Interesting new properties</h2>
+          <div class="actions">
+            <a [routerLink]="['/search']" class="button right">Search</a>
+          </div>
+        </header>
+        <article
+            *ngFor="let property of searchService.newProperties"
+            [ngClass]="{'price-change-positive': true, 'price-change-negative': false, 'is-dimmed': hoveredArticle && property.identifier?.bippoId !== hoveredArticle}"
+            (click)="viewProperty(property)"
+            (mouseenter)="hoveredArticle = property.identifier?.bippoId"
+            (mouseleave)="hoveredArticle = null">
+          <header>
+            <h3>{{property.address?.line1}}</h3>
+            <p class="meta address">{{property.address?.line2}}</p>
+            <img *ngIf="property.resources?.photos?.urls?.length > 0"
+                src="{{property.resources.photos.urls[0]}}" alt="" />
+            <div class="information">
+              <p class="meta price"><em *ngIf="propertyService.hasListPrice(property)">$</em>{{propertyService.getListPrice(property)}}</p>
+              <p class="meta price-change" *ngIf="false">???</p>
+            </div>
+            <div class="actions">
+              <a (click)="toggleWatchlistSearchListing(property); $event.stopPropagation(); $event.preventDefault()"
+                class="button right icon watchlist"
+                [ngClass]="{remove: searchService.inWatchlist(property.identifier.bippoId), add: !searchService.inWatchlist(property.identifier.bippoId)}"><span
+                    *ngIf="searchService.inWatchlist(property.identifier.bippoId)">Remove from watchlist</span><span
+                    *ngIf="!searchService.inWatchlist(property.identifier.bippoId)">Add to watchlist</span></a>
+              <a class="button icon buy">Buy this property</a>
+            </div>
+          </header>
+          <ol class="additional-information">
+            <li>{{roundDom(property.mls?.dom)}} DOM</li>
+            <li>{{roundDom(property.mls?.cdom)}} CDOM</li>
+            <li>{{property.building?.conditionCode}} {{property.building?.conditionValue | number : '.1-1'}}</li>
+            <li>MLS: {{propertyService.getStatus(searchService, property)}}</li>
+            <li>{{property.building?.size?.bldgSize | number : '1.0-0'}} SQ FT</li>
+            <li *ngIf="property.lot?.lotSizeInSQFT">{{property.lot.lotSizeInSQFT | number : '1.0-0'}} SQ FT LOT</li>
+            <li>{{property.mls?.school?.schoolDistrict}}</li>
+            <li>{{property.building?.rooms?.beds}} bed</li>
+            <li>{{property.building?.rooms?.bathsTotal}} bath</li>
+            <li>{{propertyService.getGarageSpaces(property)}} car</li>
+            <li>ARV $ 205,000</li>
+          </ol>
+        </article>
+      </div>
+
+
+
+    </div>
+    <!-- /Main content -->
+
+    <!-- Secondary content -->
+    <div class="secondary-content" role="complementary">
+
+
+    </div>
+    <!-- /Secondary content -->
+
+  </div>
+</div>
+<!-- /Main -->

@@ -1,0 +1,308 @@
+// Accordions original
+//  Accordions
+.accordion-styled .panel-heading > h4 {
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  font-weight: initial;
+}
+
+ngb-accordion {
+  display: block;
+}
+
+.accordion {
+  &:focus, > a:focus {
+    outline: none;
+  }
+  .accordion-styled & {
+    border: 1px solid $bordercolor;
+    box-shadow: $box-shadow-minimal;
+    background: $darkwhite;
+    margin-bottom: rem($spacing-s);
+  }
+  &.active {
+    .user-content {
+      // visibility: visible;
+      opacity: 1;
+      .accordion-styled & {
+        // padding-top: rem($spacing-s);
+        // padding-bottom: rem($spacing-s);
+      }
+      max-height: 100%;
+      .revisions & {
+        padding-top: 0;
+      }
+    }
+    .accordion-styled & header:before {
+      background: $brandcolor;
+    }
+    header .action-button:before {
+      @extend .icon-arrow-up-light;
+    }
+  }
+  > a {
+    > header {
+      .accordion-styled & {
+        padding: rem($spacing-s/1.5) rem($spacing-m);
+        // border-bottom: 1px solid $bordercolor;
+        background: $white;
+      }
+      position: relative;
+      cursor: pointer;
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 5px;
+        .accordion-styled & {
+          background: $bordercolor;
+          // transition: $transition-fast;
+        }
+        .calculator & {
+          // @include linear-gradient($lightgrey, darken($lightgrey, 10%));
+          // @include border-left(rem(5), transparent-color($black, .30));
+        }
+      }
+    }
+    h2 {
+      margin: 0;
+      @extend %title;
+    }
+    .action-button {
+      @extend .icon;
+      @include icon-remove-text;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: rem(60);
+      border: 0;
+      border-left: 1px solid $bordercolor;
+      text-align: center;
+      &:before {
+        @extend .icon-arrow-down-light;
+        @include font-size(24);
+        color: $darkgrey;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        @include transform(translate(-50%, -50%));
+      }
+    }
+  }
+  //  Content
+  .user-content {
+    .accordion-styled & {
+      // padding: rem($spacing-s) rem($spacing-m);
+      padding: 0;
+    }
+    .no-padding {
+      padding: 0;
+    }
+    .padding {
+      padding: rem($spacing-s) rem($spacing-m);
+    }
+    opacity: 0;
+    position: relative;
+    max-height: 0;
+    //transition: $transition-fast;
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      // width: 5px;
+      background: $bordercolor;
+      .revisions & {
+        width: 0;
+      }
+    }
+  }
+  // New Profile Accordions
+  &.profile-accordion {
+    background-image: linear-gradient($brandcolor, $brandcolor-darker);
+    color: $color-text;
+    border-radius: $radius-large;
+    margin: 3% 0;
+    padding: rem(25);
+    padding-top: 1px;
+    width: 100%;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, .1);
+    height: 100%;
+    transition: $transition-fast;
+    &.grey {
+      background-image: linear-gradient(#999, darken(#999, 25%));
+    }
+    &.blue {
+      background-image: linear-gradient(#77acba, darken(#77acba, 25%));
+    }
+    &.green {
+      background-image: linear-gradient(#84c28d, darken(#84c28d, 25%));
+    }
+    .heading {
+      @include font-size(22);
+      font-weight: $font-bold;
+      color: $white;
+      padding: rem($spacing-s) 0;
+      line-height: 1;
+      text-shadow: $text-shadow-light;
+      span {
+        margin-right: rem(5);
+        @include font-size(16.5);
+        font-weight: $font-regular;
+        color: transparentize($white, .2);
+        &:before {
+          content: " | ";
+          margin-right: rem(5);
+          display: inline-block;
+        }
+      }
+      span.icon {
+        @include font-size(22);
+        color: $white;
+        font-weight: $font-regular;
+        float: right;
+        margin: 0;
+        &:before {
+          content: none;
+        }
+      }
+    }
+    .user-content {
+      @include font-size(16);
+      background: $white;
+      display: block;
+      font-weight: $font-regular;
+      visibility: visible;
+      height: 0;
+      transition: $transition;
+      &:before {
+        background: none;
+      }
+    }
+    .accordion {
+      background-color: #fff;
+      @include font-size(17);
+      padding: 0;
+      margin: 0;
+      border-bottom: 1px solid rgba(0, 0, 0, .1);
+      transition: $transition-fast;
+      height: auto;
+      &:last-child {
+        border-bottom: 0;
+      }
+      .title {
+        color: lighten($color-text, 10%);
+        font-weight: $font-medium;
+        padding: 1rem;
+        cursor: pointer;
+        border-bottom: 1px solid transparent;
+        height: 100%;
+      }
+      &:hover {
+        background-color: $darkwhite;
+      }
+      &.active {
+        background-color: $darkwhite;
+        span.icon {
+          transform: rotate(180deg);
+        }
+        .title {
+          border-bottom: 1px solid rgba(0, 0, 0, .1);
+        }
+        .user-content {
+          padding: 1.25rem;
+          height: auto;
+          max-height: 100%;
+          &:before {}
+        }
+      }
+      span.type {
+        margin-right: .75em;
+        color: darken($darkwhite, 25%);
+        font-weight: bold;
+      }
+      span.icon {
+        @extend .icon-arrow-down-light;
+        transition: all .25s ease;
+        line-height: unset;
+        float: right;
+        color: darken($darkwhite, 25%);
+      }
+    }
+  }
+  // End New Profile Accordions
+}
+
+.collapsed-accordions {
+  width: 70% !important;
+}
+
+.expanded-accordions {
+  width: 100% !important;
+}
+
+.paper, .paper-nested>div, .paper-nested2>div>div {
+    font: normal 12px/1.5 "Lucida Grande", arial, sans-serif;
+    padding: 27px 5px 4px 42px !important;
+    position: relative;
+    color: #444;
+    line-height: 20px;
+    border: 1px solid #d2d2d2;
+    background: #FAF2AD;
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #FAF2AD)) 0 4px;
+    background: -webkit-linear-gradient(#d9eaf3 0%, #FAF2AD 8%) 0 4px;
+    background: -moz-linear-gradient(#d9eaf3 0%, #FAF2AD 8%) 0 4px;
+    background: -ms-linear-gradient(#d9eaf3 0%, #FAF2AD 8%) 0 4px;
+    background: -o-linear-gradient(#d9eaf3 0%, #FAF2AD 8%) 0 4px;
+    background: linear-gradient(#d9eaf3 0%, #FAF2AD 8%) 0 4px;
+    -webkit-background-size: 100% 20px;
+    -moz-background-size: 100% 20px;
+    -ms-background-size: 100% 20px;
+    -o-background-size: 100% 20px;
+    background-size: 100% 20px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+}
+.paper::before, .paper-nested>div::before, .paper-nested2>div>div::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    top: 0;
+    left: 30px;
+    bottom: 0;
+    border: 1px solid;
+    border-color: transparent rgba(255, 0, 0, 0.22);
+}
+.paper .paper-head, .paper-nested>div .paper-head, .paper-nested2>div>div .paper-head {
+    background-color: #FAF2AD;
+    min-height: 44px;
+    margin-left: -42px;
+    margin-top: -27px;
+    width: 794px;
+}
+
+.paper h1, .paper h2, .paper-nested h1, .paper-nested h2, .paper-nested2 h1, .paper-nested2 h2 {
+  font-size: 16px;
+  line-height: 16px;
+  margin: 0 0 4px;
+}
+.paper h3, .paper h4, .paper h5, .paper-nested h3, .paper-nested h4, .paper-nested h5, .paper-nested2 h3, .paper-nested2 h4, .paper-nested2 h5 {
+  font-size: 14px;
+  line-height: 16px;
+  margin: 0 0 4px;
+}
+.paper h4, .paper h5, .paper-nested h4, .paper-nested h5, .paper-nested2 h4, .paper-nested2 h5 {
+  font-weight: normal;
+}
+.paper p, .paper-nested>div p, .paper-nested2>div>div p {
+  margin: 0 0 20px;
+}
+.paper ul, .paper-nested>div ul, .paper-nested2>div>div ul {
+  margin: 0 0 20px;
+}
+

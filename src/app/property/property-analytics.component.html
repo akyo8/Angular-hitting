@@ -1,0 +1,7 @@
+<div class="padding">
+  <div [ngClass]="{'loading-image': !graphPrices && !graphCounts}">
+    <div style="display: block" [ngClass]="{'display-none': !graphPrices && !graphCounts}">
+      <canvas id="canvas-analytics"></canvas>
+    </div>
+  </div>
+</div>

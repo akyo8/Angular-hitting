@@ -1,0 +1,17 @@
+<div class="completer-dropdown">
+    <div *ngIf="searching && displaySearching" class="completer-searching">{{textSearching}}</div>
+    <div *ngIf="!searching && (!results || results.length == 0)" class="completer-no-results">{{textNoResults}}</div>
+    <div class="completer-row" *ngFor="let result of results; let i=index" (mouseenter)="hoverRow(i)" (click)="onClick(result)" [ngClass]="{'completer-selected-row': i == currentIndex}">
+        <div *ngIf="result.image && result.image != ''" class="completer-image-holder">
+            <img *ngIf="result.image && result.image != ''" src="{{result.image}}" class="completer-image" />
+            <div *ngIf="!result.image && result.image != ''" class="completer-image-default"></div>
+        </div>
+        <completer-list-item class="completer-title" [text]="result.title" [matchClass]="matchClass" [searchStr]="searchStr" [type]="'title'"></completer-list-item>
+        <completer-list-item *ngIf="result.description && result.description != ''" class="completer-description"
+            [text]="result.description" [matchClass]="matchClass" [searchStr]="searchStr" [type]="'description'">
+        </completer-list-item>
+
+        <!--<div ng-if="matchClass && result.description && result.description != \'\'" class="angucomplete-description" ng-bind-html="result.description"></div>-->
+        <!--<div *ngIf="!matchClass && result.description && result.description != ''" class="completer-description">{{result.description}}</div>-->
+    </div>
+</div>

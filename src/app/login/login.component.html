@@ -1,0 +1,52 @@
+<!-- Main -->
+<div id="main" class="section-main">
+  <div class="container">
+    <!-- Main content -->
+    <div class="main-content" role="main">
+      <div class="widget login">
+        <header>
+          <h2>Login</h2>
+          <div class="site-branding">
+            <div class="site-logo">
+              <a [routerLink]="['/dashboard']" title="HomeInvestorTool.com">HomeInvestorTool.com</a>
+            </div>
+          </div>
+        </header>
+        <div class="form">
+          <form #f="ngForm" (ngSubmit)="onSubmit()">
+            <div class="message error" [hidden]="!showError">
+              <p>Your login is incorrect. Please try again.</p>
+            </div>
+            <div class="message error" [hidden]="!showUnconfirmedError">
+              <p>You have not yet confirmed your account.</p>
+              <button type="button" (click)="resendConfirm()">Resend Confirmation</button>
+            </div>
+            <div class="message success" [hidden]="!showUnconfirmedMessage">
+              <p>Your confirmation email has been resent.</p>
+            </div>
+            <fieldset>
+              <div class="group">
+                <label for="username">Username</label>
+                <input type="email" [(ngModel)]="authService.login.username" name="username" placeholder="Username" required />
+              </div>
+              <div class="group">
+                <label for="password">Password</label>
+                <input type="password" [(ngModel)]="authService.login.password" name="password" placeholder="Password" required />
+              </div>
+              <div class="group button-group">
+                <input type="submit" class="button large" value="Login" [disabled]="!f.valid">
+              </div>
+            </fieldset>
+          </form>
+          <p>
+            <a [routerLink]="['/register']">Register</a>
+            <br>
+            <a [routerLink]="['/lostpassword']">Lost your password?</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- /Main content -->
+  </div>
+</div>
+<!-- /Main -->

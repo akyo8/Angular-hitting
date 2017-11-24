@@ -1,0 +1,2423 @@
+<!-- Main -->
+<div id="main" class="section-main">
+  <div class="container">
+    <!-- Main content -->
+    <div class="main-content user-content" role="main" *ngIf="profileTab == 'profile'">
+      <div class="form labels-left">
+        <form #f="ngForm" (ngSubmit)="onSubmit()">
+          <fieldset>
+            <h2><span>Login information</span></h2>
+            <div class="group ">
+              <label for="email">Email</label>
+              <input type="text" name="email" placeholder="Email address" [(ngModel)]="authService.profile.email" />
+            </div>
+            <div class="group ">
+              <label for="password">Password</label>
+              <input type="password" name="password" [(ngModel)]="authService.profile.password" required #password="ngModel" />
+            </div>
+            <div class="group ">
+              <label for="confirm_password">Confirm Password</label>
+              <input type="password" name="confirm_password" [(ngModel)]="authService.profile.confirmpassword" required validateEqual="password" #confirmPassword="ngModel" />
+            </div>
+            <div class="group button-group ">
+              <input type="submit" class="button large" name="simple_search_submit" value="Save Changes" [disabled]="!f.valid">
+            </div>
+          </fieldset>
+          <fieldset>
+            <h2><span>Personal information</span></h2>
+            <div class="group ">
+              <label for="firstname">First Name</label>
+              <input type="text" name="firstname" placeholder="First Name" [(ngModel)]="authService.profile.firstname" />
+            </div>
+            <div class="group ">
+              <label for="lastname">Last Name</label>
+              <input type="text" name="lastname" placeholder="Last Name" [(ngModel)]="authService.profile.lastname" />
+            </div>
+            <div class="group ">
+              <label for="screenname">Screen Name</label>
+              <input type="text" name="screenname" placeholder="Screen Name" [(ngModel)]="authService.profile.screenname" />
+            </div>
+            <div class="group ">
+              <label for="cellphone">Cell phone</label>
+              <input type="text" name="cellphone" placeholder="Cell phone" [(ngModel)]="authService.profile.cellphone" />
+            </div>
+            <div class="group ">
+              <label for="officephone">Office phone</label>
+              <input type="text" name="officephone" placeholder="Office phone" [(ngModel)]="authService.profile.officephone" />
+            </div>
+            <div class="group ">
+              <label for="address">Address</label>
+              <input type="text" name="address" placeholder="Address" [(ngModel)]="authService.profile.address" />
+            </div>
+            <div class="group ">
+              <label for="state">State</label>
+              <select name="state" placeholder="State" [(ngModel)]="authService.profile.state" required>
+                <option *ngFor="let state of authService.states" [value]="state">{{state}}</option>
+              </select>
+            </div>
+            <div class="group ">
+              <label for="zip">Zip</label>
+              <input type="text" name="zip" placeholder="Zip" [(ngModel)]="authService.profile.zip" />
+            </div>
+            <div class="group button-group ">
+              <input type="submit" class="button large" name="simple_search_submit" value="Save Changes" [disabled]="!f.valid">
+            </div>
+          </fieldset>
+          <!-- TODO support licenses section -->
+          <fieldset *ngIf="false && displayLicenses">
+            <div class="selection three-columns">
+              <div class="note">
+                <p>HIT licenses sync between two devices
+                  <br /><em>Choose which two devices you want to use</em></p>
+              </div>
+              <a (click)="authService.toggleLicense('desktop')" [ngClass]="{selected: authService.hasLicense('desktop')}">Desktop<br />Office</a>
+              <a (click)="authService.toggleLicense('desktop-homeoffice')" [ngClass]="{selected: authService.hasLicense('desktop-homeoffice')}">Desktop<br />Home Office</a>
+              <a (click)="authService.toggleLicense('mobile')" [ngClass]="{selected: authService.hasLicense('mobile')}">iPad or<br>Android pad</a>
+              <p class="description">Once registered then as you make changes or look at properties both devices are updated simultaneously. You can only be on one device at a time. HIT uses smartphones to contact you about changes in your offer statuses, watch list and new properties that meet your criteria only.</p>
+            </div>
+          </fieldset>
+          <!-- TODO support notif pref section -->
+          <fieldset *ngIf="false">
+            <h2><span>Notification Preferences</span></h2>
+            <div class="group radio-group">
+              <label>What is your preferred form of contact?</label>
+              <div class="group radio float-right">
+                <span class="hit-radio">
+                            <input type="radio" [(ngModel)]="authService.profile.contact" id="radio1" name="preferred-contact" id="contact-email" value="contact-email">
+                            <label for="contact-email">Email</label>
+                        </span>
+                <span class="hit-radio">
+                            <input type="radio" [(ngModel)]="authService.profile.contact" name="preferred-contact" id="contact-phone-text" value="contact-phone-text">
+                            <label for="contact-phone-text">Phone (Text)</label>
+                        </span>
+                <span class="hit-radio">
+                            <input type="radio" [(ngModel)]="authService.profile.contact" name="preferred-contact" id="contact-phone" value="contact-phone">
+                            <label for="contact-phone">Phone</label>
+                        </span>
+              </div>
+            </div>
+            <hr>
+            <div class="group radio-group">
+              <label>Do you prefer instant or daily updates for properties on you watch list?</label>
+              <div class="group radio float-right">
+                <span class="hit-radio">
+                            <input type="radio" [(ngModel)]="authService.profile.updates" name="updates" id="instant" value="instant">
+                            <label for="instant">Email</label>
+                        </span>
+                <span class="hit-radio">
+                            <input type="radio" [(ngModel)]="authService.profile.updates" name="updates" id="daily" value="daily">
+                            <label for="daily">Daily</label>
+                        </span>
+              </div>
+            </div>
+            <hr>
+          </fieldset>
+          <!-- FIXME simple_search_submit? what is this even supposed to be? -->
+          <fieldset *ngIf="false">
+            <div class="group button-group">
+              <input type="submit" class="button large" name="simple_search_submit" value="Save Changes" [disabled]="!f.valid">
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    <div class="main-content user-content" role="main" *ngIf="profileTab == 'settings'">
+      <!-- Costs Accordions -->
+      <div class="accordion profile-accordion">
+        <div class="heading">Some Costs <span>Additional Description</span> <span class="icon">&#9783;</span></div>
+        <ngb-accordion class="accordion" [closeOthers]="true">
+          <div ngbPanel>
+            <template ngbPanelTitle>
+              <div class="title"><span class="type">&#x2692;</span>Repair Costs<span class="icon"></span></div>
+            </template>
+            <template ngbPanelContent>
+              <div class="user-content">
+
+                <table class="table-user">
+                  <tr>
+                    <th class="main">Purchase Closing Cost Presets </th>
+                    <th>Cash</th>
+                    <th>Finance</th>
+                  </tr>
+                  <tr>
+                    <td>Title Policy</td>
+                  <td>
+                    <form>
+                      <select name="dropdown_1">
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                        <option value="4">Option 4</option>
+                      </select>
+                    </form>
+                  </td>
+
+                  <td>
+                    <form>
+                      <select name="dropdown_2">
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                        <option value="4">Option 4</option>
+                      </select>
+                    </form>
+                  </td>
+
+                  </tr>
+                  <tr>
+                    <td>Title Company Fees</td>
+                    <td><form><input type="text" name="value 1" placeholder="$"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+
+                  <tr>
+                    <td>Title Company Escrow fees</td>
+                    <td><form><input type="text" name="value 1" placeholder="$"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+
+                  <tr>
+                    <td>Survey</td>
+                    <td><form><input type="text" name="value 1" placeholder="$"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+
+                  <tr>
+                    <td>Loan Origination</td>
+                    <td><form><input type="text" name="value 1" placeholder="" disabled="disabled"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+
+                  <tr>
+                    <td>Down payment</td>
+                    <td><form><input type="text" name="value 1" placeholder="$"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+                </table>
+
+              </div>
+            </template>
+          </div>
+          <div ngbPanel>
+            <template ngbPanelTitle>
+              <div class="title"><span class="type">&#x2693;</span>Some Costs<span class="icon"></span></div>
+            </template>
+            <template ngbPanelContent>
+              <div class="user-content">
+
+                <table class="table-user">
+                  <tr>
+                    <th class="main">Purchase Closing Cost Presets </th>
+                    <th>Cash</th>
+                    <th>Finance</th>
+                  </tr>
+                  <tr>
+                    <td>Title Policy</td>
+                  <td>
+                    <form>
+                      <select name="dropdown_1">
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                        <option value="4">Option 4</option>
+                      </select>
+                    </form>
+                  </td>
+
+                  <td>
+                    <form>
+                      <select name="dropdown_2">
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                        <option value="4">Option 4</option>
+                      </select>
+                    </form>
+                  </td>
+
+                  </tr>
+                  <tr>
+                    <td>Title Company Fees</td>
+                    <td><form><input type="text" name="value 1" placeholder="$"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+
+                  <tr>
+                    <td>Title Company Escrow fees</td>
+                    <td><form><input type="text" name="value 1" placeholder="$"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+
+                  <tr>
+                    <td>Survey</td>
+                    <td><form><input type="text" name="value 1" placeholder="$"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+
+                  <tr>
+                    <td>Loan Origination</td>
+                    <td><form><input type="text" name="value 1" placeholder="" disabled="disabled"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+
+                  <tr>
+                    <td>Down payment</td>
+                    <td><form><input type="text" name="value 1" placeholder="$"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+                </table>
+
+              </div>
+            </template>
+          </div>
+          <div ngbPanel>
+            <template ngbPanelTitle>
+              <div class="title"><span class="type">&#x2692;</span>Other Costs<span class="icon"></span></div>
+            </template>
+            <template ngbPanelContent>
+              <div class="user-content">
+
+                <table class="table-user">
+                  <tr>
+                    <th class="main">Purchase Closing Cost Presets </th>
+                    <th>Cash</th>
+                    <th>Finance</th>
+                  </tr>
+                  <tr>
+                    <td>Title Policy</td>
+                  <td>
+                    <form>
+                      <select name="dropdown_1">
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                        <option value="4">Option 4</option>
+                      </select>
+                    </form>
+                  </td>
+
+                  <td>
+                    <form>
+                      <select name="dropdown_2">
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                        <option value="4">Option 4</option>
+                      </select>
+                    </form>
+                  </td>
+
+                  </tr>
+                  <tr>
+                    <td>Title Company Fees</td>
+                    <td><form><input type="text" name="value 1" placeholder="$"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+
+                  <tr>
+                    <td>Title Company Escrow fees</td>
+                    <td><form><input type="text" name="value 1" placeholder="$"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+
+                  <tr>
+                    <td>Survey</td>
+                    <td><form><input type="text" name="value 1" placeholder="$"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+
+                  <tr>
+                    <td>Loan Origination</td>
+                    <td><form><input type="text" name="value 1" placeholder="" disabled="disabled"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+
+                  <tr>
+                    <td>Down payment</td>
+                    <td><form><input type="text" name="value 1" placeholder="$"></form></td>
+                    <td><form><input type="text" name="value 2" placeholder="$"></form></td>
+                  </tr>
+                </table>
+
+              </div>
+            </template>
+          </div>
+        </ngb-accordion>
+      </div>
+      <!-- /Costs Accordions -->
+      <!-- Grey Costs  Accordions -->
+      <div class="accordion profile-accordion grey">
+        <div class="heading">Extra Costs <span>Other Description</span> <span class="icon">&#10026;</span></div>
+        <ngb-accordion class="accordion" [closeOthers]="true">
+          <div ngbPanel>
+            <template ngbPanelTitle>
+              <div class="title"><span class="type">&#x2692;</span>Extra Costs<span class="icon"></span></div>
+            </template>
+            <template ngbPanelContent>
+              <div class="user-content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur culpa quisquam, minima veritatis dicta. Consequuntur.</div>
+            </template>
+          </div>
+          <div ngbPanel>
+            <template ngbPanelTitle>
+              <div class="title"><span class="type">&#x2693;</span>More Costs<span class="icon"></span></div>
+            </template>
+            <template ngbPanelContent>
+              <div class="user-content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur culpa quisquam, minima veritatis dicta. Consequuntur.</div>
+            </template>
+          </div>
+          <div ngbPanel>
+            <template ngbPanelTitle>
+              <div class="title"><span class="type">&#x2692;</span>Other Costs<span class="icon"></span></div>
+            </template>
+            <template ngbPanelContent>
+              <div class="user-content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur culpa quisquam, minima veritatis dicta. Consequuntur.</div>
+            </template>
+          </div>
+        </ngb-accordion>
+      </div>
+      <!-- /Grey Costs  Accordions -->
+    </div>
+    <div class="main-content user-content" role="main" *ngIf="profileTab == 'preferences'">
+      TODO
+    </div>
+    <div class="main-content user-content" role="main" *ngIf="profileTab == 'account'">
+      TODO
+    </div>
+    <div class="main-content user-content" role="main" *ngIf="profileTab == 'contract'">
+		<form role="form">
+			<section class="section">
+				<div class="heading">
+					<h2>Subscriber</h2>
+					<div class="left_line"></div>
+					<div class="right_line"></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<label for="firstname">FIRST NAME*</label>
+					    <input type="text" name="subscriberFirstname"
+					        [(ngModel)]="authService.contract.subscriberFirstname"
+					        class="form-control" placeholder="First Name" />
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<label for="lastname">Last name*</label>
+					    <input type="text" name="subscriberLastname"
+					        [(ngModel)]="authService.contract.subscriberLastname"
+					        class="form-control" placeholder="First Name" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<label for="Companyname">Company name</label>
+					    <input type="text" name="subscriberCompanyname"
+					        [(ngModel)]="authService.contract.subscriberCompanyname"
+					        class="form-control" placeholder="Company Name" />
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<label for="address">Address</label>
+					    <input type="text" name="subscriberAddress"
+					        [(ngModel)]="authService.contract.subscriberAddress"
+					        class="form-control" placeholder="Address" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<label for="city">City</label>
+					    <input type="text" name="subscriberCity"
+					        [(ngModel)]="authService.contract.subscriberCity"
+					        class="form-control" placeholder="City" />
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="st">st</label>
+						<input type="text" class="form-control" placeholder="st" id="st">
+      			        <select name="subscriberState" placeholder="State"
+      			            [(ngModel)]="authService.contract.subscriberState" required>
+      			            <option *ngFor="let state of authService.states" [value]="state">{{state}}</option>
+      			        </select>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="zip">Zip</label>
+					    <input type="text" name="subscriberZipcode"
+					        [(ngModel)]="authService.contract.subscriberZipcode"
+					        class="form-control" placeholder="Zip" required pattern="[0-9]{5}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-4 col-md-4 col-sm-4">
+						<label for="cellphone">Cell phone</label>
+						<input type="text" name="subscriberCellphone" class="form-control"
+						    placeholder="Cell phone" [(ngModel)]="authService.contract.subscriberCellphone"
+						    pattern="^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$" >
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-4">
+						<label for="office">Office</label>
+						<input type="text" name="subscriberOfficephone" class="form-control"
+						    placeholder="Office phone" [(ngModel)]="authService.contract.subscriberOfficephone"
+						    pattern="^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$" >
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-4">
+						<label for="othercontactphone">Other contact phone</label>
+						<input type="text" name="subscriberOtherphone" class="form-control"
+						    placeholder="Other contact phone" [(ngModel)]="authService.contract.subscriberOtherphone"
+						    pattern="^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$" >
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<label for="registeremail">Register Email*</label>
+						<input type="email" name="email" class="form-control"
+						    placeholder="Email" [(ngModel)]="authService.contract.email" required />
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<label for="alternativeemail">Alternative Email</label>
+						<input type="email" name="alternativeEmail" class="form-control"
+						    placeholder="Alternative Email" [(ngModel)]="authService.contract.alternativeEmail" />
+					</div>
+				</div>
+			</section>
+			<section class="section">
+				<div class="heading">
+					<h2>Buying Entity</h2>
+					<div class="left_line"></div>
+					<div class="right_line"></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox">
+							<input type="radio" name="purchaseAgency"
+							    [(ngModel)]="authService.contract.purchaseAgency"
+							    value="self" />
+							<label for="c1"><span></span>Personal Name</label>
+						</div>
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						<input type="text" name="personalName" class="form-control"
+						    placeholder="Name as it appears on Driver's License"
+						    [(ngModel)]="authService.contract.personalName" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox">
+							<input type="radio" name="purchaseAgency"
+							    [(ngModel)]="authService.contract.purchaseAgency"
+							    value="couple" />
+							<label for="c2"><span></span>Buy as a married couple</label>
+						</div>
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						<input type="text" name="spouseName" class="form-control"
+						    placeholder="Spouse's name as it appears on Driver's License"
+						    [(ngModel)]="authService.contract.spouseName" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						<input type="email" name="spouseEmail" class="form-control"
+						    placeholder="Spouse's email address" [(ngModel)]="authService.contract.spouseEmail" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-4 col-md-5 col-sm-5">
+						<input type="text" name="spouseCellphone" class="form-control"
+						    placeholder="Spouse's cell phone" [(ngModel)]="authService.contract.spouseCellphone"
+						    pattern="^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$" />
+					</div>
+					<div class="col-lg-5 col-md-4 col-sm-4">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox">
+							<input type="radio" name="purchaseAgency"
+							    [(ngModel)]="authService.contract.purchaseAgency"
+							    value="corporation" />
+							<label for="c3"><span></span>Corporation</label>
+						</div>
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						<input type="text" name="corpName" class="form-control"
+						    placeholder="Name as it appears on checking account"
+						    [(ngModel)]="authService.contract.corpName" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="upload-chapter" class="padding-left"><span></span>Upload Charter</label>
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						<div class="file-list">					
+							<div class="flip">
+							    <div ng2FileDrop
+							        [ngClass]="{'nv-file-over': authService.corpCharterUploaderHover}"
+							        (fileOver)="authService.corpCharterUploaderHover = $event"
+							        [uploader]="authService.corpCharterUploader">
+							        Base drop zone
+							    </div>
+								<input type="file" ng2FileSelect [uploader]="authService.corpCharterUploader" />
+							</div>
+							<div class="col-md-9" style="margin-bottom: 40px">
+                                <h3>Upload queue</h3>
+                                <p>Queue length: {{ authService.corpCharterUploader?.queue?.length }}</p>
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th width="50%">Name</th>
+                                        <th>Size</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of authService.corpCharterUploader.queue">
+                                        <td><strong>{{ item?.file?.name }}</strong></td>
+                                        <td *ngIf="authService.corpCharterUploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                                        <td *ngIf="authService.corpCharterUploader.isHTML5">
+                                            <div class="progress" style="margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                            <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                            <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        </td>
+                                        <td nowrap>
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                                <span class="glyphicon glyphicon-upload"></span> Upload
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-xs"
+                                                    (click)="item.cancel()" [disabled]="!item.isUploading">
+                                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="item.remove()">
+                                                <span class="glyphicon glyphicon-trash"></span> Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <div>
+                                        Queue progress:
+                                        <div class="progress" style="">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': authService.corpCharterUploader.progress + '%' }"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="upload-chapter" class="padding-left"><span></span>Upload Signatory</label>
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						<div class="file-list">
+							<div class="flip">
+							    <div ng2FileDrop
+							        [ngClass]="{'nv-file-over': authService.corpSignatoryUploaderHover}"
+							        (fileOver)="authService.corpSignatoryUploaderHover = $event"
+							        [uploader]="authService.corpSignatoryUploader">
+							        Base drop zone
+							    </div>
+								<input type="file" ng2FileSelect [uploader]="authService.corpSignatoryUploader" />
+							</div>
+							<div class="col-md-9" style="margin-bottom: 40px">
+                                <h3>Upload queue</h3>
+                                <p>Queue length: {{ authService.corpSignatoryUploader?.queue?.length }}</p>
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th width="50%">Name</th>
+                                        <th>Size</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of authService.corpSignatoryUploader.queue">
+                                        <td><strong>{{ item?.file?.name }}</strong></td>
+                                        <td *ngIf="authService.corpSignatoryUploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                                        <td *ngIf="authService.corpSignatoryUploader.isHTML5">
+                                            <div class="progress" style="margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                            <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                            <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        </td>
+                                        <td nowrap>
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                                <span class="glyphicon glyphicon-upload"></span> Upload
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-xs"
+                                                    (click)="item.cancel()" [disabled]="!item.isUploading">
+                                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="item.remove()">
+                                                <span class="glyphicon glyphicon-trash"></span> Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <div>
+                                        Queue progress:
+                                        <div class="progress" style="">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': authService.corpSignatoryUploader.progress + '%' }"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						<input type="text" name="corpSignatoryName" class="form-control"
+						    placeholder="Name as it appears on checking account"
+						    [(ngModel)]="authService.contract.corpSignatoryName" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox">
+							<input type="radio" name="purchaseAgency"
+							    [(ngModel)]="authService.contract.purchaseAgency"
+							    value="llc" />
+							<label for="c4"><span></span>LLC</label>
+						</div>
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						<input type="text" name="llcName" class="form-control"
+						    placeholder="Name as it appears on checking account"
+						    [(ngModel)]="authService.contract.llcName" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="upload-chapter" class="padding-left"><span></span>Upload Formation </label>
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						<div class="file-list">					
+							<div class="flip">
+							    <div ng2FileDrop
+							        [ngClass]="{'nv-file-over': authService.llcFormationUploaderHover}"
+							        (fileOver)="authService.llcFormationUploaderHover = $event"
+							        [uploader]="authService.llcFormationUploader">
+							        Base drop zone
+							    </div>
+								<input type="file" ng2FileSelect [uploader]="authService.llcFormationUploader" />
+							</div>
+							<div class="col-md-9" style="margin-bottom: 40px">
+                                <h3>Upload queue</h3>
+                                <p>Queue length: {{ authService.llcFormationUploader?.queue?.length }}</p>
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th width="50%">Name</th>
+                                        <th>Size</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of authService.llcFormationUploader.queue">
+                                        <td><strong>{{ item?.file?.name }}</strong></td>
+                                        <td *ngIf="authService.llcFormationUploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                                        <td *ngIf="authService.llcFormationUploader.isHTML5">
+                                            <div class="progress" style="margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                            <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                            <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        </td>
+                                        <td nowrap>
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                                <span class="glyphicon glyphicon-upload"></span> Upload
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-xs"
+                                                    (click)="item.cancel()" [disabled]="!item.isUploading">
+                                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="item.remove()">
+                                                <span class="glyphicon glyphicon-trash"></span> Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <div>
+                                        Queue progress:
+                                        <div class="progress" style="">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': authService.llcFormationUploader.progress + '%' }"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="upload-chapter" class="padding-left"><span></span>Upload Signatory</label>
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						<div class="file-list">
+							<div class="flip">
+							    <div ng2FileDrop
+							        [ngClass]="{'nv-file-over': authService.llcSignatoryUploaderHover}"
+							        (fileOver)="authService.llcSignatoryUploaderHover = $event"
+							        [uploader]="authService.llcSignatoryUploader">
+							        Base drop zone
+							    </div>
+								<input type="file" ng2FileSelect [uploader]="authService.llcSignatoryUploader" />
+							</div>
+							<div class="col-md-9" style="margin-bottom: 40px">
+                                <h3>Upload queue</h3>
+                                <p>Queue length: {{ authService.llcSignatoryUploader?.queue?.length }}</p>
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th width="50%">Name</th>
+                                        <th>Size</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of authService.llcSignatoryUploader.queue">
+                                        <td><strong>{{ item?.file?.name }}</strong></td>
+                                        <td *ngIf="authService.llcSignatoryUploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                                        <td *ngIf="authService.llcSignatoryUploader.isHTML5">
+                                            <div class="progress" style="margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                            <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                            <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        </td>
+                                        <td nowrap>
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                                <span class="glyphicon glyphicon-upload"></span> Upload
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-xs"
+                                                    (click)="item.cancel()" [disabled]="!item.isUploading">
+                                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="item.remove()">
+                                                <span class="glyphicon glyphicon-trash"></span> Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <div>
+                                        Queue progress:
+                                        <div class="progress" style="">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': authService.llcSignatoryUploader.progress + '%' }"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox">
+							<input type="radio" name="purchaseAgency"
+							    [(ngModel)]="authService.contract.purchaseAgency"
+							    value="1031exchange" />
+							<label for="c5"><span></span>1031 Exchange</label>
+						</div>
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						<input type="text" name="exchangeName" class="form-control"
+						    placeholder="Buying Entity on the Terms Sheet"
+						    [(ngModel)]="authService.contract.exchangeName" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="trmscntrct" class="indent">Terms on contract</label>
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						<input type="text" name="exchangeContractTerms" class="form-control"
+						    placeholder="240 characters of text"
+						    [(ngModel)]="authService.contract.exchangeContractTerms"
+						    maxlength="240" />
+						<span class="text_span">HIT will verify Buying Entity on every transaction</span>
+					</div>
+				</div>
+			</section>
+			<section class="section">
+				<div class="heading">
+					<h2>Funding Sources</h2>
+					<div class="left_line"></div>
+					<div class="right_line"></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-4">
+					    {{authService.getCheckedEntity()}}
+					</div>
+					<div class="col-lg-5 col-md-5 col-sm-5">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox">
+							<input type="radio" name="fundingSource"
+							    [(ngModel)]="authService.contract.fundingSource"
+							    value="cash" />
+							<label for="c6"><span></span>CASH</label>
+						</div>
+					</div>
+					<div class="col-lg-5 col-md-5 col-sm-5">
+						<div class="file-list">					
+							<div class="flip">
+							    <div ng2FileDrop
+							        [ngClass]="{'nv-file-over': authService.fundingSourceCashUploaderHover}"
+							        (fileOver)="authService.fundingSourceCashUploaderHover = $event"
+							        [uploader]="authService.fundingSourceCashUploader">
+							        Base drop zone
+							    </div>
+								<input type="file" ng2FileSelect [uploader]="authService.fundingSourceCashUploader" />
+							</div>
+							<div class="col-md-9" style="margin-bottom: 40px">
+                                <h3>Upload queue</h3>
+                                <p>Queue length: {{ authService.fundingSourceCashUploader?.queue?.length }}</p>
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th width="50%">Name</th>
+                                        <th>Size</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of authService.fundingSourceCashUploader.queue">
+                                        <td><strong>{{ item?.file?.name }}</strong></td>
+                                        <td *ngIf="authService.fundingSourceCashUploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                                        <td *ngIf="authService.fundingSourceCashUploader.isHTML5">
+                                            <div class="progress" style="margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                            <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                            <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        </td>
+                                        <td nowrap>
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                                <span class="glyphicon glyphicon-upload"></span> Upload
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-xs"
+                                                    (click)="item.cancel()" [disabled]="!item.isUploading">
+                                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="item.remove()">
+                                                <span class="glyphicon glyphicon-trash"></span> Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <div>
+                                        Queue progress:
+                                        <div class="progress" style="">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': authService.fundingSourceCashUploader.progress + '%' }"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<input type="text" name="cashDate" class="form-control date"
+						    [(ngModel)]="authService.contract.cashDate" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox">
+							<input type="radio" name="fundingSource"
+							    [(ngModel)]="authService.contract.fundingSource"
+							    value="lender" />
+							<label for="c7"><span></span>Lender </label>
+						</div>
+					</div>
+					<div class="col-lg-5 col-md-5 col-sm-5">
+						<div class="file-list">					
+							<div class="flip">
+							    <div ng2FileDrop
+							        [ngClass]="{'nv-file-over': authService.fundingSourceLenderUploaderHover}"
+							        (fileOver)="authService.fundingSourceLenderUploaderHover = $event"
+							        [uploader]="authService.fundingSourceLenderUploader">
+							        Base drop zone
+							    </div>
+								<input type="file" ng2FileSelect [uploader]="authService.fundingSourceLenderUploader" />
+							</div>
+							<div class="col-md-9" style="margin-bottom: 40px">
+                                <h3>Upload queue</h3>
+                                <p>Queue length: {{ authService.fundingSourceLenderUploader?.queue?.length }}</p>
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th width="50%">Name</th>
+                                        <th>Size</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of authService.fundingSourceLenderUploader.queue">
+                                        <td><strong>{{ item?.file?.name }}</strong></td>
+                                        <td *ngIf="authService.fundingSourceLenderUploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                                        <td *ngIf="authService.fundingSourceLenderUploader.isHTML5">
+                                            <div class="progress" style="margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                            <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                            <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        </td>
+                                        <td nowrap>
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                                <span class="glyphicon glyphicon-upload"></span> Upload
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-xs"
+                                                    (click)="item.cancel()" [disabled]="!item.isUploading">
+                                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="item.remove()">
+                                                <span class="glyphicon glyphicon-trash"></span> Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <div>
+                                        Queue progress:
+                                        <div class="progress" style="">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': authService.fundingSourceLenderUploader.progress + '%' }"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<input type="text" name="lenderDate" class="form-control date"
+						    [(ngModel)]="authService.contract.lenderDate" />
+					</div>
+				</div>
+				<table class="funding_sources">
+					<tbody>
+						<tr>
+							<td>&nbsp;</td>
+							<td>Down Payment</td>
+							<td>Contingency Days </td>
+							<td>Closing Days </td>
+						</tr>
+						<tr>
+							<td>Bank Loan</td>
+							<td>
+							    <input type="text" name="loanDownPayment" class="form-control"
+						            [(ngModel)]="authService.contract.loanDownPayment" />
+							</td>
+							<td>
+              			        <select name="loanContingencyDays"
+              			            [(ngModel)]="authService.contract.loanContingencyDays">
+									<option>0</option>
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+              			        </select>
+							</td>
+							<td>
+              			        <select name="loanClosingDays"
+              			            [(ngModel)]="authService.contract.loanClosingDays">
+									<option>7</option>
+									<option>8</option>
+									<option>9</option>
+									<option>10</option>
+              			        </select>
+							</td>
+						</tr>
+						<tr>
+							<td>Hard Money</td>
+							<td>
+							    <input type="text" name="hardMoneyDownPayment" class="form-control"
+						            [(ngModel)]="authService.contract.hardMoneyDownPayment" />
+							</td>
+							<td>
+              			        <select name="hardMoneyContingencyDays"
+              			            [(ngModel)]="authService.contract.hardMoneyContingencyDays">
+									<option>7</option>
+									<option>8</option>
+									<option>9</option>
+									<option>10</option>
+              			        </select>
+							</td>
+							<td>
+              			        <select name="hardMoneyClosingDays"
+              			            [(ngModel)]="authService.contract.hardMoneyClosingDays">
+									<option>10</option>
+									<option>11</option>
+									<option>12</option>
+									<option>13</option>
+              			        </select>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox">
+							<input type="radio" name="fundingSource"
+							    [(ngModel)]="authService.contract.fundingSource"
+							    value="loc" />
+							<label for="c8"><span></span>LOC  </label>
+						</div>
+					</div>
+					<div class="col-lg-5 col-md-5 col-sm-5">
+						<div class="file-list">					
+							<div class="flip">
+							    <div ng2FileDrop
+							        [ngClass]="{'nv-file-over': authService.locUploaderHover}"
+							        (fileOver)="authService.locUploaderHover = $event"
+							        [uploader]="authService.locUploader">
+							        Base drop zone
+							    </div>
+								<input type="file" ng2FileSelect [uploader]="authService.locUploader" />
+							</div>
+							<div class="col-md-9" style="margin-bottom: 40px">
+                                <h3>Upload queue</h3>
+                                <p>Queue length: {{ authService.locUploader?.queue?.length }}</p>
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th width="50%">Name</th>
+                                        <th>Size</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of authService.locUploader.queue">
+                                        <td><strong>{{ item?.file?.name }}</strong></td>
+                                        <td *ngIf="authService.locUploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                                        <td *ngIf="authService.locUploader.isHTML5">
+                                            <div class="progress" style="margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                            <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                            <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        </td>
+                                        <td nowrap>
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                                <span class="glyphicon glyphicon-upload"></span> Upload
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-xs"
+                                                    (click)="item.cancel()" [disabled]="!item.isUploading">
+                                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="item.remove()">
+                                                <span class="glyphicon glyphicon-trash"></span> Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <div>
+                                        Queue progress:
+                                        <div class="progress" style="">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': authService.locUploader.progress + '%' }"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<input type="text" name="locDate" class="form-control date"
+						    [(ngModel)]="authService.contract.locDate" />
+					</div>
+				</div>		
+			</section>
+			<section class="section">
+				<div class="heading">
+					<h2>Earnest Money, Option Fee <span>-  (Earnest is Mandatory) </span></h2>
+					<div class="left_line"></div>
+					<div class="right_line"></div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-4">
+					    {{authService.getCheckedEntity()}}
+					</div>
+					<div class="col-lg-5 col-md-5 col-sm-5">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox">
+							<label class="nowrap"><span></span>Copy of Blank Check <br>Earnest Money </label>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="file-list">					
+							<div class="flip">
+							    <div ng2FileDrop
+							        [ngClass]="{'nv-file-over': authService.earnestCheckUploaderHover}"
+							        (fileOver)="authService.earnestCheckUploaderHover = $event"
+							        [uploader]="authService.earnestCheckUploader">
+							        Base drop zone
+							    </div>
+								<input type="file" ng2FileSelect [uploader]="authService.earnestCheckUploader" />
+							</div>
+							<div class="col-md-9" style="margin-bottom: 40px">
+                                <h3>Upload queue</h3>
+                                <p>Queue length: {{ authService.earnestCheckUploader?.queue?.length }}</p>
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th width="50%">Name</th>
+                                        <th>Size</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of authService.earnestCheckUploader.queue">
+                                        <td><strong>{{ item?.file?.name }}</strong></td>
+                                        <td *ngIf="authService.earnestCheckUploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                                        <td *ngIf="authService.earnestCheckUploader.isHTML5">
+                                            <div class="progress" style="margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                            <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                            <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        </td>
+                                        <td nowrap>
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                                <span class="glyphicon glyphicon-upload"></span> Upload
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-xs"
+                                                    (click)="item.cancel()" [disabled]="!item.isUploading">
+                                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="item.remove()">
+                                                <span class="glyphicon glyphicon-trash"></span> Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <div>
+                                        Queue progress:
+                                        <div class="progress" style="">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': authService.earnestCheckUploader.progress + '%' }"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+					</div>
+				</div>
+				<div class="has-lay">
+					<div class="row1">
+						<div class="col-lg-3 col-md-3 col-sm-3">
+							<strong class="title">Cash HIT recommends </strong>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4">
+							<span class="price">$5,000.00</span>
+						</div>
+						<div class="col-lg-5 col-md-5 col-sm-5">
+						    &nbsp;
+						</div>
+					</div>
+					<div class="row1">
+						<div class="col-lg-3 col-md-3 col-sm-3">
+							<strong class="title">Cash Other Options</strong>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4">
+							$<input type="text" class="form-control inline"
+							    name="cashOtherOptions" pattern="[0-9]*"
+							    [(ngModel)]="authService.contract.cashOtherOptions" />
+						</div>
+						<div class="col-lg-5 col-md-5 col-sm-5">
+						    &nbsp;
+						</div>
+					</div>
+				</div>
+				<div class="has-lay">
+					<div class="row1">
+						<div class="col-lg-3 col-md-3 col-sm-3">
+							<strong class="title">Financed HIT Recommends</strong>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4">
+							<span class="price">$1,000</span>
+						</div>
+						<div class="col-lg-5 col-md-5 col-sm-5">
+						    &nbsp;
+						</div>
+					</div>
+					<div class="row1">
+						<div class="col-lg-3 col-md-3 col-sm-3">
+							<strong class="title">Finance Other Options</strong>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4">
+							$<input type="text" class="form-control inline"
+							    name="financeOtherOptions" pattern="[0-9]*"
+							    [(ngModel)]="authService.contract.financeOtherOptions" />
+						</div>
+						<div class="col-lg-5 col-md-5 col-sm-5">
+						    &nbsp;
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox">
+							<label for="c14" class="nowrap"><span></span>Copy of Blank Check<br> Option Fee</label>
+						</div>
+					</div>
+					<div class="col-lg-5 col-md-5 col-sm-5">
+						<div class="file-list">					
+							<div class="flip">
+							    <div ng2FileDrop
+							        [ngClass]="{'nv-file-over': authService.optionCheckUploaderHover}"
+							        (fileOver)="authService.optionCheckUploaderHover = $event"
+							        [uploader]="authService.optionCheckUploader">
+							        Base drop zone
+							    </div>
+								<input type="file" ng2FileSelect [uploader]="authService.optionCheckUploader" />
+							</div>
+							<div class="col-md-9" style="margin-bottom: 40px">
+                                <h3>Upload queue</h3>
+                                <p>Queue length: {{ authService.optionCheckUploader?.queue?.length }}</p>
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th width="50%">Name</th>
+                                        <th>Size</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of authService.optionCheckUploader.queue">
+                                        <td><strong>{{ item?.file?.name }}</strong></td>
+                                        <td *ngIf="authService.optionCheckUploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                                        <td *ngIf="authService.optionCheckUploader.isHTML5">
+                                            <div class="progress" style="margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                            <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                            <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        </td>
+                                        <td nowrap>
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                    (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                                <span class="glyphicon glyphicon-upload"></span> Upload
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-xs"
+                                                    (click)="item.cancel()" [disabled]="!item.isUploading">
+                                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="item.remove()">
+                                                <span class="glyphicon glyphicon-trash"></span> Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <div>
+                                        Queue progress:
+                                        <div class="progress" style="">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': authService.optionCheckUploader.progress + '%' }"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+					</div>
+				</div>
+				<div class="has-lay">
+					<div class="row1">
+						<div class="col-lg-3 col-md-3 col-sm-3">
+							<strong class="title">HIT recommends</strong>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4">
+							<span class="price">$1,000</span>
+						</div>
+						<div class="col-lg-5 col-md-5 col-sm-5">
+						    &nbsp;
+						</div>
+					</div>
+					<div class="row1">
+						<div class="col-lg-3 col-md-3 col-sm-3">
+							<strong class="title">Option Fee Other Options</strong>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4">
+							$<input type="text" class="form-control inline"
+							    name="optionFeeOtherOptions" pattern="[0-9]*"
+							    [(ngModel)]="authService.contract.optionFeeOtherOptions" />
+						</div>
+						<div class="col-lg-5 col-md-5 col-sm-5">
+						    &nbsp;
+						</div>
+					</div>
+				</div>
+				<div class="form-group no-left-pad">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for="">Home Warranty (Residential Service Contracts) </label>
+					</div>
+					<div class="col-lg-5 col-md-5 col-sm-5">
+						<div class="checkbox checkbox3">
+							<input name="homeWarranty" type="radio"
+							    [(ngModel)]="authService.contract.homeWarranty" value="no" />
+							<label for="c17"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="homeWarranty" type="radio"
+							    [(ngModel)]="authService.contract.homeWarranty" value="yes" />
+							<label for="c18"><span></span>Yes</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-1 col-md-1 col-sm-1">
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<span>Residential Service Contract</span>
+						$<input type="text" class="form-control inline"
+						    name="homeWarrantyServiceContract" pattern="[0-9]*"
+						    [(ngModel)]="authService.contract.homeWarrantyServiceContract" />
+
+					</div>
+					<div class="col-lg-5 col-md-5 col-sm-5">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-1 col-md-1 col-sm-1">
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<span class="pre">Provider</span>
+						<select class="select1" name="homeWarrantyProvider"
+						    [(ngModel)]="authService.contract.homeWarrantyProvider">
+							<option value="">Choose company</option>
+      			            <option *ngFor="let provider of authService.homeWarrantyServiceProviders"
+      			                [value]="provider.value">{{provider.label}}</option>
+						</select>
+					</div>
+					<div class="col-lg-5 col-md-5 col-sm-5">
+					</div>
+				</div>
+				<p>This field will be treated the same on all contracts submitted; HIT will not ask again</p>	
+			</section>
+			<section class="section section1">
+				<div class="heading">
+					<div class="left_line"></div>
+					<div class="right_line"></div>
+				</div>
+				<p><strong>The TAR Purchase contract asks to disclose any licensees that might have a relationship with the Buyer on the first page of the contract. </strong></p>
+				<p><strong>4.LICENSE HOLDER DISCLOSURE:</strong>
+				    Texas law requires a real estate license holder who is a
+				    party to a transaction or acting on behalf of a spouse,
+				    parent, child, business entity in which the license holder
+				    owns more than 10%, or a trust for which the license holder
+				    acts as a trustee or of which the license holder or the
+				    license holder's spouse, parent or child is a beneficiary,
+				    to notify the other party in writing before entering into
+				    a contract of sale. Disclose if applicable.
+				</p>
+				<p><strong>Does the Subscriber have a real estate license or
+				    have a relative or a business partner of any kind who is
+				    licensed in the State of Texas? </strong></p>
+				<div class="form-group no-left-pad">
+					<div class="col-lg-5 col-md-5 col-sm-5">
+						<div class="checkbox checkbox3">
+							<input name="licenseHolderDisclosure" type="radio"
+							    [(ngModel)]="authService.contract.licenseHolderDisclosure" value="no" />
+							<label for="c19"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="licenseHolderDisclosure" type="radio"
+							    [(ngModel)]="authService.contract.licenseHolderDisclosure" value="yes" />
+							<label for="c20"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-7 col-md-7 col-sm-7">
+					</div>
+				</div>
+				<div class="form-group no-left-pad">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<div class="input-row">
+    						<input type="text" class="form-control"
+    						    placeholder="Name" name="licenseHolderName"
+    						    [(ngModel)]="authService.contract.licenseHolderName"
+    						    (ngModelChange)="authService.contract.licenseHolderSelfRep = 'no'" />
+						</div>
+						<div class="input-row">
+    						<input type="text" class="form-control"
+    						    placeholder="Name" name="licenseHolderRelationship"
+    						    [(ngModel)]="authService.contract.licenseHolderRelationship"
+    						    (ngModelChange)="authService.contract.licenseHolderSelfRep = 'yes'" />
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+				</div>
+				<p *ngIf="authService.contract.licenseHolderDisclosure == 'yes'">
+				    <strong>If Y =  Is it your plan to use yourself or your
+    				    relative to represent you in any HIT generated
+    				    contracts?
+				    </strong>
+				</p>
+				<div class="form-group no-left-pad">
+					<div class="col-lg-5 col-md-5 col-sm-5">
+						<div class="checkbox checkbox3">
+							<input name="licenseHolderSelfRep" type="radio"
+							    [(ngModel)]="authService.contract.licenseHolderSelfRep" value="no" />
+							<label for="c21"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="licenseHolderSelfRep" type="radio"
+							    [(ngModel)]="authService.contract.licenseHolderSelfRep" value="yes" />
+							<label for="c22"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-7 col-md-7 col-sm-7">
+					</div>
+				</div>
+				<div class="has-lay has-lay1">
+					<p>Thank you for your subscription - we look forward to a
+					    long relationship. However, the simple click Contract
+					    Generation is only offered to Subscribers who are
+					    interested in having Property Align Inc represent them
+					    in the real estate transactions originated on HIT. If
+					    you have any questions, please contact support at<br>
+					    <a href="mailto:Contracts@homeinvestortool.com">Contracts@homeinvestortool.com</a></p>
+				</div>
+			</section>
+			<section class="section">
+				<h3>Attorney</h3>
+				<p><strong>Do you use an Attorney as a part of your residential real estate transactions? </strong></p>
+				<div class="form-group no-left-pad">
+					<div class="col-lg-5 col-md-5 col-sm-5">
+						<div class="checkbox checkbox3">
+							<input name="useAttorney" type="radio"
+							    [(ngModel)]="authService.contract.useAttorney" value="no" />
+							<label for="c23"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="useAttorney" type="radio"
+							    [(ngModel)]="authService.contract.useAttorney" value="yes" />
+							<label for="c24"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-7 col-md-7 col-sm-7">
+					</div>
+					<div class="clear_div"><p>If yes = Buyer's</p></div>
+				</div>
+				<div class="form-group form-group2">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="attorney">Attorney is</label>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<input type="text" class="form-control"
+						    name="attorneyName" placeholder="Name of an Individual Attorney"
+						    [(ngModel)]="authService.contract.attorneyName" />
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+				</div>
+				<div class="form-group form-group2">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<input type="text" class="form-control"
+						    name="attorneyFirm" placeholder="Name of Attorney's Firm"
+						    [(ngModel)]="authService.contract.attorneyFirm" />
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+				</div>
+				<div class="form-group form-group2">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="phone">Phone</label>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<input type="text" class="form-control"
+						    name="attorneyPhone" placeholder="(__) ###-####"
+						    [(ngModel)]="authService.contract.attorneyPhone" />
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+				</div>
+				<div class="form-group form-group2">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="fax">Fax</label>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<input type="text" class="form-control"
+						    name="attorneyFax" placeholder="(__) ###-####"
+						    [(ngModel)]="authService.contract.attorneyFax" />
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+				</div>
+				<div class="form-group form-group2">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="email">Email</label>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<input type="email" class="form-control"
+						    name="attorneyEmail" placeholder="(__) ###-####"
+						    [(ngModel)]="authService.contract.attorneyEmail" />
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+				</div>
+				<div class="form-group">
+					<h4>Home Warranty (Residential Service Contracts)</h4>
+					<p>Though atypical for investors to request Residential
+					    Service Contracts part of the presets for contract
+					    generation has to address all the available resources
+					    to a Buyer.</p>
+					<p>Is your intention to include a Residential Service
+					    contract on your Investment Purchases?</p>
+				</div>
+				<div class="form-group no-left-pad">
+					<div class="col-lg-5 col-md-5 col-sm-5">
+						<div class="checkbox checkbox3">
+							<input name="homeWarranty" type="radio"
+							    [(ngModel)]="authService.contract.homeWarranty" value="no" />
+							<label for="c25"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="homeWarranty" type="radio"
+							    [(ngModel)]="authService.contract.homeWarranty" value="yes" />
+							<label for="c26"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-7 col-md-7 col-sm-7">
+					</div>
+				</div>
+				<div class="form-group">
+					<h4>Home Warranty (Residential Service Contracts)</h4>
+					<div class="col-lg-1 col-md-1 col-sm-1">
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<span class="pre">Provider</span>
+						<strong class="button">
+    						<select class="select1" name="homeWarrantyProvider"
+    						    [(ngModel)]="authService.contract.homeWarrantyProvider">
+    							<option value="">Choose company</option>
+          			            <option *ngFor="let provider of authService.homeWarrantyServiceProviders"
+          			                [value]="provider.value">{{provider.label}}</option>
+    						</select>
+						</strong>
+					</div>
+					<div class="col-lg-5 col-md-5 col-sm-5">
+					</div>
+				</div>
+			</section>
+			<section class="section">
+				<h4>Notices Section 21 Texas 1-4 Family</h4>
+				<p>During the course of getting your transactions closed the
+				    title company will send out written notices to you by mail,
+				    email of fax. If you have any changes in how you want
+				    notices sent, please change the form below so the title
+				    company knows where to send the written notices that
+				    affect your contract.</p>
+				<p>To Buyer</p>
+				<div class="form-group form-group2">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="at">at</label>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<input type="text" class="form-control"
+						    name="noticesSentToName" placeholder="Name or Corp"
+						    [(ngModel)]="authService.contract.noticesSentToName" />
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+				</div>
+				<div class="form-group form-group2">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<input type="text" class="form-control"
+						    name="noticesSentToAddress" placeholder="Address, city, st, zip"
+						    [(ngModel)]="authService.contract.noticesSentToAddress" />
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+				</div>
+				<div class="form-group form-group2">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="phone1">Phone</label>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<input type="text" class="form-control"
+						    name="noticesSentToPhone" placeholder="(__) ###-####"
+						    [(ngModel)]="authService.contract.noticesSentToPhone" />
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+				</div>
+				<div class="form-group form-group2">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="fax1">Fax</label>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<input type="text" class="form-control"
+						    name="noticesSentToFax" placeholder="(__) ###-####"
+						    [(ngModel)]="authService.contract.noticesSentToFax" />
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+				</div>
+				<div class="form-group form-group2">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<label for="email1">Email</label>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<input type="text" class="form-control"
+						    name="noticesSentToEmail" placeholder="Email on file"
+						    [(ngModel)]="authService.contract.noticesSentToEmail" />
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+				</div>
+				<div class="form-group">
+					<p><strong>Purchase Contracts have several sections which
+					    change with every property and when conditions permit
+					    the Subscriber's preferences will change as well.</strong></p>
+					<p>One of these is Title Company selection. </p>
+				</div>
+			</section>
+			<section class="section section1">
+				<div class="heading">
+					<div class="left_line"></div>
+					<div class="right_line"></div>
+				</div>
+				<h3>Title Company </h3>
+				<p>RESPA Section 9 of the Real Estate Settlement Procedures Act
+				    prohibits Sellers from conditioning their home sale on the
+				    use of a specific title insurance company and in fact
+				    violators can be subject to penalties with the most typical
+				    being fined up to three times the amount of the insurance
+				    fee.</p>
+				<p>HIT lists Title companies if and only if they are willing to
+				    publish their fee sheet on the site. HIT wants to disclose
+				    to you all fees throughout the process and title closing
+				    fees are on the list.</p>
+				<p>If you have a single favorite Title Company and closer,
+				    please fill out the following form, HIT will default all
+				    MLS and Non MLS transactions</p>
+				<p>As investors there are times when using the Seller's title
+				    company makes better sense than taking the deal to your
+				    favorite closer. HIT recommends the flowing - please check
+				    the appropriate box. </p>
+				<div class="form-group no-left-pad">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for="" class="text-trans"><strong>REO
+						    transactions are best closed at the Seller's Title
+						    company</strong></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="useSellerTitleCoREO" type="radio"
+							    [(ngModel)]="authService.contract.useSellerTitleCoREO" value="no" />
+							<label for="c27"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="useSellerTitleCo" type="radio"
+							    [(ngModel)]="authService.contract.useSellerTitleCo" value="yes" />
+							<label for="c28"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for="" class="text-trans"><strong>Short Sales
+						    are best closed at the Seller's listed Title
+						    Company</strong></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="useSellerTitleCoSS" type="radio"
+							    [(ngModel)]="authService.contract.useSellerTitleCoSS" value="no" />
+							<label for="c29"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="useSellerTitleCoSS" type="radio"
+							    [(ngModel)]="authService.contract.useSellerTitleCoSS" value="yes" />
+							<label for="c30"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad">
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<div class="input-row input-row1">
+						<input type="text" class="form-control"
+						    name="titleCompanyName" placeholder="Company Name"
+						    [(ngModel)]="authService.contract.titleCompanyName" />
+						</div>
+						<div class="input-row input-row1">
+						<input type="text" class="form-control"
+						    name="titleCompanyAddress" placeholder="Address"
+						    [(ngModel)]="authService.contract.titleCompanyAddress" />
+						</div>
+						<div class="input-row input-row1">
+						<input type="text" class="form-control"
+						    name="titleCompanyCityStZip" placeholder="City, State, Zip"
+						    [(ngModel)]="authService.contract.titleCompanyCityStZip" />
+						</div>
+						<div  class="input-row input-row1">
+						<input type="text" class="form-control"
+						    name="titleCompanyPhones" placeholder="Phone- Office, Direct, Cell, Fax"
+						    [(ngModel)]="authService.contract.titleCompanyPhones" />
+						</div>
+						<div class="input-row input-row1">
+						<input type="text" class="form-control"
+						    name="titleCompanyContact" placeholder="Contact"
+						    [(ngModel)]="authService.contract.titleCompanyContact" />
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+				</div>
+				<div class="clear_div"><p>HIT will cascade other Title
+				    Companies willing to publish fees at this part of the
+				    contract so our Subscribers are kept up to date on fees
+				    being charged by competitive Title Insurance companies;
+				    HIT will default to your selected Title Company in the
+				    normal course of contract generation</p></div>
+			</section>
+			<section class="section">
+				<div class="heading">
+					<h2>Survey</h2>
+					<div class="left_line"></div>
+					<div class="right_line"></div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for="">HIT's Investor Contract Generator defaults to all
+						    financed transactions requiring a survey. </label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="useSurveyFinanced" type="radio"
+							    [(ngModel)]="authService.contract.useSurveyFinanced" value="no" />
+							<label for="c31"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="useSurveyFinanced" type="radio"
+							    [(ngModel)]="authService.contract.useSurveyFinanced" value="yes" />
+							<label for="c32"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for="">Cash transactions do not require a survey;
+						    indicate if you want a survey or not on cash
+						    transactions.</label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="useSurveyCash" type="radio"
+							    [(ngModel)]="authService.contract.useSurveyCash" value="no" />
+							<label for="c33"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="useSurveyCash" type="radio"
+							    [(ngModel)]="authService.contract.useSurveyCash" value="yes" />
+							<label for="c34"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="clear_div"><h4>On the Texas Contract there are 3 choices.</h4></div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>1.</em> <span>Buyer provides the survey</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="surveyProvider" type="radio"
+							    [(ngModel)]="authService.contract.surveyProvider" value="buyer" />
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>2.</em> <span>Seller Provides the survey</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="surveyProvider" type="radio"
+							    [(ngModel)]="authService.contract.surveyProvider" value="seller" />
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>3.</em> <span>If the seller provides
+						    a survey. The Lender and the title company approve
+						    the survery then the buyer has a small concession
+						    OR The Title company or Lender do not accept the
+						    survey.</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="surveyProvider" type="radio"
+							    [(ngModel)]="authService.contract.surveyProvider" value="sellerconcession" />
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>4.</em> <span>IN ALL CASES, HIT will
+						    default to 10 days of the effective date of the
+						    contract to order the survey.</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="surveyDaysDefault" type="radio"
+							    [(ngModel)]="authService.contract.surveyDaysDefault" value="no" />
+							<label for="c41"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="surveyDaysDefault" type="radio"
+							    [(ngModel)]="authService.contract.surveyDaysDefault" value="yes" />
+							<label for="c42"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey"
+				    *ngIf="authService.contract.surveyDaysDefault == 'no'">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em></em><span>How many days</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey"
+				    *ngIf="authService.contract.surveyDaysDefault == 'no'">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for="e-date"><em></em><span>How many Days from effective Date:</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<input type="text" class="form-control"
+						    name="surveyDaysDefault" pattern="[0-9]*"
+						    [(ngModel)]="authService.contract.surveyDaysDefault" />
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>5.</em><span>If there are shortages on the survey, then</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey survey1">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>1.</em><span>The shortage will be amended or deleted from the title policy</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="surveyShortagesDeleted" type="radio"
+							    [(ngModel)]="authService.contract.surveyShortagesDeleted" value="no" />
+							<label for="c43"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="surveyShortagesDeleted" type="radio"
+							    [(ngModel)]="authService.contract.surveyShortagesDeleted" value="yes" />
+							<label for="c44"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey survey1"
+				    *ngIf="authService.contract.surveyShortagesDeleted == 'no'">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em></em><span>If No then it will be amended to read "Shortages in the area" and will be paid for by the</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey survey2">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>a.</em><span>Buyer</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="surveyShortagesDeleted" type="radio"
+							    [(ngModel)]="authService.contract.surveyShortagesPaidBy" value="buyer" />
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey survey2">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>b.</em><span>Seller</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="surveyShortagesDeleted" type="radio"
+							    [(ngModel)]="authService.contract.surveyShortagesPaidBy" value="seller" />
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey">
+						<label for="">
+							<em>6.</em>
+							<span class="title"><strong>Objections:</strong> The contract says</span>
+						</label>
+						<p>OBJ ECTIONS : Buyer may object in writing to
+						    defects, exceptions, or encumbrances to title:
+						    disclosed on the survey other than items 6A(1 )
+						    through (7) above; disclosed in the Commitment
+						    other than items 6A(1 ) through (8) above; or
+						    which prohibit the following use or activity
+						    <input type="text" class="form-control inline3" placeholder="" >
+						    residential
+						    <input type="text" class="form-control inline3" placeholder="" >
+						    Buyer must object the earlier of (i) the Closing
+						    Date or (ii)
+						    <input type="text" class="form-control inline3" placeholder="" >
+						    3 <input type="text" class="form-control inline3" placeholder="" >
+						    days after Buyer receives the Commitment,
+						    Exception Documents. and the survey.</p>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for="">HIT defaults to <em class="red">residential</em> activity
+						    and the Buyer must respond within <em class="red">3</em> days </label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="buyerResponse3Days" type="radio"
+							    [(ngModel)]="authService.contract.buyerResponse3Days" value="no" />
+							<label for="c49"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="buyerResponse3Days" type="radio"
+							    [(ngModel)]="authService.contract.buyerResponse3Days" value="yes" />
+							<label for="c50"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="clear_div">
+					<p>then
+						<input type="text" class="form-control"
+						    name="buyerResponseActivity"
+						    [(ngModel)]="authService.contract.buyerResponseActivity" />
+					    activity and
+						<input type="text" class="form-control"
+						    name="buyerResponseDays" pattern="[0-9]*"
+						    [(ngModel)]="authService.contract.buyerResponseDays" />
+					    days</p>
+				</div>
+			</section>
+			<section class="section">
+				<div class="heading">
+					<div class="left_line"></div>
+					<div class="right_line"></div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>7.</em><span><strong>Mandatory Membership in a HOA</strong></span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey survey1">
+					<div class="left_padding">
+						<p><strong>Section 6 E2</strong> - This section must be answered every time. </p>
+						<p>Four choices for HOA docs - HIT will deal with on a
+						    case by case but the general format is <br>as follows</p>
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey survey1">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>1</em><span>Seller delivers and pays Subdivision Information</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="hoaReq" type="radio"
+							    [(ngModel)]="authService.contract.hoaReq" value="sellerPays" />
+							<label for="c51"><span></span>No</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey survey1">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>2</em><span>Buyer does not require reading Subdivision Information.</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="hoaReq" type="radio"
+							    [(ngModel)]="authService.contract.hoaReq" value="buyerNotRequired" />
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey survey1">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>3</em><span>Buyer has already read the Subdivision Information and needs an Updated resale </span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="hoaReq" type="radio"
+							    [(ngModel)]="authService.contract.hoaReq" value="buyerUpdatedResale" />
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="left_padding">
+					<p>Special Case - Title Company requires docs</p>
+				</div>
+				<div class="form-group no-left-pad survey survey2">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>1.</em><span>Buyer pays</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="titleCompanyReqDocs" type="radio"
+							    [(ngModel)]="authService.contract.titleCompanyReqDocs" value="buyerPays" />
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey survey2">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><em>2.</em><span>Seller pays</span></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="titleCompanyReqDocs" type="radio"
+							    [(ngModel)]="authService.contract.titleCompanyReqDocs" value="sellerPays" />
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><strong>By and large Subdivision
+						    Information and Resale Certificates run $400
+						    though that may vary. HIT will default to the
+						    Seller paying $0 and the Buyer picking up all
+						    the fees associated with Resale in an HOA</strong></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="buyerPaysResaleCert" type="radio"
+							    [(ngModel)]="authService.contract.buyerPaysResaleCert" value="no" />
+							<label for="c61"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="buyerPaysResaleCert" type="radio"
+							    [(ngModel)]="authService.contract.buyerPaysResaleCert" value="yes" />
+							<label for="c62"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for=""><strong>The default number of days is 10
+						    from the effective date of the contract</strong></label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="hoaDaysDefault" type="radio"
+							    [(ngModel)]="authService.contract.hoaDaysDefault" value="no" />
+							<label for="c63"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="hoaDaysDefault" type="radio"
+							    [(ngModel)]="authService.contract.hoaDaysDefault" value="yes" />
+							<label for="c64"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="left_padding">
+					<p><strong>if No, then
+						<input type="text" class="form-control inline3"
+						    name="hoaDays" pattern="[0-9]*"
+						    [(ngModel)]="authService.contract.hoaDays" />
+					    days</strong></p>
+				</div>
+			</section>
+			<section class="section">
+				<div class="heading">
+					<h2>Property Condition</h2>
+					<div class="left_line"></div>
+					<div class="right_line"></div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<p>Seller's Disclosures are required for all residential property sold in Texas. Exceptions include REO, Estates and special cases.</p>
+					<p>In cases that a Seller's Disclosure is required and it is unavailable at the time of making your offer how many days will you permit the Seller to provide one?</p>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for="">HIT recommends:
+						    <input type="text" class="form-control inline3" placeholder="" >
+						    3 days to receive the Seller's Disclosure</label>
+						<label for="">How many days
+						<input type="text" class="form-control inline3"
+						    name="sellersDisclosureDays" pattern="[0-9]*"
+						    [(ngModel)]="authService.contract.sellersDisclosureDays" />
+						    days</label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="sellersDisclosureDaysDefault" type="radio"
+							    [(ngModel)]="authService.contract.sellersDisclosureDaysDefault" value="no" />
+							<label for="c65"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="sellersDisclosureDaysDefault" type="radio"
+							    [(ngModel)]="authService.contract.sellersDisclosureDaysDefault" value="yes" />
+							<label for="c66"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for="">HIT also recommends that Subscribers
+						    accept the Property in its AS IS condition.</label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="propertyAcceptAsIs" type="radio"
+							    [(ngModel)]="authService.contract.propertyAcceptAsIs" value="no" />
+							<label for="c67"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="propertyAcceptAsIs" type="radio"
+							    [(ngModel)]="authService.contract.propertyAcceptAsIs" value="yes" />
+							<label for="c68"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for="">HIT recommends that Subscribers take
+						    into consideration any repairs noted in their
+						    offers and do not attempt to include them in
+						    their offers. </label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="propertyAcceptAsIs" type="radio"
+							    [(ngModel)]="authService.contract.propertyRepairsNotIncluded" value="no" />
+							<label for="c69"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="propertyAcceptAsIs" type="radio"
+							    [(ngModel)]="authService.contract.propertyRepairsNotIncluded" value="yes" />
+							<label for="c70"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<div class="col-lg-7 col-md-7 col-sm-7">
+						<label for="">For Properties Built Prior to 1978 it is
+						    required to include the ADDENDUM FOR SELLER'S
+						    DISCLOSURE INFORMATION ON LEAD-BASED PAINT AND
+						    LEAD-BASED PAINT HAZARDS AS REQUIRED BY LAW.</label>
+						<label for="">HIT includes this form with all
+						    qualifying properties and recommends that
+						    Subscribers Waive Risk Assessment</label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-3">
+						<div class="checkbox checkbox3">
+							<input name="propertyWaiveRiskAssessment" type="radio"
+							    [(ngModel)]="authService.contract.propertyWaiveRiskAssessment" value="no" />
+							<label for="c71"><span></span>No</label>
+						</div>
+						<div class="checkbox checkbox3">
+							<input name="propertyWaiveRiskAssessment" type="radio"
+							    [(ngModel)]="authService.contract.propertyWaiveRiskAssessment" value="yes" />
+							<label for="c72"><span></span>Yes</label>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2">
+					</div>
+				</div>
+				<div class="form-group no-left-pad survey">
+					<p>And HIT provides PROTECT YOUR FAMILY FROM LEAD IN YOUR HOME in the Preferences on this site for 
+easy reference</p>
+				</div>
+				<div class="left_padding">
+					<p>HIT will not email a copy automatically those if you need one for your records</p>
+					<p>please email <a href="mailto:CONTRACTS@HomeInvestorTool.com">CONTRACTS@HomeInvestorTool.com</a></p>
+				</div>					
+			</section>
+		</form>
+    </div>
+    <!-- /Main content -->
+    <!-- Secondary content -->
+    <aside class="secondary-content" role="secondary">
+      <div class="widget navigation">
+        <header>
+          <h2>My Profile</h2>
+        </header>
+        <ul>
+          <li><a class="clickable" (click)="setProfileTab('profile')" [ngClass]="{selected: profileTab == 'profile'}">My Profile</a></li>
+          <li><a class="clickable" (click)="setProfileTab('settings')" [ngClass]="{selected: profileTab == 'settings'}">Settings</a></li>
+          <li><a class="clickable" (click)="setProfileTab('preferences')" [ngClass]="{selected: profileTab == 'preferences'}">Preferences</a></li>
+          <li><a class="clickable" (click)="setProfileTab('contract')" [ngClass]="{selected: profileTab == 'contract'}">Contract</a></li>
+          <li><a class="clickable" (click)="setProfileTab('account')" [ngClass]="{selected: profileTab == 'account'}">Account</a></li>
+          <li><a class="clickable" (click)="logout()">Logout</a></li>
+        </ul>
+      </div>
+    </aside>
+    <!-- /Secondary content -->
+  </div>
+</div>
+<!-- /Main -->

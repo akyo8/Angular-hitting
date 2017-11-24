@@ -1,0 +1,753 @@
+<div class="form-layout">
+  <div class="tab-selector tab-selector2">
+    <ul *ngIf="mode == 'complete'">
+      <li [ngClass]="{'active': infoTab == 1}" (click)="setInfoTab(1)"><a>General</a></li>
+      <li [ngClass]="{'active': infoTab == 2}" (click)="setInfoTab(2)"><a>Space</a></li>
+      <li [ngClass]="{'active': infoTab == 3}" (click)="setInfoTab(3)"><a>Specifications</a></li>
+      <li [ngClass]="{'active': infoTab == 4}" (click)="setInfoTab(4)"><a>Details</a></li>
+      <li [ngClass]="{'active': infoTab == 5}" (click)="setInfoTab(5)"><a>Description</a></li>
+      <li [ngClass]="{'active': infoTab == 6}" (click)="setInfoTab(6)"><a>Additional Information</a></li>
+    </ul>
+    <ul *ngIf="mode == 'summary'">
+      <li [ngClass]="{'active': infoTab == 1}" (click)="setInfoTab(1)"><a>Legal</a></li>
+      <li [ngClass]="{'active': infoTab == 2}" (click)="setInfoTab(2)"><a>Space</a></li>
+      <li [ngClass]="{'active': infoTab == 3}" (click)="setInfoTab(3)"><a>Specifications</a></li>
+      <li [ngClass]="{'active': infoTab == 4}" (click)="setInfoTab(4)"><a>Address</a></li>
+      <li [ngClass]="{'active': infoTab == 5}" (click)="setInfoTab(5)"><a>Map</a></li>
+    </ul>
+  </div>
+  <div class="tabs-container" *ngIf="mode == 'complete'">
+    <section class="sec-block tab" [ngClass]="{'is-active': infoTab == 1}">
+      <div class="heading">
+        <h2>General Information</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+      <div class="block-columns">
+        <div class="block-col">
+          <table class="table-info">
+            <tbody>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>MLS#</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().identifier?.mlsNumber}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Lease MLS#</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Active?</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().mls?.status}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Listing Price</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">${{propertyService.getListPrice(getProperty())}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Original Listing Price</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">${{propertyService.getOriginalListPrice(getProperty())}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Lst $ / SqFt</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">${{propertyService.getPricePerSQFT(getProperty())}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Also for Lease</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Lake Name</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Plan Dvlpmnt</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>MUD Dst</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="block-col">
+          <table class="table-info">
+            <tbody>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Category</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty('mls').summary?.propType}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Type</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty('mls').summary?.propSubType}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Area</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Subdv</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().area?.subdName}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>County</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().area?.countrysecsubd}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Parcel ID</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().identifier?.obPropId}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Multi Prcl</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Lot</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().lot?.lotNum}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Block</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().area?.blockNum}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Unexempt Taxes</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><strong>Legal: </strong>{{getProperty().area?.munName}} BLK {{getProperty().area?.blockNum}} LOT {{getProperty().lot?.lotNum}} ...</p>
+    </section>
+    <section class="sec-block tab" [ngClass]="{'is-active': infoTab == 2}">
+      <div class="heading">
+        <h2>Space</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+      <div class="block-columns">
+        <div class="block-col">
+          <table class="table-info">
+            <tbody>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Bedrooms</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().building?.rooms?.beds}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Tot Baths</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().building?.rooms?.bathsFull}}.{{getProperty().building?.rooms?.bathsHalf}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Full Bath</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().building?.rooms?.bathsFull}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Half Bath</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().building?.rooms?.bathsHalf}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Fireplaces</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().building?.interior?.fplcCount}}</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="block-col">
+          <table class="table-info">
+            <tbody>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Living Areas</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().building?.interior?.fplcCount}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Dining Areas</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Stories</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().building?.summary?.levels}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Pool</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{(getProperty().lot?.poolInd && ('Y' == getProperty().lot?.poolInd)) ? 'Yes' : 'No'}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Security System</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <section class="sec-block tab" [ngClass]="{'is-active': infoTab == 3}">
+      <div class="heading">
+        <h2>Specification</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+      <div class="block-columns">
+        <div class="block-col">
+          <table class="table-info">
+            <tbody>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>SqFt</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty('mls').building?.size?.bldgSize ? (getProperty('mls').building?.size?.bldgSize + ' / MLS') : (getProperty('tax').building?.size?.bldgSize + ' / Tax')}} </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong># Gar Space</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong># Carprt Spcs</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Acres</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().lot?.lotSizeInAcres}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>HOA</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Yr Built</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().summary?.yearBuilt}} / ...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="block-col">
+          <table class="table-info">
+            <tbody>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Garage Size</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().building?.parking?.prkgSize}} sq ft</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Cvrd Park</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Lot Dimension</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{getProperty().lot?.depth}} x {{getProperty().lot?.frontage}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>HOA Dues</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Hdcp Am</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Will Subdiv</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Accessory Unit</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Accessory Unit Type</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <section class="sec-block tab" [ngClass]="{'is-active': infoTab == 4}">
+      <div class="heading">
+        <h2>Property Details</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+      <div class="block-columns">
+        <div class="block-col">
+          <table class="table-info">
+            <tbody>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Housing Type</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{propertyService.getPropertyHousingType(getProperty())}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Style of House</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">{{propertyService.getPropertyHousingStyle(getProperty())}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Lot Size/Acreage</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">... .5 Acre to .99 Acre</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Lot Description</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Exterior Features</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Construction</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Foundation</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Roof</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Type of Fence</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Parking/Garage</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>PStreet/Utilities</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Interior Features</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="block-col">
+          <table class="table-info">
+            <tbody>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Fireplace Type</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Kitchen Equipment</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Alarm/Security</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Flooring</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Heating/Cooling</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Green Features</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Green Certification</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Handicap Amenities</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Proposed Financing</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Possession</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-text"><strong>Showing</strong></div>
+                </td>
+                <td>
+                  <div class="text-box">...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <section class="sec-block tab" [ngClass]="{'is-active': infoTab == 5}">
+      <div class="heading">
+        <h2>Property Description</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+      <p>{{getProperty().mls?.publicRemarks}}</p>
+      <br>
+      <div class="heading">
+        <h2>Public Driving Directions</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+      <p>Directions...</p>
+    </section>
+    <section class="sec-block tab" [ngClass]="{'is-active': infoTab == 6}">
+      <div class="heading">
+        <h2>List Office Name</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+      <p>{{getProperty().mls?.brokerage?.listOfficeName}}</p>
+      <br>
+      <div class="heading">
+        <h2>List Agent Name</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+      <p>{{getProperty().mls?.brokerage?.listAgentFullName}}</p>
+    </section>
+  </div>
+  <div class="tabs-container" *ngIf="mode == 'summary'">
+    <section class="sec-block tab" [ngClass]="{'is-active': infoTab == 1}">
+      <div class="heading">
+        <h2>Legal</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+    </section>
+    <section class="sec-block tab" [ngClass]="{'is-active': infoTab == 2}">
+      <div class="heading">
+        <h2>Legal</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+    </section>
+    <section class="sec-block tab" [ngClass]="{'is-active': infoTab == 3}">
+      <div class="heading">
+        <h2>Legal</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+    </section>
+    <section class="sec-block tab" [ngClass]="{'is-active': infoTab == 4}">
+      <div class="heading">
+        <h2>Address</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+      <table class="table-info">
+        <tbody>
+          <tr>
+            <td>
+              <div class="title-text"><strong>Address</strong></div>
+            </td>
+            <td>
+              <div class="text-box">{{getProperty().address?.line1}}</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="title-text"><strong>City, State, Zip</strong></div>
+            </td>
+            <td>
+              <div class="text-box">{{getProperty().address?.line2}}</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div [id]="ninjaSliderId" class="ninja-slider" *ngIf="getProperty().resources?.photos?.urls && (getProperty().resources?.photos?.urls.length > 0)">
+        <div>
+          <div class="slider-inner">
+            <ul>
+              <li *ngFor="let photo of getProperty().resources?.photos?.highResUrls">
+                <a class="ns-img" href="{{photo}}"></a>
+              </li>
+            </ul>
+            <div class="fs-icon" title="Expand/Close"></div>
+          </div>
+          <div [id]="thumbSliderId" class="thumbnail-slider">
+            <div class="inner">
+              <ul>
+                <li *ngFor="let photo of getProperty().resources?.photos?.urls">
+                  <a class="thumb" href="{{photo}}"></a>
+                  <span>&nbsp;</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="sec-block tab" [ngClass]="{'is-active': infoTab == 5}">
+      <div class="heading">
+        <h2>Map</h2>
+        <div class="left_line"></div>
+        <div class="right_line"></div>
+      </div>
+      <app-google-map [active]="(infoTab == 5) && getProperty().location?.latitude && getProperty().location?.longitude" [property]="{latitude: getProperty().location?.latitude, longitude: getProperty().location?.longitude, mls: {listPrice: getProperty().mls?.listPrice}}" [subjectProperty]="{latitude: getSubjectProperty().location?.latitude, longitude: getSubjectProperty().location?.longitude, mls: {listPrice: getSubjectProperty().mls?.listPrice}}">
+      </app-google-map>
+    </section>
+  </div>
+</div>

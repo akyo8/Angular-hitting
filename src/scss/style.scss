@@ -1,0 +1,106 @@
+// Include
+@import 'susy/susy';
+@import 'settings';
+@import 'partials/mixins';
+@import 'bourbon/bourbon';
+@import 'bootstrap/bootstrap';
+@import 'fonts';
+@import 'partials/variables';
+@import 'partials/extends';
+@import 'defaults';
+@import 'layout';
+@import 'modules/modules';
+@import 'partials/forms';
+
+app-property-slideout {
+  position: absolute;
+  display: block;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.property-slideout {
+  background: $brandcolor;
+  border: 1px solid darken($brandcolor, 5%);
+  color: $white;
+  display: block;
+  padding: rem(15);
+  box-shadow: 0 1px 5px transparentize($black, .75);
+  a.handle {
+    color: #fff;
+    font-weight: $font-bold;
+    background: $brandcolor;
+    font-size: 115%;
+    border: 1px solid darken($brandcolor, 5%);
+    border-right: 0;
+    margin-top: -1px;
+    border-radius: $radius 0 0 $radius;
+    padding: rem(10);
+    text-shadow: 0 1px 2px transparentize($black, .5);
+    &:before {
+      content: "\000AB";
+      margin-right: 5px;
+    }
+  }
+  &.open {
+    a.handle {
+      left: -35px !important;
+      span {
+        display: none;
+      }
+      &:before {
+        content: "\000AB";
+        right: 0;
+      }
+    }
+  }
+  h2 {
+    margin: 0 0 gutter();
+  }
+  p {
+    margin: gutter() / 2 0;
+  }
+  .info {
+    @include font-size(24);
+    font-weight: $font-bold;
+    display: inline-block;
+    padding-left: rem(10);
+    margin-right: rem(10);
+    margin-bottom: rem(15);
+    border-left: 1px solid transparentize($white, .3);
+    text-shadow: 0 1px 3px transparentize($black, .85);
+    span {
+      @include font-size(12);
+      color: transparentize($white, .3);
+      margin-top: rem(5);
+      font-weight: $font-regular;
+      display: block;
+      text-transform: uppercase;
+    }
+  }
+  .address {
+    margin-bottom: rem(15);
+    @include font-size(28);
+    font-weight: $font-bold;
+    display: block;
+    text-shadow: 0 1px 3px transparentize($black, .85);
+    span {
+      @include font-size(12);
+      color: transparentize($white, .3);
+      margin-top: rem(5);
+      font-weight: $font-regular;
+      text-transform: uppercase;
+    }
+  }
+}
+
+
+// Browser-sync notification
+#__bs_notify__ {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  font-size: 0.95em !important;
+  padding: 5px 10px !important;
+  border-bottom-left-radius: 1px !important;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}

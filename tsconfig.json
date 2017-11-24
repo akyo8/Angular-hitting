@@ -1,0 +1,22 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitAny": false,
+    "removeComments": false,
+    "outDir": ".tmp",
+    "sourceMap": false,
+    "target": "es2015"
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "main.ts"
+  ]
+}

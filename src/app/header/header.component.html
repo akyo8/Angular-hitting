@@ -1,0 +1,33 @@
+<!-- Header -->
+<header id="page-header" role="banner">
+  <div class="container">
+    <div class="site-branding">
+      <div class="site-logo"><a [routerLink]="['/dashboard']" title="{{siteTitle}}" style="margin-top: -12px; margin-bottom: -12px">{{siteTitle}}</a></div>
+    </div>
+    <nav role="navigation" id="site-nav-container">
+      <a class="visually-hidden skip-link" href="dashboard#main" title="Skip to content">Skip to content</a>
+      <div class="site-nav">
+        <ul>
+          <li><a [routerLink]="['/dashboard']" [routerLinkActive]="'selected'">Dashboard</a></li>
+          <li><a [routerLink]="['/search']" [routerLinkActive]="'selected'">Search</a></li>
+          <li><a [routerLink]="['/watchlist']" [routerLinkActive]="'selected'">Watchlist</a><span class="notification number" *ngIf="searchService.watchlistArray && (searchService.watchlistArray.length > 0)">{{searchService.watchlistArray.length}}</span></li>
+          <li><a href="dashboard#">My Offers</a><span class="notification number">1</span></li>
+          <!--li>
+            <a class="clickable" [fullScreen]="isFullScreen" [ngClass]="{'fullscreen-out': !isFullScreen, 'fullscreen-in': isFullScreen}" (cancel)="cancelFullScreen()" (click)="toggleFullscreen()"></a>
+          </li-->
+          <li class="my-profile"><a>My Profile</a>
+            <ul class="submenu">
+              <li><a [routerLink]="['/profile/profile']">Profile</a></li>
+              <li><a [routerLink]="['/profile/settings']">Settings</a></li>
+              <li><a [routerLink]="['/profile/preferences']">Preferences</a></li>
+              <li><a [routerLink]="['/profile/contract']">Contract</a></li>
+              <li><a [routerLink]="['/profile/account']">Account</a></li>
+              <li><a class="clickable" (click)="logout()">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</header>
+<!-- /Header -->

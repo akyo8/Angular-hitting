@@ -1,0 +1,85 @@
+//  Pagination
+//  Pagination
+.widget.pagination {
+  ol {
+    @include list-reset;
+    box-shadow: $box-shadow-minimal;
+    border-left: 1px solid $bordercolor;
+    float: left;
+    @include clearfix;
+  }
+  li {
+    float: left;
+    border: 1px solid $bordercolor;
+    border-left: 0;
+  }
+  a {
+    display: block;
+    padding: rem($spacing-s/2) rem($spacing-s/2);
+    min-width: rem($spacing-s*2);
+    text-align: center;
+    font-weight: $font-bold;
+    @include font-size(14);
+    text-transform: uppercase;
+    &:hover {
+      background: $bordercolor;
+      border-bottom: 1px solid darken($bordercolor, 10%);
+    }
+  }
+  .selected a {
+    background: $grey;
+    border-bottom: 1px solid darken($grey, 5%);
+    color: $white;
+  }
+  .disabled {
+    pointer-events: none;
+  }
+  .disabled a {
+    color: $lightgrey;
+    opacity: .5;
+  }
+}
+
+.ng2-pagination {
+  @include list-reset;
+  box-shadow: $box-shadow-minimal;
+  border-left: 1px solid $bordercolor;
+  float: left;
+  @include clearfix;
+  li {
+    float: left;
+    border: 1px solid $bordercolor;
+    border-left: 0;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: $font-bold;
+    @include font-size(14);
+  }
+  a, .current div, .disabled span {
+    display: block;
+    padding: rem($spacing-s/2) rem($spacing-s/2);
+    min-width: rem($spacing-s*2);
+    // border-bottom: 1px solid $brandcolor;
+  }
+  a {
+    cursor: pointer;
+  }
+  a:hover {
+    color: $brandcolor;
+    background: $bordercolor;
+    // border-bottom: 1px solid darken($bordercolor, 10%);
+  }
+  .current {
+    background: $brandcolor;
+    // border-bottom: 1px solid darken($grey, 5%);
+    color: $white;
+  }
+  .disabled {
+    pointer-events: none;
+    color: $lightgrey;
+    opacity: .5;
+  }
+  .show-for-sr {
+    @include visually-hidden;
+  }
+}

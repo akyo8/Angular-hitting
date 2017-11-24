@@ -1,0 +1,479 @@
+<div class="content full-width">
+  <div [ngBusy]="busy"></div>
+  <div class="widget map full-width" style="margin-top: -25px; overflow: hidden;">
+    <app-google-map [property]="propertyService.property"
+        [properties]="propertyService.propertyComps"
+        [altProperties]="propertyService.propertyCompsBackground"
+        [altToggle]="altPropertyToggle"
+        [selected]="propertyService.propertyCompsSelectedList"
+        [active]="isActive() && propertyService.propertyComps && (propertyService.propertyComps.length > 0)"
+        [compmeta]="propertyService.propertyCompsMeta"
+        [shrink]="mapShrink"
+        (select)="togglePropertySummary($event)">
+    </app-google-map>
+    <app-property-slideout tabLocation="right" topPos="0px" rightPos="0px"
+        [active]="isActive() && propertyService.getListPrice()" (toggle)="setMapShrink($event)">
+      <a class="handle" href="javascript:void(0)"><span>Property Info</span></a>
+      <div class="info">{{propertyService.getCurrentProperty().address?.line1}}<span>{{propertyService.getCurrentProperty().address?.line2}}</span></div>
+      <div class="info">{{propertyService.getRepairConditionName(propertyService.getFlipRepairsCondition())}}<span>Condition</span></div>
+      <div class="info">{{propertyService.getCurrentProperty().mls?.statusShortValue}}<span>Status</span></div>
+      <div class="info">${{propertyService.getListPrice()}} <span>List Price</span></div>
+      <br>
+      <ol class="tags featured">
+        <li><strong>{{propertyService.getCurrentProperty().building?.rooms?.beds}}</strong> Bed</li>
+        <li><strong>{{propertyService.getCurrentProperty().building?.rooms?.bathsTotal}}</strong> Bath</li>
+        <li><strong>{{propertyService.getGarageSpaces()}}</strong> Car</li>
+        <li [ngClass]="{'dimmed': !propertyService.getCurrentProperty().lot?.poolInd || ('0' == propertyService.getCurrentProperty().lot?.poolInd), 'more-info': propertyService.getCurrentProperty().lot?.poolInd && ('0' != propertyService.getCurrentProperty().lot?.poolInd)}">
+            <strong>Pool</strong>
+            <div><p>{{propertyService.getCurrentProperty().lot?.poolType}}</p></div>
+        </li>
+        <li [ngClass]="{'dimmed': propertyService.getCurrentProperty().mls?.hoaType != 'Mandatory', 'more-info': propertyService.getCurrentProperty().mls?.hoaType != 'None' && propertyService.getCurrentProperty().mls?.hoaType != ''}">
+            <strong>HOA</strong>
+            <div>
+              <p>{{propertyService.getCurrentProperty().mls?.hoaType}} Membership</p>
+              <p>{{propertyService.getCurrentProperty().mls?.hoaPeriod}} Fee: {{propertyService.getCurrentProperty().mls?.hoaFee | currency:'USD':true:'1.0-2'}}</p>
+            </div>
+        </li>
+        <li [ngClass]="{'more-info': propertyService.getCurrentProperty().building?.summary?.yearBuiltEffective}">
+            Built in: <strong>{{propertyService.getCurrentProperty().summary?.yearBuilt}}</strong>
+            <div><p>Effective Year Built: {{propertyService.getCurrentProperty().building?.summary?.yearBuiltEffective}}</p></div>
+        </li>
+        <li class="more-info">
+          <strong>{{propertyService.getCurrentProperty().building?.size?.livingSize | number : '1.0-0'}}</strong> SQ FT <strong> Living</strong>
+          <div>
+            <p>TOT BLDG: <b>{{propertyService.getFootageSourceDescription()}}</b></p>
+          </div>
+        </li>
+        <li class="more-info">
+            <strong>{{propertyService.getCurrentProperty().lot?.lotSizeInSQFT | number : '1.0-0'}}</strong> SQ FT LOT
+            <div><p>{{propertyService.getCurrentProperty().lot?.lotSizeInAcres | number : '1.0-4'}} acres</p></div>
+        </li>
+        <li class="more-info" *ngIf="propertyService.getCurrentProperty().summary?.propSubType">
+            <strong>{{propertyService.getCurrentProperty().summary?.propLandUse}}</strong>
+            <div>{{propertyService.getCurrentProperty().summary?.propSubType}}</div>
+        </li>
+      </ol>
+      <br>
+      <ol class="tags">
+        <li class="clickable more-info" (click)="toggleCompsMapAlt()">
+          Toggle Non-Comp Solds
+          <div style="width: 215px">Toggle between displaying all the solds in this search, or only relevant comps.</div>
+        </li>
+      </ol>
+    </app-property-slideout>
+    <!--app-property-slideout tabLocation="right" topPos="200px" leftPos="0px"
+        [active]="true" (toggle)="toggleCompsMapAlt($event)" *ngIf="type == 'arv'">
+      <a class="handle" href="javascript:void(0)"><span>Show All Solds</span></a>
+      <div>Hide All Solds</div>
+    </app-property-slideout-->
+    <!--app-property-slideout tabLocation="left" topPos="10px"
+        leftPos="20px" [active]="isActive() && propertyService.getListPrice()"
+        (toggle)="setMapShrink($event)">
+        <a class="handle" href="javascript:void(0)"><span>Other Info</span></a>
+        There Is Stuff In Here
+    </app-property-slideout-->
+  </div>
+  <div class="widget notice full-width" style="visibility: hidden" *ngIf="columnProperties">
+    <h2 style="visibility: visible">
+      <a class="clickable" style="font-weight: lighter; font-size: 70%" (click)="prevPage()" *ngIf="page > 0">Page {{page}}</a>
+      <a class="clickable" style="font-weight: lighter; font-size: 70%" (click)="nextPage()" *ngIf="page < getLastPage()">Page {{page + 2}}</a>
+    </h2>
+  </div>
+  <div class="widget notice full-width" *ngIf="!propertySummary && page < 1">
+    <h2>
+      <div class="calctooltip" *ngIf="type">
+        {{getCompLabel()}} ${{propertyService.getPropertyCompPrice()}}
+        <span class="calctooltiptext" style="padding: 10px; font-weight: normal; font-size: 60%">{{getCompTooltip()}}</span>
+      </div>
+      <br>
+      <small>{{getCompType()}}</small>
+      <br>
+      <a class="clickable" style="font-weight: lighter; font-size: 70%" (click)="narrativeShowMore()" *ngIf="!narrShowMore">Show more..</a>
+      <a class="clickable" style="font-weight: lighter; font-size: 70%" (click)="narrativeShowLess()" *ngIf="narrShowMore">Show less..</a>
+    </h2>
+    <div class="note" [ngClass]="{'narr-show-more': narrShowMore, 'narr-show-less': !narrShowMore}" [innerHTML]="propertyService.describeCompProperties()"></div>
+  </div>
+  <div class="widget table narrow full-width" *ngIf="page < 1 || page == 2">
+    <table *ngIf="page < 1">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>&nbsp;</th>
+          <th class="left">Address</th>
+          <th>Bed</th>
+          <th>Bth</th>
+          <th>GAR/TCP</th>
+          <th>Year</th>
+          <th>Pool</th>
+          <th>SqFt</th>
+          <th>Acres</th>
+          <th>List Price</th>
+          <!--<th>Sold Price</th>-->
+          <!--<th>SP%LP</th>-->
+          <th>$ / Sqft</th>
+          <th>CDOM</th>
+          <th>Last Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="propertySummary"
+            [ngClass]="{selected: propertyService.isCompSelected(propertySummary)}">
+            <td class="picture">
+              <div class="image"><img src="{{propertyService.getFirstPhoto(propertyService.getCompProperty(propertySummary))}}"></div>
+            </td>
+            <td class="left"><a class="clickable" (click)="propertyService.toggleCompSelected(propertySummary)"><span *ngIf="!propertyService.isCompSelected(propertySummary)">Select</span><span *ngIf="propertyService.isCompSelected(propertySummary)">Unselect</span></a></td>
+            <td class="left"><a class="clickable" (click)="togglePropertySummary(propertySummary)"><b>{{propertyService.getCompProperty(propertySummary).address?.line1}}<br>{{propertyService.getPropertyData(property).address?.line2}}</b></a></td>
+            <td>{{propertyService.getCompProperty(propertySummary).building?.rooms?.beds}}</td>
+            <td>{{propertyService.getCompProperty(propertySummary).building?.rooms?.bathsFull}}/{{propertyService.getCompProperty(propertySummary).building?.rooms?.bathsHalf}}</td>
+            <td>{{propertyService.getGarageSpaces(propertyService.getCompProperty(propertySummary))}} / {{propertyService.getCompProperty(propertySummary).building?.parking?.prkgSpaces}}</td>
+            <td>{{propertyService.getCompProperty(propertySummary).summary?.yearBuilt}}</td>
+            <td>{{(propertyService.getCompProperty(propertySummary).lot?.poolInd && ('0' != propertyService.getCompProperty(propertySummary).lot?.poolInd)) ? 'Y' : 'N'}}</td>
+            <td>{{propertyService.getCompProperty(propertySummary).building?.size?.livingSize || propertyService.getCompProperty(property, 'mls').building?.size?.bldgSize}}</td>
+            <td>{{propertyService.getCompProperty(propertySummary).lot?.lotSizeInAcres}}</td>
+            <td>{{propertyService.getListPrice(propertyService.getCompProperty(propertySummary))}}</td>
+            <!--<td>-</td>-->
+            <!--<td>-</td>-->
+            <td>
+              <div class="calctooltip">
+                ${{pricePerFootage(propertyService.getListPrice(propertyService.getCompProperty(propertySummary)), propertyService.getCompProperty(propertySummary).building?.size?.bldgSize) | number:'1.0-0'}}
+                <span class="calctooltiptext" style="width: 100px">
+                  ${{pricePerFootage(propertyService.getClosePrice(propertyService.getCompProperty(propertySummary)), propertyService.getCompProperty(propertySummary).building?.size?.bldgSize) | number:'1.0-0' }}
+                </span>
+              </div>
+            </td>
+            <td>{{roundDom(propertyService.getCompProperty(propertySummary).mls?.cdom)}}</td>
+            <td>{{propertyService.getCompProperty(propertySummary).mls?.status}}</td>
+        </tr>
+        <tr *ngIf="propertySummary" class="listing-summary" class="active">
+          <td class="nopadding" colspan="16">
+              <app-property-info
+                  *ngIf="propertySummary"
+                  [property]="propertyService.getCompProperty(propertySummary, 'hitMergedResponse', false)"
+                  [subjectProperty]="propertyService.property"
+                  hasClose="true"
+                  (close)="togglePropertySummary(propertySummary)"
+                  mode="comps">
+              </app-property-info>
+          </td>
+        </tr>
+        <template ngFor let-property [ngForOf]="propertyService.propertyCompsSelected">
+          <tr class="selected" *ngIf="propertyService.getPropertyId(property) != propertySummary">
+            <td class="picture">
+              <div class="image"><img src="{{propertyService.getFirstPhoto(property)}}"></div>
+            </td>
+            <td class="left"><a class="clickable" (click)="propertyService.toggleCompSelected(property)">Unselect</a></td>
+            <td class="left"><a class="clickable" (click)="togglePropertySummary(property)"><b>{{propertyService.getPropertyData(property).address?.line1}}<br>{{propertyService.getPropertyData(property).address?.line2}}</b></a></td>
+            <td>{{propertyService.getPropertyData(property).building?.rooms?.beds}}</td>
+            <td>{{propertyService.getPropertyData(property).building?.rooms?.bathsFull}}/{{propertyService.getPropertyData(property).building?.rooms?.bathsHalf}}</td>
+            <td>{{propertyService.getGarageSpaces(propertyService.getPropertyData(property))}} / {{propertyService.getPropertyData(property).building?.parking?.prkgSpaces}}</td>
+            <td>{{propertyService.getPropertyData(property).summary?.yearBuilt}}</td>
+            <td>{{(propertyService.getPropertyData(property).lot?.poolInd && ('0' != propertyService.getPropertyData(property).lot?.poolInd)) ? 'Y' : 'N'}}</td>
+            <td>{{propertyService.getPropertyData(property).building?.size?.livingSize || propertyService.getPropertyData(property, 'mls').building?.size?.bldgSize}}</td>
+            <td>{{propertyService.getPropertyData(property).lot?.lotSizeInAcres}}</td>
+            <td>{{propertyService.getListPrice(property)}}</td>
+            <!--<td>-</td>-->
+            <!--<td>-</td>-->
+            <td>
+              <div class="calctooltip">
+                ${{pricePerFootage(propertyService.getListPrice(property), propertyService.getPropertyData(property).building?.size?.bldgSize) | number:'1.0-0'}}
+                <span class="calctooltiptext" style="width: 100px">
+                  ${{pricePerFootage(propertyService.getClosePrice(property), propertyService.getPropertyData(property).building?.size?.bldgSize) | number:'1.0-0' }}
+                </span>
+              </div>
+            </td>
+            <td>{{roundDom(propertyService.getPropertyData(property).mls?.cdom)}}</td>
+            <td>{{propertyService.getPropertyData(property).mls?.status}}</td>
+          </tr>
+        </template>
+        <!-- | paginate: { itemsPerPage: propertyService.size, currentPage: page, totalItems: propertyService.propertyCompsMeta.totalElements } -->
+        <template ngFor let-property [ngForOf]="propertyService.propertyComps">
+          <tr *ngIf="!propertyService.isCompSelected(property) && !isPropertySummaryOpen(property)">
+            <td class="picture">
+              <div class="image"><img src="{{propertyService.getFirstPhoto(property)}}"></div>
+            </td>
+            <td class="left"><a class="clickable" (click)="propertyService.toggleCompSelected(property)">Select</a></td>
+            <td class="left"><a class="clickable" (click)="togglePropertySummary(property)"><b>{{propertyService.getPropertyData(property).address?.line1}}<br>{{propertyService.getPropertyData(property).address?.line2}}</b></a></td>
+            <td>{{propertyService.getPropertyData(property).building.rooms.beds}}</td>
+            <td>{{propertyService.getPropertyData(property).building.rooms.bathsFull}}/{{propertyService.getPropertyData(property).building.rooms.bathsHalf}}</td>
+            <td>{{propertyService.getGarageSpaces(propertyService.getPropertyData(property))}} / {{propertyService.getPropertyData(property).building?.parking?.prkgSpaces}}</td>
+            <td>{{propertyService.getPropertyData(property).summary?.yearBuilt}}</td>
+            <td>{{(propertyService.getPropertyData(property).lot?.poolInd && ('0' != propertyService.getPropertyData(property).lot.poolInd)) ? 'Y' : 'N'}}</td>
+            <td>{{propertyService.getPropertyData(property).building?.size?.livingSize || propertyService.getPropertyData(property, 'mls').building?.size?.bldgSize}}</td>
+            <td>{{propertyService.getPropertyData(property).lot?.lotSizeInAcres}}</td>
+            <td>{{propertyService.getListPrice(property)}}</td>
+            <!--<td>-</td>-->
+            <!--<td>-</td>-->
+            <td>
+              <div class="calctooltip">
+                ${{pricePerFootage(propertyService.getListPrice(property), propertyService.getPropertyData(property).building?.size?.bldgSize) | number:'1.0-0'}}
+                <span class="calctooltiptext" style="width: 100px">
+                  ${{pricePerFootage(propertyService.getClosePrice(property), propertyService.getPropertyData(property).building?.size?.bldgSize) | number:'1.0-0'}}
+                </span>
+              </div>
+            </td>
+            <td>{{roundDom(propertyService.getPropertyData(property).mls?.cdom)}}</td>
+            <td>{{propertyService.getPropertyData(property).mls?.status}}</td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+    <table *ngIf="page == 2 && hasExcludedComps()">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th class="left">Address</th>
+          <th>Bed</th>
+          <th>Bth</th>
+          <th>GAR/TCP</th>
+          <th>Year</th>
+          <th>Pool</th>
+          <th>SqFt</th>
+          <th>Acres</th>
+          <th>List Price</th>
+          <!--<th>Sold Price</th>-->
+          <!--<th>SP%LP</th>-->
+          <th>$ / Sqft</th>
+          <th>CDOM</th>
+          <th>Last Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="propertySummary"
+            [ngClass]="{selected: propertyService.isCompSelected(propertySummary)}">
+            <td class="picture">
+              <div class="image"><img src="{{propertyService.getFirstPhoto(propertyService.getCompProperty(propertySummary))}}"></div>
+            </td>
+            <td class="left"><a class="clickable" (click)="togglePropertySummary(propertySummary)"><b>{{propertyService.getCompProperty(propertySummary).address?.line1}}<br>{{propertyService.getPropertyData(property).address?.line2}}</b></a></td>
+            <td>{{propertyService.getCompProperty(propertySummary).building?.rooms?.beds}}</td>
+            <td>{{propertyService.getCompProperty(propertySummary).building?.rooms?.bathsFull}}/{{propertyService.getCompProperty(propertySummary).building?.rooms?.bathsHalf}}</td>
+            <td>{{propertyService.getGarageSpaces(propertyService.getCompProperty(propertySummary))}} / {{propertyService.getCompProperty(propertySummary).building?.parking?.prkgSpaces}}</td>
+            <td>{{propertyService.getCompProperty(propertySummary).summary?.yearBuilt}}</td>
+            <td>{{(propertyService.getCompProperty(propertySummary).lot?.poolInd && ('0' != propertyService.getCompProperty(propertySummary).lot?.poolInd)) ? 'Y' : 'N'}}</td>
+            <td>{{propertyService.getCompProperty(propertySummary).building?.size?.livingSize || propertyService.getCompProperty(property, 'mls').building?.size?.bldgSize}}</td>
+            <td>{{propertyService.getCompProperty(propertySummary).lot?.lotSizeInAcres}}</td>
+            <td>{{propertyService.getListPrice(propertyService.getCompProperty(propertySummary))}}</td>
+            <!--<td>-</td>-->
+            <!--<td>-</td>-->
+            <td>
+              <div class="calctooltip">
+                ${{pricePerFootage(propertyService.getListPrice(propertyService.getCompProperty(propertySummary)), propertyService.getCompProperty(propertySummary).building?.size?.bldgSize) | number:'1.0-0'}}
+                <span class="calctooltiptext" style="width: 100px">
+                  ${{pricePerFootage(propertyService.getClosePrice(propertyService.getCompProperty(propertySummary)), propertyService.getCompProperty(propertySummary).building?.size?.bldgSize) | number:'1.0-0' }}
+                </span>
+              </div>
+            </td>
+            <td>{{roundDom(propertyService.getCompProperty(propertySummary).mls?.cdom)}}</td>
+            <td>{{propertyService.getCompProperty(propertySummary).mls?.status}}</td>
+        </tr>
+        <tr *ngIf="propertySummary" class="listing-summary" class="active">
+          <td class="nopadding" colspan="16">
+              <app-property-info
+                  *ngIf="propertySummary"
+                  [property]="propertyService.getExcludedCompProperty(propertySummary, 'hitMergedResponse', false)"
+                  [subjectProperty]="propertyService.property"
+                  hasClose="true"
+                  (close)="togglePropertySummary(propertySummary)"
+                  mode="comps">
+              </app-property-info>
+          </td>
+        </tr>
+        <!-- | paginate: { itemsPerPage: propertyService.size, currentPage: page, totalItems: propertyService.propertyCompsMeta.totalElements } -->
+        <template ngFor let-property [ngForOf]="propertyService.propertyCompsExcluded">
+          <tr *ngIf="!propertyService.isCompSelected(property) && !isPropertySummaryOpen(property)">
+            <td class="picture">
+              <div class="image"><img src="{{propertyService.getFirstPhoto(property)}}"></div>
+            </td>
+            <td class="left"><a class="clickable" (click)="togglePropertySummary(property)"><b>{{propertyService.getPropertyData(property).address?.line1}}<br>{{propertyService.getPropertyData(property).address?.line2}}</b></a></td>
+            <td>{{propertyService.getPropertyData(property).building.rooms.beds}}</td>
+            <td>{{propertyService.getPropertyData(property).building.rooms.bathsFull}}/{{propertyService.getPropertyData(property).building.rooms.bathsHalf}}</td>
+            <td>{{propertyService.getGarageSpaces(propertyService.getPropertyData(property))}} / {{propertyService.getPropertyData(property).building?.parking?.prkgSpaces}}</td>
+            <td>{{propertyService.getPropertyData(property).summary?.yearBuilt}}</td>
+            <td>{{(propertyService.getPropertyData(property).lot?.poolInd && ('0' != propertyService.getPropertyData(property).lot.poolInd)) ? 'Y' : 'N'}}</td>
+            <td>{{propertyService.getPropertyData(property).building?.size?.livingSize || propertyService.getPropertyData(property, 'mls').building?.size?.bldgSize}}</td>
+            <td>{{propertyService.getPropertyData(property).lot?.lotSizeInAcres}}</td>
+            <td>{{propertyService.getListPrice(property)}}</td>
+            <!--<td>-</td>-->
+            <!--<td>-</td>-->
+            <td>
+              <div class="calctooltip">
+                ${{pricePerFootage(propertyService.getListPrice(property), propertyService.getPropertyData(property).building?.size?.bldgSize) | number:'1.0-0'}}
+                <span class="calctooltiptext" style="width: 100px">
+                  ${{pricePerFootage(propertyService.getClosePrice(property), propertyService.getPropertyData(property).building?.size?.bldgSize) | number:'1.0-0'}}
+                </span>
+              </div>
+            </td>
+            <td>{{roundDom(propertyService.getPropertyData(property).mls?.cdom)}}</td>
+            <td>{{propertyService.getPropertyData(property).mls?.status}}</td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+  <div class="widget notice full-width" *ngIf="propertySummary && page < 1">
+    <h2>
+      <div class="calctooltip" *ngIf="type">
+        {{getCompLabel()}} ${{propertyService.getPropertyCompPrice()}}
+        <span class="calctooltiptext" style="padding: 10px; font-weight: normal; font-size: 60%">{{getCompTooltip()}}</span>
+      </div>
+      <br>
+      <small>{{getCompType()}}</small>
+      <br>
+      <a class="clickable" style="font-weight: lighter; font-size: 70%" (click)="narrativeShowMore()" *ngIf="!narrShowMore">Show more..</a>
+      <a class="clickable" style="font-weight: lighter; font-size: 70%" (click)="narrativeShowLess()" *ngIf="narrShowMore">Show less..</a>
+    </h2>
+    <div class="note" [ngClass]="{'narr-show-more': narrShowMore, 'narr-show-less': !narrShowMore}" [innerHTML]="propertyService.describeCompProperties()"></div>
+  </div>
+  <div class="widget table narrow full-width" *ngIf="page == 1 && columnProperties">
+    <table>
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>
+            Subject
+            <a class="clickable" (click)="columnPrevPage()" *ngIf="columnCount > 3 && columnStart > 0">&lt;</a>
+            <a class="clickable" (click)="columnNextPage()" *ngIf="columnCount > 3 && columnStart < columnCount - 3">&gt;</a>
+          </th>
+          <th colspan="2" *ngFor="let property of columnPage; let i = index">Sold {{i + 1}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="height: 120px">
+          <td>&nbsp;</td>
+          <td class="picture initial-width"><div class="image"><img src="{{propertyService.getFirstPhoto(propertyService.getCurrentProperty())}}"></div></td>
+          <td class="picture initial-width" colspan="2" *ngFor="let property of columnPage"><div class="image"><img src="{{propertyService.getFirstPhoto(property)}}"></div></td>
+        </tr>
+        <tr>
+          <td>Address</td>
+          <td>{{propertyService.getCurrentProperty().address?.line1}}<br>{{propertyService.getCurrentProperty().address?.line2}}</td>
+          <td colspan="2" *ngFor="let property of columnPage">{{propertyService.getPropertyData(property).address?.line1}}<br>{{propertyService.getPropertyData(property).address?.line2}}</td>
+        </tr>
+        <tr>
+          <td>Proximity to subject</td>
+          <td>&nbsp;</td>
+          <td colspan="2" *ngFor="let property of columnPage">{{property.distance}}</td>
+        </tr>
+        <tr>
+          <td>List price</td>
+          <td>{{propertyService.getListPrice(propertyService.getCurrentProperty())}}</td>
+          <td colspan="2" *ngFor="let property of columnPage">{{propertyService.getListPrice(property)}}</td>
+        </tr>
+        <tr>
+          <td>Price per GLA</td>
+          <td>${{pricePerFootage(propertyService.getListPrice(propertyService.getCurrentProperty()), propertyService.getPropertyData(propertyService.getCurrentProperty()).building?.size?.bldgSize) | number:'1.0-0'}}</td>
+          <td colspan="2" *ngFor="let property of columnPage">
+            <div class="calctooltip">
+              ${{pricePerFootage(propertyService.getListPrice(property), propertyService.getPropertyData(property).building?.size?.bldgSize) | number:'1.0-0'}}
+              <span class="calctooltiptext" style="width: 100px">
+                ${{pricePerFootage(propertyService.getClosePrice(property), propertyService.getPropertyData(property).building?.size?.bldgSize) | number:'1.0-0'}}
+              </span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Quality</td>
+          <td>{{propertyService.getQualityName(propertyService.getFlipSelectedQuality())}}</td>
+          <td colspan="2" *ngFor="let property of columnPage">{{propertyService.getQualityName(propertyService.getFlipDefaultQuality())}}</td>
+        </tr>
+        <tr>
+          <td>Year Built</td>
+          <td>{{propertyService.getCurrentProperty().summary?.yearBuilt}}</td>
+          <td colspan="2" *ngFor="let property of columnPage">{{propertyService.getPropertyData(property).summary?.yearBuilt}}</td>
+        </tr>
+        <!--tr>
+          <td>Condition</td>
+          <td>&nbsp;</td>
+          <td colspan="2" *ngFor="let property of columnPage">&nbsp;</td>
+        </tr-->
+        <tr>
+          <td>Above Grade Room Count</td>
+          <td style="padding: 0">
+            <div class="widget table narrow full-width" style="margin-bottom: -1px">
+              <table>
+                <tbody>
+                  <tr>
+                    <td>Rooms</td>
+                    <td>Beds</td>
+                    <td>Baths</td>
+                  </tr>
+                  <tr>
+                    <td>{{inferTotalRooms(propertyService.getCurrentProperty().building?.rooms)}}</td>
+                    <td>{{propertyService.getCurrentProperty().building?.rooms?.beds}}</td>
+                    <td>
+                      {{propertyService.getCurrentProperty().building?.rooms?.bathsFull}}
+                      <div *ngIf="propertyService.getCurrentProperty().building?.rooms?.bathsHalf > 0">
+                        {{propertyService.getCurrentProperty().building?.rooms?.bathsHalf}}/2
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+          <template ngFor let-property [ngForOf]="columnPage">
+            <td style="padding: 0px">
+              <div class="widget table narrow full-width" style="margin-bottom: -1px">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>Rm</td>
+                      <td>Bd</td>
+                      <td>Ba</td>
+                    </tr>
+                    <tr>
+                      <td>{{inferTotalRooms(propertyService.getPropertyData(property).building?.rooms)}}</td>
+                      <td>{{propertyService.getPropertyData(property).building?.rooms?.beds}}</td>
+                      <td>
+                        {{propertyService.getPropertyData(property).building?.rooms?.bathsFull}}
+                        <div *ngIf="propertyService.getCurrentProperty().building?.rooms?.bathsHalf > 0">
+                          {{propertyService.getPropertyData(property).building?.rooms?.bathsHalf}}/2
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+            <td *ngIf="columnAdjustments"><br><br>${{(property.adjustment?.bathsFull?.adjustmentValue
+                  + property.adjustment?.bathsHalf?.adjustmentValue
+                  + property.adjustment?.bedrooms?.adjustmentValue) | number:'1.0-0'}}</td>
+            <td *ngIf="!columnAdjustments"></td>
+          </template>
+        </tr>
+        <tr>
+          <td>Gross Living Area</td>
+          <td>{{propertyService.getCurrentProperty().building?.size?.livingSize || propertyService.getCurrentProperty().building?.size?.bldgSize}}</td>
+          <template ngFor let-property [ngForOf]="columnPage">
+            <td>{{propertyService.getPropertyData(property).building?.size?.livingSize || propertyService.getPropertyData(property).building?.size?.bldgSize}}</td>
+            <td *ngIf="columnAdjustments">${{property.adjustment?.footage?.adjustmentValue | number:'1.0-0'}}</td>
+            <td *ngIf="!columnAdjustments"></td>
+          </template>
+        </tr>
+        <tr>
+          <td>Garages / Carports</td>
+          <td>{{propertyService.getCurrentProperty().building?.parking?.prkgSpaces}} / {{propertyService.getCurrentProperty().building?.parking?.coveredSpaces}}</td>
+          <template ngFor let-property [ngForOf]="columnPage">
+            <td>{{propertyService.getPropertyData(property).building?.parking?.prkgSpaces}} / {{propertyService.getPropertyData(property).building?.parking?.coveredSpaces}}</td>
+            <td *ngIf="columnAdjustments">${{(property.adjustment?.garages?.adjustmentValue + property.adjustment?.carports?.adjustmentValue) | number:'1.0-0'}}</td>
+            <td *ngIf="!columnAdjustments"></td>
+          </template>
+        </tr>
+        <tr *ngIf="columnAdjustments">
+          <td>Net Adjustment</td>
+          <td>&nbsp;</td>
+          <template ngFor let-property [ngForOf]="columnPage">
+            <td>&nbsp;</td>
+            <td>${{property.adjustment?.netAdjustment | number:'1.0-0'}}</td>
+          </template>
+        </tr>
+        <tr *ngIf="columnAdjustments">
+          <td>Adjusted Value</td>
+          <td>&nbsp;</td>
+          <template ngFor let-property [ngForOf]="columnPage">
+            <td>&nbsp;</td>
+            <td>${{property.adjustment?.postAdjustment | number:'1.0-0'}}</td>
+          </template>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

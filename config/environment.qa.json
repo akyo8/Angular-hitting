@@ -1,0 +1,9 @@
+{
+  "production": false,
+  "API_ENDPOINT": "http://qa.api.homeinvestortool.com/",
+  "AUTH_ENDPOINT": "http://qa.auth.bippo.com/",
+  "BING_KEY": "Am9djQD23AIR8LQddVTpNhtrII-jakm7AqN1fVWJ20cyxi1A4Y4CExY4omZM9fwY",
+  "STRIPE_PUB_KEY": "pk_test_we9AshzRsnnLxNswtR55x3h2",
+  "ninjaSliderLicense": "mylicense",
+  "thumbnailSliderLicense": "b2e98"
+}

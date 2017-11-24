@@ -1,0 +1,407 @@
+//  Tabs
+#tabs-container {
+  .tab {
+    display: none;
+    &.is-active {
+      display: block;
+    }
+  }
+}
+
+// .nav-tabs {
+//   border-bottom: 1px solid #ddd;
+//   > li {
+//     float: left;
+//     margin-bottom: -1px;
+//     > a {
+//       margin-right: 2px;
+//       line-height: 1.42857143;
+//       border: 1px solid transparent;
+//       border-radius: 4px 4px 0 0;
+//       &:hover {
+//         border-color: #eee #eee #ddd;
+//       }
+//     }
+//     &.active {
+//       > a,
+//       > a:hover,
+//       > a:focus {
+//         color: #555;
+//         cursor: default;
+//         background-color: #fff;
+//         border: 0px solid transparent;
+//       }
+//     }
+//   }
+//   &.nav-justified {
+//     width: 100%;
+//     border-bottom: 0;
+//     > li {
+//       float: none;
+//       > a {
+//         margin-bottom: 5px;
+//         text-align: center;
+//       }
+//     }
+//   }
+// }
+%tab-selector {
+  position: relative;
+  width: 100%;
+  //  Actions
+  .actions {
+    position: absolute;
+    top: 0;
+    right: rem($spacing-m*2);
+  }
+}
+
+%tab-template-property {
+  position: absolute;
+  top: rem(-70);
+  left: rem($spacing-m);
+}
+
+%tab-template-search {
+  top: rem(-82);
+}
+
+%tab-height {
+  height: rem(50);
+}
+
+%tab-selector-list {
+  @include list-reset;
+  > li {
+    float: left;
+    margin-right: rem($spacing-s/2);
+    @include font-size(13.5);
+    line-height: rem(20);
+    font-weight: $font-regular;
+    color: $lightgrey;
+    text-align: center;
+    border-top-left-radius: $radius;
+    border-top-right-radius: $radius;
+    // background: transparent-color($darkgrey, .9);
+    background: $darkgrey;
+    position: relative;
+    cursor: pointer;
+    transition: all .3s ease-out;
+    &.is-active, &.is-active:hover {
+      background: $white;
+      strong {
+        // color: green;
+        color: $brandcolor;
+      }
+    }
+    &:hover {
+      background: lighten($darkgrey, 5%);
+    }
+  }
+}
+
+%tab-selector-list-element {
+  padding: rem(14) rem($spacing-s*1.25);
+}
+
+%tab-selector-active {
+  color: $grey;
+  background: $white;
+}
+
+%tab-selector-strong {
+  @include font-size(19);
+  color: $white;
+  font-weight: $font-bold;
+}
+
+//  Close
+%tab-selector-close {
+  @extend .icon;
+  @include icon-remove-text;
+  position: absolute;
+  top: rem(5);
+  right: rem(5);
+  border: 0;
+  &:before {
+    @extend .icon-close-small;
+    @include font-size(16);
+    line-height: 1;
+    color: $white;
+  }
+}
+
+%tab-selector-close-before {
+  text-indent: 0;
+  display: block;
+}
+
+//  Tab selectornav-item
+.tab-selector {
+  @extend %tab-selector;
+  // When on property details page or Search page
+  #template.property {
+    @extend %tab-template-property;
+  }
+  #template.search {
+    @extend %tab-template-search;
+  }
+  #template.search & {
+    @extend %tab-template-search;
+  }
+  #template.search &.property {
+    top: rem(-100);
+  }
+  > ol {
+    @extend %tab-selector-list;
+    > li.is-active {
+      @extend %tab-selector-active;
+      color: tint($brandcolor, 20%);
+      strong {
+        // color: $brandcolor;
+        color: tint($brandcolor, 20%);
+      }
+      // .close:before {
+      //   color: $grey;
+      // }
+    }
+    > li {
+      @extend %tab-selector-list-element;
+      padding: rem(14) rem($spacing-s*1.25) rem(56);
+      @extend %tab-height;
+      color: lighten($brandcolor, 40%);
+      font-weight: $font-regular;
+      > strong {
+        @extend %tab-selector-strong;
+      }
+      // .close {
+      //   @extend %tab-selector-close;
+      //   &:before {
+      //     @extend %tab-selector-close-before;
+      //   }
+      // }
+    }
+  }
+  > ul {
+    @extend %tab-selector-list;
+    > li {
+      @extend %tab-height;
+      display: block;
+      > a {
+        > span, > strong {
+          @extend %tab-selector-strong;
+        }
+      }
+      > a:hover, > a:focus {
+        > span {
+          // color: transparent-color($darkgrey, .9);
+          // opacity: .75;
+        }
+        > strong {
+          color: $white;
+          &.active {
+            color: darken($white, 50%);
+          }
+        }
+      }
+      &.active {
+        @extend %tab-selector-active;
+        > a {
+          color: tint($brandcolor, 20%);
+          > span, > strong {
+            color: tint($brandcolor, 20%);
+          }
+        }
+      }
+      > a, > a:-webkit-any-link, > a:-webkit-any-link span, > a:hover, > a:active {
+        text-decoration: none !important;
+        // color: tint($brandcolor, 20%);
+      }
+    }
+  }
+  //  Popup
+  .popup {
+    position: absolute;
+    bottom: rem(60);
+    left: 50%;
+    //     @include transform(translateX(-50%));
+    @include linear-gradient($darkwhite, darken($darkwhite, 10%));
+    border-radius: $radius;
+    box-shadow: $box-shadow;
+    width: rem(280);
+    visibility: hidden;
+    opacity: 0;
+    transition: $transition-fast;
+    @include transform(translateX(-50%) scale(.95));
+    &.is-visible {
+      visibility: visible;
+      opacity: 1;
+      bottom: rem(72);
+      @include transform(translateX(-50%) scale(1));
+    }
+    &:before {
+      content: "";
+      @include triangle(20px, darken($darkwhite, 10%), down);
+      position: absolute;
+      bottom: rem(-10);
+      left: 50%;
+      margin-left: rem(-10);
+    }
+    header {
+      h3 {
+        margin: 0;
+        @include font-size(13);
+        text-align: center;
+        font-weight: $font-bold;
+        text-transform: uppercase;
+        letter-spacing: -.2px;
+        color: $lightgrey;
+        padding: rem($spacing-s);
+        padding-bottom: 0;
+      }
+    }
+    ol {
+      border-top: 1px solid transparent-color($black, .1);
+      margin: rem($spacing-s/1.5) 0;
+      @include clearfix;
+    }
+    li {
+      display: block;
+      background: none;
+      padding: 0;
+      clear: both;
+      width: 100%;
+      border-bottom: 1px solid transparent-color($black, .1);
+    }
+    a {
+      display: block;
+      border: 0;
+      text-align: center;
+      @include font-size(17);
+      font-weight: $font-regular;
+      padding: rem($spacing-s/2.5) rem($spacing-s);
+      &:hover {
+        background: $color-positive;
+        color: $white;
+      }
+    }
+  }
+  //  Button Add
+  .button-add {
+    @extend .icon;
+    @extend .button.grey;
+    padding: 0;
+    box-shadow: $box-shadow;
+    //     @include transform(translateY(-50%));
+    &:before {
+      @extend .icon-calculator2;
+      @include font-size(22);
+      padding: rem(14);
+      color: $darkgrey;
+    }
+  }
+  &.property {
+    .tab-content {
+      margin-top: rem(32);
+    }
+    > ul {
+      > li {
+        height: rem(70);
+        > a {
+          max-height: rem(70);
+        }
+      }
+    }
+  }
+  &.tab-container {
+    .nav {
+      // height: rem(70);
+      height: auto;
+      margin-top: 0;
+      margin-bottom: 3em;
+    }
+  }
+}
+
+.tab-selector3 {
+  @extend %tab-selector;
+  @extend %tab-template-property;
+  @extend %tab-template-search;
+  > ol, > ul {
+    @extend %tab-selector-list;
+  }
+  > ol {
+    > li {
+      @extend %tab-selector-list-element;
+      &:hover, &.active {
+        @extend %tab-selector-active;
+        .close:before {
+          color: $grey;
+        }
+      }
+    }
+  }
+  li {
+    &:hover, &.active {
+      label {
+        color: $brandcolor;
+      }
+    }
+  }
+  strong, label {
+    @extend %tab-selector-strong;
+  }
+}
+
+//  Tab selector inline
+//  This selector is used within .main-content and actions within him open another page template (i.e. search results)
+//  Tab selector
+.tab-selector-inline {
+  position: relative;
+  width: 100%;
+  ol {
+    @include list-reset;
+    border-bottom: 5px solid $bordercolor;
+    @include clearfix;
+  }
+  li {
+    float: left;
+    margin-right: rem($spacing-s);
+    @include font-size(22);
+    font-weight: $font-regular;
+    color: lighten($brandcolor, 20%);
+    text-align: center;
+    padding: rem($spacing-s/1.5) rem($spacing-s);
+    position: relative;
+    cursor: pointer;
+    border-bottom: 5px solid $bordercolor;
+    margin-bottom: rem(-5);
+    transition: $transition-fast;
+    &:hover {
+      color: $white;
+      border-bottom: 5px solid $darkgrey;
+    }
+
+    &.is-active {
+      color: $brandcolor;
+      border-bottom: 5px solid $brandcolor;
+      @at-root .image-tabs#{&} {
+        color: $white;
+        border-bottom: 5px solid $white;
+      }
+    }
+    @at-root .image-tabs#{&} {
+      font-size: rem(14);
+      // font-weight: bold;
+      margin-right: rem(16);
+    }
+    @at-root .gallery-tabs#{&} {
+      font-size: rem(9.5);
+      font-weight: bold;
+    }
+    @at-root .widget.gallery .gallery-tabs#{&} {
+      width: calc(33% - rem(4));
+      margin-right: rem(4);
+    }
+  }
+}

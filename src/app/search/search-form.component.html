@@ -1,0 +1,164 @@
+<div class="form advanced-search">
+    <form #advancedSearchForm="ngForm" (ngSubmit)="onSubmit(advancedSearchForm.value)">
+        <fieldset>
+            <div class="group group-thirds">
+                <label for="property_type">Property Type</label>
+                <div style="clear: both" *ngFor="let pt of searchService.propertySearchTypes">
+                    <div>
+                        <input type="checkbox" name="propertyType"
+                            (ngModelChange)="searchService.toggleSearchPropertyType(pt); doChange()"
+                            [ngModel]="searchService.hasSearchPropertyType(pt)"
+                            />
+                        <span>{{pt.label}}</span>
+                    </div>
+                    <div class="indented" *ngFor="let pst of searchService.propertySubTypes | filterByType:pt:searchService.hasSearchPropertyType(pt)">
+                        <input type="checkbox" name="propertySubType"
+                            (ngModelChange)="searchService.toggleSearchPropertySubType(pst); doChange()"
+                            [ngModel]="searchService.hasSearchPropertySubType(pst)"
+                            />
+                        <span>{{pst.label}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="group group-thirds">
+                <label for="mls_status">MLS Status</label>
+                <div style="clear: both" *ngFor="let ms of searchService.mlsStatuses">
+                    <div>
+                        <input type="checkbox" name="mlsStatus"
+                            (ngModelChange)="searchService.toggleSearchMlsStatus(ms)"
+                            [ngModel]="searchService.hasSearchMlsStatus(ms)"
+                            />
+                        <span>{{ms.label}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="group group-thirds">
+                <label for="hud">HUD</label>
+                <input type="checkbox" name="hud" [(ngModel)]="searchService.search.hud" />
+            </div>
+            <div class="group group-thirds">
+                <label for="dom_range">DOM</label>
+                <input type="hidden" name="dom_01" [(ngModel)]="searchService.search.domFrom" />
+                <input type="hidden" name="dom_02" [(ngModel)]="searchService.search.domTo" />
+                <select name="dom_range" [ngModel]="searchService.getSearchRange('dom')"
+                    (ngModelChange)="searchService.setSearchRange('dom', $event)">
+                    <option value="">--Choose--</option>
+                    <option *ngFor="let r of searchService.domranges" value="{{r.from}};{{r.to}}">{{r.from}}{{r.to ? (-1 * r.to) : '+'}}</option>
+                </select>
+            </div>
+            <div class="group group-thirds">
+                <label for="cdom_range">CDOM</label>
+                <input type="hidden" name="cdom_01" [(ngModel)]="searchService.search.cdomFrom" />
+                <input type="hidden" name="cdom_02" [(ngModel)]="searchService.search.cdomTo" />
+                <select name="cdom_range" [ngModel]="searchService.getSearchRange('cdom')"
+                    (ngModelChange)="searchService.setSearchRange('cdom', $event)">
+                    <option value="">--Choose--</option>
+                    <option *ngFor="let r of searchService.domranges" value="{{r.from}};{{r.to}}">{{r.from}}{{r.to ? (-1 * r.to) : '+'}}</option>
+                </select>
+            </div>
+
+            <div class="group" style="display: none"><!-- empty --></div>
+            <div class="group" style="height: 20px"><!-- empty --></div>
+            <div class="group"><!-- empty --></div>
+
+            <div class="group group-single-centered">
+                <label for="zip_codes">Zip Codes <span ngbPopover="Enter one or more zip codes, separatating multiple zip codes with commas." triggers="mouseenter:mouseleave" placement="right">?</span></label>
+                <rl-tag-input name="zipcodes" placeholder="Add zipcodes" [(ngModel)]="searchService.search.zipCodes" allowedTagsPattern="/\d+/"></rl-tag-input>
+            </div>
+            <div class="group" style="display: none"><!-- empty --></div>
+            <div class="group">
+                <label for="county">County <span ngbPopover="Start typing the county name and matching counties will appear.  Select one county at a time or enter zip codes for multiple counties."
+                    triggers="mouseenter:mouseleave" placement="right">?</span></label>
+                <ng2-completer name="county" [(ngModel)]="searchService.search.county" [dataService]="searchService.countiesDataService" [matchClass]="'match'" [minSearchLength]="0"></ng2-completer>
+            </div>
+            <div class="group">
+                <label for="subdivision">Subdivision</label><input class="disabled" type="text" name="subdivision" readonly [(ngModel)]="searchService.search.subdivision" />
+            </div>
+            <div class="group">
+                <label for="city">City <span ngbPopover="Start typing and matching city names will appear." triggers="mouseenter:mouseleave" placement="right">?</span></label>
+                <ng2-completer name="city" [(ngModel)]="searchService.search.city" [dataService]="searchService.citiesDataService" [matchClass]="'match'" [minSearchLength]="0"></ng2-completer>
+            </div>
+            <div class="group">
+                <label for="school_district">School District <span ngbPopover="Start typing and matching school districts will appear." triggers="mouseenter:mouseleave" placement="right">?</span></label>
+                <ng2-completer name="schoolSystem" [(ngModel)]="searchService.search.schoolDistrict[0]" [dataService]="searchService.schoolDistrictsDataService" [matchClass]="'match'" [minSearchLength]="0"></ng2-completer>
+            </div>
+
+            <div class="group" style="height: 40px"><!-- empty --></div>
+            <div class="group"><!-- empty --></div>
+
+            <div class="group">
+                <label for="list_price_01">List Price</label>
+                <div class="ranged-input-wrapper">
+                    <input type="text" name="list_price_01" placeholder="From" #listPriceFrom="ngModel" [(ngModel)]="searchService.search.listPriceFrom" />
+                    <input type="text" name="list_price_02" placeholder="To" #listPriceTo="ngModel" [(ngModel)]="searchService.search.listPriceTo" />
+                </div>
+            </div>
+            <div class="group">
+                <label for="sqft_range_01">SqFt Range</label>
+                <div class="ranged-input-wrapper">
+                    <input type="text" name="sqft_range_01" placeholder="From" [(ngModel)]="searchService.search.sqftFrom" />
+                    <input type="text" name="sqft_range_02" placeholder="To" [(ngModel)]="searchService.search.sqftTo" />
+                </div>
+            </div>
+            <div class="group">
+                <label for="stories_number">Number of Stories</label>
+                <select name="stories_number" [(ngModel)]="searchService.search.numberOfStories">
+                    <option value="0">--Choose--</option>
+                    <option *ngFor="let s of searchService.stories" value="{{s.value}}">{{s.label}}</option>
+                </select>
+            </div>
+            <div class="group">
+                <label for="hoa">HOA Fee</label>
+                <div class="ranged-input-wrapper">
+                    <input type="text" name="hoa_fee_range_01" placeholder="From" [(ngModel)]="searchService.search.hoaFrom" />
+                    <input type="text" name="hoa_fee_range_02" placeholder="To" [(ngModel)]="searchService.search.hoaTo" />
+                </div>
+            </div>
+            <div class="group">
+                <label for="pool">Pool</label>
+                <input type="checkbox" name="pool" [(ngModel)]="searchService.search.pool" />
+            </div>
+
+            <div class="group"><!-- empty--></div>
+            <div class="group" style="height: 40px"><!-- empty --></div>
+            <div class="group"><!-- empty --></div>
+
+            <div class="group">
+                <label for="hit_wholesale_01">HIT Wholesale</label>
+                <div class="ranged-input-wrapper">
+                    <input type="text" name="hit_wholesale_01" placeholder="From" #hitWholesaleFrom="ngModel" [(ngModel)]="searchService.search.hitWholesaleFrom" />
+                    <input type="text" name="hit_wholesale_02" placeholder="To" #hitWholesaleTo="ngModel" [(ngModel)]="searchService.search.hitWholesaleTo" />
+                </div>
+            </div>
+            <div class="group">
+                <label for="tax_value_range_01">Tax Value Range</label>
+                <div class="ranged-input-wrapper">
+                    <input type="text" name="tax_value_range_01" placeholder="From" [(ngModel)]="searchService.search.taxValueFrom" />
+                    <input type="text" name="tax_value_range_02" placeholder="To" [(ngModel)]="searchService.search.taxValueTo" />
+                </div>
+            </div>
+            <div class="group">
+                <label for="hit_arv_01">HIT ARV</label>
+                <div class="ranged-input-wrapper">
+                    <input type="text" name="hit_arv_01" placeholder="From" #hitArvFrom="ngModel" [(ngModel)]="searchService.search.hitArvFrom" />
+                    <input type="text" name="hit_arv_02" placeholder="To" #hitArvTo="ngModel" [(ngModel)]="searchService.search.hitArvTo" />
+                </div>
+            </div>
+            <div class="group">
+                <label for="hit_asis_01">HIT As Is</label>
+                <div class="ranged-input-wrapper">
+                    <input type="text" name="hit_asis_01" placeholder="From" #hitAsIsFrom="ngModel" [(ngModel)]="searchService.search.hitAsIsFrom" />
+                    <input type="text" name="hit_asis_02" placeholder="To" #hitAsIsTo="ngModel" [(ngModel)]="searchService.search.hitAsIsTo" />
+                </div>
+            </div>
+            <div class="group search-name">
+                <label for="search_name">Name Your Search</label>
+                <input type="text" name="search_name" [(ngModel)]="searchService.search.searchName" placeholder="My First Search, MY MLS Search etc." />
+            </div>
+            <div class="group button-group ">
+                <input type="button" value="Reset" (click)="searchService.resetSearch()" />
+                <input type="submit" name="advanced_search_submit" value="Search" (click)="onSubmit()" />
+            </div>
+        </fieldset>
+    </form>
+</div>

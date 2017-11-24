@@ -1,0 +1,364 @@
+<template #notes let-c="close" let-d="dismiss">
+  <div class="modal-dialog">
+    <div class="modal-content widget">
+      <div class="modal-header">
+        <div class="modal-title">Notes</div>
+        <div class="actions">
+          <a (click)="d('close')" class="clickable close">Close</a>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="notes-content">
+          <div *ngFor="let note of notesService.notes">
+            <span>{{note.author}}</span>
+            <span>{{formatDate(note.created, 'MMM D, YY@h:mm A')}}</span>
+            <div [innerHTML]="note.content"></div>
+            <div *ngFor="let attachment of note.filteredAttachments">
+              <a target="_blank" href="{{attachment.url}}">{{attachment.description}}</a>
+            </div>
+          </div>
+        </div>
+        <form #f="ngForm" (ngSubmit)="savePropertyNote()">
+          <fieldset>
+            <div class="group">
+              <label for="notes">Notes about this property</label>
+              <p-editor class="paper-nested2" name="newnote" [(ngModel)]="notesService.newnote" [style]="{'height':'160px'}"></p-editor>
+              <p class="description">Write down your notes about this property. <strong>These notes will be visible only to you.</strong></p>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a (click)="savePropertyNote(); c('close')" class="clickable button">Save notes</a>
+      </div>
+    </div>
+  </div>
+</template>
+<!-- Property Basic Information -->
+<div id="property-information" [ngClass]="{foldup: activeTab != 'tab-general'}">
+  <div class="container">
+    <!-- All Information -->
+    <div class="all-information">
+      <div class="basic-information">
+        <h1 style="margin-left: 2%; border-left: 1px solid rgb(254, 207, 64); padding-left: 0.83333rem">
+          {{propertyService.getCurrentProperty().address?.line1}} <em>{{propertyService.getCurrentProperty().address?.line2}} &bull; MLS #{{propertyService.getCurrentProperty().identifier?.mlsNumber}}</em>
+        </h1>
+        <h2 class="condition">
+          {{propertyService.getRepairConditionName(propertyService.getFlipRepairsCondition())}}
+          <em class="calctooltip">
+            Condition{{propertyService.getFlipRepairsCondition() >= 0 ? ' (C' + (propertyService.getFlipRepairsCondition() + 1) + ')' : ''}}
+            <span class="calctooltiptext">Condition Ratings on HIT are standardized and align with Fannie Mae’s Appraisal Condition Ratings, or the C-scores. These scores align with common descriptions: Excellent (C1, ARV condition), Good (C2), Above Average (C3), Average (C4) Below Average (C5-Fair) and Poor (C6). The short form of the definition for the Member to gauge habitability and marketing requirements. Until the Member adds repairs the C score remains blank. The Member adds repairs and HIT scores it relative to the definition provided by Fannie. HIT quantifies these common words using Fanny’s C score definitions as a series of systems.</span>
+          </em>
+        </h2>
+        <h2 class="condition">
+          {{propertyService.getQualityName(propertyService.getFlipSelectedQuality())}}
+          <em class="calctooltip">
+            Quality{{propertyService.getFlipSelectedQuality() >= 0 ? ' (Q' + (propertyService.getFlipSelectedQuality() + 1) + ')' : ''}}
+            <span class="calctooltiptext">Quality ratings on HIT are standardized and align with Fannie Mae’s Appraisal Quality Ratings or Q scores. The Q scores translate into common descriptions of property based on the type of construction: Basic (Q6), Economy (builders Q5), Volume (Builder Q4), Semi Custom (Q3), Custom (Q2) and Estate (Q1). Each Q has an individual Cost to Rehab (or Cost to Cure) each Quality Score has costs for single stories and two stories. Selected a Quality Type is selecting a separate preset of costs to rehab. Members are free to change any costs globally or on individual properties. Whether Members use HITs presets or their own having set libraries of realistic costs available saves countless time and energy on properties that simply will not work.</span>
+          </em>
+        </h2>
+        <h2 class="status">{{propertyService.getCurrentProperty().mls?.statusShortValue}} <em>Status<!--{{propertyService.getStatusChangeDate() | date:'mediumDate'}}--></em></h2>
+        <h2 class="list-price">${{propertyService.getListPrice()}} <em>List Price</em></h2>
+      </div>
+      <div class="additional-information">
+        <ol class="tags featured">
+          <li><strong>{{propertyService.getCurrentProperty().building?.rooms?.beds}}</strong> bed</li>
+          <li>
+            <strong>{{propertyService.getCurrentProperty().building?.rooms?.bathsFull}}</strong>
+            <strong *ngIf="propertyService.getCurrentProperty().building?.rooms?.bathsHalf && propertyService.getCurrentProperty().building?.rooms?.bathsHalf > 0">
+              {{propertyService.getCurrentProperty().building?.rooms?.bathsHalf}}/2
+            </strong>
+            baths
+          </li>
+          <li><strong>{{propertyService.getGarageSpaces()}}</strong> car</li>
+          <li class="more-info" *ngIf="propertyService.getCurrentProperty().building?.parking?.garageType">
+            <strong>Garage</strong>
+            <div>
+              <p>{{propertyService.getCurrentProperty().building?.parking?.garageType}}</p>
+              <p>{{propertyService.getGarageSpaces()}} / {{propertyService.getCurrentProperty().building?.parking?.prkgSpaces}} spaces</p>
+            </div>
+          </li>
+          <li [ngClass]="{'dimmed': !propertyService.getCurrentProperty().lot?.poolInd || ('0' == propertyService.getCurrentProperty().lot?.poolInd), 'more-info': propertyService.getCurrentProperty().lot?.poolInd && ('0' != propertyService.getCurrentProperty().lot?.poolInd)}">
+            <strong>Pool</strong>
+            <div>
+              <p>{{propertyService.getCurrentProperty().lot?.poolType}}</p>
+            </div>
+          </li>
+          <li [ngClass]="{'dimmed': propertyService.getCurrentProperty().mls?.hoaType != 'Mandatory', 'more-info': propertyService.getCurrentProperty().mls?.hoaType != 'None' && propertyService.getCurrentProperty().mls?.hoaType != ''}">
+            <strong>HOA</strong>
+            <div>
+              <p>{{propertyService.getCurrentProperty().mls?.hoaType}} Membership</p>
+              <p>{{propertyService.getCurrentProperty().mls?.hoaPeriod}} Fee: {{propertyService.getCurrentProperty().mls?.hoaFee | currency:'USD':true:'1.0-2'}}</p>
+            </div>
+          </li>
+          <li class="more-info">
+            <strong>{{propertyService.getCurrentProperty().building?.size?.livingSize | number : '1.0-0'}}</strong> SQ FT <strong> Living</strong>
+            <div>
+              <p>TOT BLDG: <b>{{propertyService.getFootageSourceDescription()}}</b></p>
+            </div>
+          </li>
+          <li [ngClass]="{'more-info': propertyService.getCurrentProperty().lot?.lotSizeInAcres}" *ngIf="propertyService.getCurrentProperty().lot?.lotSizeInSQFT">
+            <strong>{{propertyService.getCurrentProperty().lot?.lotSizeInSQFT | number : '1.0-0'}}</strong> SQ FT <strong>Lot</strong>
+            <div>
+              <p *ngIf="propertyService.getCurrentProperty().lot?.lotSizeInAcres"><strong>{{propertyService.getCurrentProperty().lot?.lotSizeInAcres | number : '1.0-4'}}</strong> Acres <strong>Lot Size</strong></p>
+            </div>
+          </li>
+          <li class="more-info" *ngIf="propertyService.getCurrentProperty().summary?.propSubType">
+            <strong>{{propertyService.getCurrentProperty().summary?.propLandUse}}</strong>
+            <div>
+              {{propertyService.getCurrentProperty().summary?.propSubType}}
+            </div>
+          </li>
+        </ol>
+        <ol class="tags">
+          <li><strong>{{roundDom(propertyService.getCurrentProperty().mls?.dom)}}</strong> DOM</li>
+          <li><strong>{{roundDom(propertyService.getCurrentProperty().mls?.cdom)}}</strong> CDOM</li>
+          <li [ngClass]="{'more-info': propertyService.getCurrentProperty().building?.summary?.yearBuiltEffective}">
+            Built in: <strong>{{propertyService.getCurrentProperty().summary?.yearBuilt}}</strong>
+            <div>
+              <p>Effective Year Built: {{propertyService.getCurrentProperty().building?.summary?.yearBuiltEffective}}</p>
+            </div>
+          </li>
+          <li class="more-info">
+            School: <strong>{{propertyService.getCurrentProperty().mls?.school?.schoolDistrict}}</strong>
+            <div>
+              <p *ngIf="propertyService.getCurrentProperty().mls?.school?.elementarySchoolName">Elementary: {{propertyService.getCurrentProperty().mls.school.elementarySchoolName}}</p>
+              <p *ngIf="propertyService.getCurrentProperty().mls?.school?.middleSchoolName">Middle: {{propertyService.getCurrentProperty().mls.school.middleSchoolName}}</p>
+              <p *ngIf="propertyService.getCurrentProperty().mls?.school?.juniorHighSchoolName">Junior High: {{propertyService.getCurrentProperty().mls.school.juniorHighSchoolName}}</p>
+              <p *ngIf="propertyService.getCurrentProperty().mls?.school?.highSchoolName">High: {{propertyService.getCurrentProperty().mls.school.highSchoolName}}</p>
+              <p *ngIf="propertyService.getCurrentProperty().mls?.school?.seniorHighSchoolName">Senior High: {{propertyService.getCurrentProperty().mls.school.seniorHighSchoolName}}</p>
+            </div>
+          </li>
+          <li class="more-info" *ngIf="propertyService.getCurrentProperty().assessment?.assessed?.assdTtlValue">
+            Tax value: <strong>{{propertyService.getCurrentProperty().assessment?.assessed?.assdTtlValue | currency:'USD':true:'1.0-0'}}</strong>
+            <div>
+              <p>{{propertyService.getPropertyTaxDescription()}}: {{propertyService.getTaxAmt() | currency:'USD':true:'1.0-0'}}</p>
+            </div>
+          </li>
+          <li *ngIf="propertyService.getCurrentProperty().building?.summary?.levels == 1">
+            <strong>1</strong> Story
+          </li>
+          <li *ngIf="propertyService.getCurrentProperty().building?.summary?.levels > 1">
+            <strong>{{propertyService.getCurrentProperty().building?.summary?.levels}}</strong> Stories
+          </li>
+        </ol>
+      </div>
+      <div *ngIf="propertyService.getCurrentProperty().resources?.photos?.urls?.length > 0" class="image-tabs tab-selector-inline" (click)="$event.stopPropagation(); $event.preventDefault()">
+        <!--ul>
+          <li [ngClass]="{'is-active': imageTab == 'tab-image'}" (click)="selectImage('tab-image')">Image</li>
+          <li [ngClass]="{'is-active': imageTab == 'tab-streetview'}" (click)="selectImage('tab-streetview')">Streetview</li>
+        </ul-->
+      </div>
+      <div class="image is-active" *ngIf="propertyService.getCurrentProperty().resources?.photos?.urls?.length > 0">
+        <img src="{{propertyService.getCurrentProperty().resources.photos.urls[0]}}" alt="" class="clickable" (click)="launchGallery()" />
+      </div>
+      <div class="image is-active" *ngIf="propertyService.getCurrentProperty().address && propertyService.getCurrentProperty().resources?.photos?.urls?.length < 1">
+        <app-google-streetview [active]="true" [property]="{latitude: propertyService.getCurrentProperty().location?.latitude, longitude: propertyService.getCurrentProperty().location?.longitude, noControls: true}">
+        </app-google-streetview>
+      </div>
+    </div>
+    <!-- End All Information -->
+    <!-- Tab selector -->
+    <div (click)="$event.preventDefault()">
+      <ngb-tabset tabsId="property-tabs" tabsOnly="true" class="tab-selector" (tabChange)="activeTab=$event.nextId; doChange()">
+        <ngb-tab id="tab-general">
+          <template ngbTabTitle>
+            General<span> Information</span>
+          </template>
+          <template ngbTabContent>
+            <app-property-general></app-property-general>
+          </template>
+        </ngb-tab>
+        <ngb-tab id="tab-flip">
+          <template ngbTabTitle>
+            Buy &amp; Flip<span> ${{propertyService.propertyFlip.profit | number:'1.0-0'}}</span>
+          </template>
+          <template ngbTabContent>
+            <app-property-flip [active]="activeTab == 'tab-flip'"></app-property-flip>
+          </template>
+        </ngb-tab>
+        <ngb-tab id="tab-rent">
+          <template ngbTabTitle>
+            Buy &amp; Hold
+            <span *ngIf="propertyService.property?.market?.rentHigh"> {{propertyService.property?.market?.rentLow | currency:'USD':true:'1.0-0'}} - {{propertyService.property?.market?.rentHigh | currency:'USD':true:'1.0-0'}}</span>
+            <span *ngIf="!propertyService.property?.market?.rentHigh">&mdash;</span>
+          </template>
+          <template ngbTabContent>
+            <app-property-rent [active]="activeTab == 'tab-rent'"></app-property-rent>
+          </template>
+        </ngb-tab>
+        <ngb-tab id="tab-onepct" *ngIf="propertyService.property?.hitMergedResponse?.resources?.photos?.highResUrls && propertyService.property?.hitMergedResponse?.resources?.photos?.highResUrls.length > 0">
+          <template ngbTabTitle>
+            Photo<span> Beta</span>
+          </template>
+          <template ngbTabContent>
+            <app-photo-addendum></app-photo-addendum>
+          </template>
+        </ngb-tab>
+        <ngb-tab id="tab-arv">
+          <template ngbTabTitle>
+            ARV
+            <span *ngIf="propertyService.property?.market?.arv"> {{propertyService.property?.market?.arv | currency:'USD':true:'1.0-0'}}</span>
+            <span *ngIf="!propertyService.property?.market?.arv">&mdash;</span>
+          </template>
+          <template ngbTabContent>
+            <app-property-comps [active]="activeTab == 'tab-arv'" [type]="'arv'" (navigateTo)="setActiveTab($event)"></app-property-comps>
+          </template>
+        </ngb-tab>
+        <ngb-tab id="tab-asis">
+          <template ngbTabTitle>
+            MA
+            <span *ngIf="propertyService.property?.market?.asIs"> {{propertyService.property?.market?.asIs | currency:'USD':true:'1.0-0'}}</span>
+            <span *ngIf="!propertyService.property?.market?.asIs">&mdash;</span>
+          </template>
+          <template ngbTabContent>
+            <app-property-comps [active]="activeTab == 'tab-asis'" [type]="'asIs'" (navigateTo)="setActiveTab($event)"></app-property-comps>
+          </template>
+        </ngb-tab>
+        <ngb-tab id="tab-wholesale">
+          <template ngbTabTitle>
+            Wholesale
+            <span *ngIf="propertyService.property?.market?.wholesale"> {{propertyService.property?.market?.wholesale | currency:'USD':true:'1.0-0'}}</span>
+            <span *ngIf="!propertyService.property?.market?.wholesale">&mdash;</span>
+          </template>
+          <template ngbTabContent>
+            <app-property-comps [active]="activeTab == 'tab-wholesale'" [type]="'wholesale'" (navigateTo)="setActiveTab($event)"></app-property-comps>
+          </template>
+        </ngb-tab>
+        <ngb-tab id="tab-rental">
+          <template ngbTabTitle>
+            Rent
+            <span *ngIf="propertyService.property?.market?.rentAverage"> &lt;{{propertyService.property?.market?.rentAverage | currency:'USD':true:'1.0-0'}}&gt;</span>
+            <span *ngIf="!propertyService.property?.market?.rentAverage">&mdash;</span>
+          </template>
+          <template ngbTabContent>
+            <app-property-comps [active]="activeTab == 'tab-rental'" [type]="'rent'" (navigateTo)="setActiveTab($event)"></app-property-comps>
+          </template>
+        </ngb-tab>
+        <ngb-tab id="tab-equity">
+          <template ngbTabTitle>
+            Equity Buy<span> Coming Soon</span>
+          </template>
+          <template ngbTabContent>
+            Coming Soon
+          </template>
+        </ngb-tab>
+      </ngb-tabset>
+    </div>
+    <!-- /Tab selector -->
+  </div>
+</div>
+<!-- /Property Basic Information -->
+<div style="position: relative;">
+  <div class="body-overlay" [hidden]="!showGallerySlider">
+    <!-- put slider tabs here -->
+    <div class="actions-wrapper">
+      <div class="actions">
+        <div class="gallery-tabs tab-selector-inline"
+            (click)="$event.stopPropagation(); $event.preventDefault()">
+          <!--ul>
+            <li [hidden]="0 == propertyService.getCurrentProperty().resources?.photos?.highResUrls?.length"
+                [ngClass]="{'is-active': galleryTab == 'tab-gallery'}"
+                (click)="selectGallery('tab-gallery')">Gallery</li>
+            <li [ngClass]="{'is-active': galleryTab == 'tab-mapview'}"
+                (click)="selectGallery('tab-mapview')">Map&nbsp;view</li>
+            <li [ngClass]="{'is-active': galleryTab == 'tab-streetview'}"
+                (click)="selectGallery('tab-streetview')">Street&nbsp;view</li>
+            <li [ngClass]="{'is-active': galleryTab == 'tab-birdseyeview'}"
+                (click)="selectGallery('tab-birdseyeview')">Birds&nbsp;eye</li>
+          </ul-->
+        </div>
+        <a (click)="showGallerySlider = false" class="clickable close">Close</a>
+      </div>
+    </div>
+    <div class="tab" [ngClass]="{'is-active': galleryTab == 'tab-gallery'}">
+      <div id="ninjaSliderModal" class="ninja-slider general-modal"
+        *ngIf="propertyService.getCurrentProperty().resources?.photos?.urls && (propertyService.getCurrentProperty().resources?.photos?.urls.length > 0)">
+        <div>
+          <div class="slider-inner">
+            <ul>
+              <li *ngFor="let photo of propertyService.getCurrentProperty().resources?.photos?.highResUrls">
+                <a class="ns-img" href="{{photo}}"></a>
+              </li>
+            </ul>
+            <div class="fs-icon" title="Expand/Close"></div>
+          </div>
+          <div id="thumbSliderModal" class="thumbnail-slider">
+            <div class="inner">
+              <ul>
+                <li *ngFor="let photo of propertyService.getCurrentProperty().resources?.photos?.urls">
+                  <a class="thumb" href="{{photo}}"></a>
+                  <span>&nbsp;</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div> <!-- End ninja-slider -->
+    </div>
+    <!--div class="tab" [ngClass]="{'is-active': galleryTab == 'tab-mapview'}">
+      <app-google-map
+          [active]="isMapActive('tab-mapview')"
+          [property]="propertyService.property">
+      </app-google-map>
+    </div-->
+    <!--div class="tab" [ngClass]="{'is-active': galleryTab == 'tab-birdseyeview'}">
+      <app-bing-birdseyeview
+          [active]="isMapActive('tab-birdseyeview')"
+          [property]="{latitude: propertyService.getCurrentProperty().location?.latitude, longitude: propertyService.getCurrentProperty().location?.longitude, label: propertyService.getCurrentProperty().address?.line1}"
+          [zoom]="19">
+      </app-bing-birdseyeview>
+    </div-->
+    <!--div class="tab" [ngClass]="{'is-active': galleryTab == 'tab-streetview'}">
+      <app-google-streetview
+          [active]="isMapActive('tab-streetview')"
+          [property]="{latitude: propertyService.getCurrentProperty().location?.latitude, longitude: propertyService.getCurrentProperty().location?.longitude}">
+      </app-google-streetview>
+    </div-->
+  </div>
+</div>
+<!-- Main -->
+<flo-scroller>
+  <ul>
+    <li><a class="button secondary small clickable" (click)="showNotesModal($event, notes)">Notes</a></li>
+    <li>
+      <a class="button white small clickable" (click)="toggleWatchlistSearchListing()">
+        <span *ngIf="!searchService.inWatchlist(propertyService.getCurrentProperty().identifier?.bippoId)">Add to watchlist</span>
+        <span *ngIf="searchService.inWatchlist(propertyService.getCurrentProperty().identifier?.bippoId)">Remove from watchlist</span></a>
+    </li>
+    <li><a class="button make-offer small flat clickable" (click)="makeOffer()">Make an offer</a></li>
+    <li><a class="button secondary small clickable" (click)="backToSearch()">Back to Search</a></li>
+  </ul>
+</flo-scroller>
+<div id="main" class="section-main">
+  <div class="container">
+    <!-- Main content -->
+    <div class="main-content" role="main">
+      <ngb-tabset-content tabsId="property-tabs"></ngb-tabset-content>
+      <div class="property-courtesy-of" *ngIf="propertyService.getCurrentProperty().mls?.brokerage && activeTab == 'tab-general'">
+        <p>Courtesy of {{propertyService.getCurrentProperty().mls?.brokerage?.listOfficeName}}, {{propertyService.getCurrentProperty().mls?.brokerage?.listAgentFullName}}
+        </p>
+      </div>
+    </div>
+    <!-- /Main content -->
+  </div>
+</div>
+<!-- /Main -->
+<div class="floating-information">
+  <div class="container">
+    <header>
+      <p>Current property: <strong>{{propertyService.getCurrentProperty().address?.line1}}</strong>, {{propertyService.getCurrentProperty().address?.line2}}</p>
+      <p>List price: <strong>${{propertyService.getListPrice()}}</strong></p>
+    </header>
+    <div class="actions">
+      <a class="button secondary small clickable" (click)="showNotesModal($event, notes)">Notes</a>
+      <a class="button white small clickable" (click)="toggleWatchlistSearchListing()">
+        <span *ngIf="!searchService.inWatchlist(propertyService.getCurrentProperty().identifier?.bippoId)">Add to watchlist</span>
+        <span *ngIf="searchService.inWatchlist(propertyService.getCurrentProperty().identifier?.bippoId)">Remove from watchlist</span></a>
+      <a class="button make-offer small flat clickable" (click)="makeOffer()">Make an offer</a>
+    </div>
+  </div>
+  <header style="width: 100%; text-align: center; margin: -20px auto">
+    <p>COMPALATOR™</p>
+  </header>
+</div>

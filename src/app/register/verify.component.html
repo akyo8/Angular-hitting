@@ -1,0 +1,39 @@
+<!-- Main -->
+<div id="main" class="section-main">
+    <div class="container">
+    <!-- Main content -->
+    <div class="main-content" role="main">
+        <div class="widget register">
+            <header>
+                <h2>Verify Registration</h2>
+            </header>
+            <div class="form two-columns no-labels">
+                <form #f="ngForm" (ngSubmit)="onSubmit()">
+                    <div class="message error" [hidden]="!showError">
+                        <p>There was a problem with your registration code. You can register <a [routerLink]="['/register']"><u>here</u></a>.</p>
+                    </div>
+                    <div class="message success" [hidden]="!showSuccess">
+                        <p>Congratulations! You are now registered. You can log in <a [routerLink]="['/login']">here</a> to activate your free trial.</p>
+                    </div>
+                    <div class="message success" [hidden]="!showPending">
+                        <p>Please wait while we process your request.</p>
+                    </div>
+                    <fieldset>
+                        <div class="group">
+                            <label for="code">Registration code</label>
+                            <input type="text" [(ngModel)]="code" name="code" placeholder="Code" required [disabled]="showPending" />
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="group button-group">
+                            <input type="submit" value="Verify" [disabled]="!f.valid || showPending">
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /Main content -->
+    </div>
+</div>
+<!-- /Main -->

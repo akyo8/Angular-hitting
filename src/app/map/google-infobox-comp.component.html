@@ -1,0 +1,35 @@
+<div class="thumb" *ngIf="propertyService.getPropertyData(property).resources?.photos?.urls?.length > 0">
+  <img src="{{propertyService.getFirstPhoto(property)}}" alt="Property Image" />
+</div>
+<div class="info">
+  <span class="addr">
+      <span>
+          <strong>{{propertyService.getPropertyData(property).address?.line1}}</strong>
+          <br>
+          {{propertyService.getPropertyData(property).address?.line2}}
+      </span>
+  </span>
+  <span class="dist">
+      <span *ngIf="property.distance"><strong>{{property.distance | number: '1.0-3'}}</strong> Mi. from subject</span>
+      <span *ngIf="!property.distance">Subject property</span>
+  </span>
+  <span class="space">
+      <span><strong>{{propertyService.getPropertyData(property).building?.rooms?.beds}}</strong> Bed</span>
+      <span><strong>{{propertyService.getPropertyData(property).building?.rooms?.bathsTotal}}</strong> Bath</span>
+      <span><strong>{{propertyService.getGarageSpaces(property)}}</strong> Car</span>
+  </span>
+  <span class="gla">
+      <span><strong>{{roundDom(propertyService.getPropertyData(property).mls?.dom)}}</strong> DOM</span>
+      <span><strong>{{roundDom(propertyService.getPropertyData(property).mls?.cdom)}}</strong> CDOM</span>
+  </span>
+  <span class="lot">
+      <span *ngIf="propertyService.getPropertyData(property).building?.size?.bldgSize"><strong>{{propertyService.getPropertyData(property).building?.size?.bldgSize | number : '1.0-0'}}</strong> SQ FT</span>
+      <span *ngIf="propertyService.getPropertyData(property).lot?.lotSizeInSQFT"><strong>{{propertyService.getPropertyData(property).lot?.lotSizeInSQFT | number : '1.0-0'}}</strong> SQ FT LOT</span>
+  </span>
+  <span class="build">
+      <span>Build Year: <strong>1985</strong></span>
+  </span>
+  <!--     <span *ngIf="propertyService.getPropertyData(property).building?.conditionValue">{{propertyService.getPropertyData(property).building?.conditionCode}} {{propertyService.getPropertyData(property).building?.conditionValue | number : '.1-1'}} /</span>
+    <span><strong>MLS:</strong> {{propertyService.getStatus(searchService, property)}}</span> -->
+  <!-- <span><strong>{{propertyService.getPropertyData(property).mls?.school?.schoolDistrict}}</strong></span> -->
+</div>

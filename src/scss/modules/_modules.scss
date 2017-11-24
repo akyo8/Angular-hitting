@@ -1,0 +1,303 @@
+// All Modules
+@import 'shared';
+// @import 'ninja_slider';
+@import 'auth';
+@import 'dashboard';
+@import 'map';
+@import 'modal';
+@import 'navigation';
+@import 'pagination';
+@import 'revisions';
+@import 'search';
+@import 'saved_search';
+@import 'slider';
+@import 'slideshow';
+@import 'table';
+@import 'tabs';
+@import 'infotabs';
+@import 'tax';
+@import 'accordion';
+@import 'calculator';
+@import 'census';
+
+//  Floating information object
+#template.property {}
+
+.floating-information {
+  position: fixed;
+  padding: gutter() / 4;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: transparent-color($black, .95);
+  z-index: 10000;
+  header {
+    float: left;
+    p {
+      @include font-size(16);
+      color: $lightgrey;
+      strong {
+        color: $darkwhite;
+      }
+    }
+  }
+  .actions {
+    float: right;
+  }
+}
+
+/* =Templates and template parts
+===================================================== */
+
+.full-width {
+  width: 100%;
+}
+
+.section-main {
+  background: $white;
+  padding: gutter() / 2;
+}
+
+//  Templates
+//  Template property
+%template-property-tabs {
+  .content {
+    width: 100%;
+    float: left;
+  }
+  .secondary-content {
+    width: 30%;
+    float: right;
+    padding-left: rem($spacing-m);
+  }
+}
+
+#template.property {
+  #tabs-container {
+    @extend %template-property-tabs;
+  }
+}
+
+app-property-general {
+  @extend %template-property-tabs;
+}
+
+//  Static template (with sidebar)
+#template.static.with-sidebar {
+  [role="main"] {
+    width: 65%;
+    float: right;
+  }
+  [role="secondary"] {
+    width: 30%;
+    float: left;
+  }
+}
+
+/* =Widgets
+===================================================== */
+
+%widget-header {
+  padding: rem($spacing-s) rem($spacing-m);
+  background: $darkgrey;
+  border-radius: $radius $radius 0 0;
+  .secondary-content & {
+    padding: rem($spacing-s/1.5) rem($spacing-m);
+  }
+  h2, .modal-title {
+    padding: 0;
+    margin: 0;
+    color: $white;
+  }
+}
+
+%widget-footer {
+  padding: rem($spacing-s) rem($spacing-m);
+  padding-top: 0;
+}
+
+//  General
+.widget {
+  margin-bottom: rem($spacing-m);
+  @include clearfix;
+  > header, > .modal-header {
+    position: relative;
+    h2 {
+      @extend %title;
+    }
+    .actions {
+      position: absolute;
+      top: 50%;
+      @include transform(translateY(-50%));
+      right: 0;
+    }
+    .button {
+      float: left;
+    }
+  }
+  > .modal-header {
+    .modal-title {
+      @extend %title;
+    }
+  }
+  > footer {
+    padding-top: rem($spacing-s);
+  }
+  //  Widget Elements
+  .note {
+    @include description;
+  }
+  //  Widgets as blocks
+  &.block, &.login, &.register, &.map, &.gallery, .modal & {
+    border-radius: $radius;
+    background: $darkwhite;
+    > header {
+      @extend %widget-header;
+      background: $darkgrey;
+    }
+    > footer {
+      @extend %widget-footer;
+    }
+    .form, .content, .text {
+      padding: rem($spacing-m) rem($spacing-m);
+    }
+    .text p {
+      text-align: left;
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.tab-content {
+  > .tab-pane {
+    display: none;
+  }
+  > .active {
+    display: block;
+  }
+}
+
+//  Notice
+.widget.notice {
+  background: $notecolor;
+  border: 1px solid shade($notecolor, 10%);
+  padding: rem($spacing-m);
+  &.full-width {
+    left: 50%;
+    position: relative;
+    @include transform(translateX(-50%));
+  }
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  h2 {
+    @extend %title;
+    float: left;
+    padding-right: $spacing-s;
+  }
+  p {
+    @include font-size(16);
+  }
+}
+
+//  Selection
+.widget.selection {
+  ol {
+    @include list-reset;
+    padding-top: rem($spacing-s);
+  }
+  li {
+    padding: rem(2) 0;
+    position: relative;
+    a {
+      display: block;
+      background: $white;
+      box-shadow: $box-shadow-minimal;
+      border-radius: $radius-small;
+      padding: rem($spacing-s/2) rem($spacing-s);
+    }
+    &.is-selected a {
+      background: $color-positive;
+      color: $white;
+      &:before {
+        @extend .icon;
+        @extend .icon-checkmark;
+        position: absolute;
+        top: 50%;
+        right: rem($spacing-s);
+        @include transform(translateY(-50%));
+      }
+    }
+  }
+}
+
+//  Notes
+.widget.notes {
+  width: rem(1000);
+  fieldset {
+    padding: 0;
+  }
+  textarea {
+    min-height: rem(300);
+  }
+}
+
+/* =Icons
+===================================================== */
+
+.mfp-bg {
+  background: transparent-color($black, .95);
+  opacity: 1;
+  z-index: 10001;
+}
+
+.mfp-wrap {
+  z-index: 10002;
+}
+
+.mfp-container {
+  z-index: 1000;
+}
+
+// Additions
+
+.form.advanced-search ng2-completer {
+  width: 60%;
+  float: right;
+  input {
+    width: 100%;
+    float: none;
+  }
+}
+
+ng2-completer .match {
+  color: orangered;
+}
+
+.fade {
+  opacity: 0;
+  -webkit-transition: opacity .15s linear;
+  -o-transition: opacity .15s linear;
+  transition: opacity .15s linear;
+}
+
+.fade.in {
+  opacity: 1;
+}
+
+.router-link-active {
+  background-color: red;
+}
+
+.tab .data .field-value {
+  display: inline-block;
+  height: rem(80);
+  line-height: rem(80);
+}
+
+.indented {
+  padding-left: rem(20);
+}

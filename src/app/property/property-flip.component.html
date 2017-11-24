@@ -1,0 +1,1053 @@
+<div class="content full-width">
+    <div class="widget calculator">
+        <article class="featured">
+            <div class="group">
+                <header>
+                    <div class="label">
+                        <h3>List Price</h3>
+                        <div class="tab-selector-inline cftoggle-position calc" (click)="$event.stopPropagation(); $event.preventDefault()">
+                            <ul>
+                                <li [ngClass]="{'active': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}"
+                                    (click)="selectClosingCostType('cash')">Cash</li>
+                                <li [ngClass]="{'active': propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'}"
+                                    (click)="selectClosingCostType('financed')">Financed</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="value">
+                        <span class="currency">$</span>
+                        <span class="value">{{propertyService.getListPrice()}}</span>
+                    </div>
+                </header>
+            </div>
+        </article>
+        <article>
+            <div class="group">
+                <header>
+                    <div class="label">
+                        <h3>Flip Price</h3>
+                        <bourbon-select [model]="propertyService.propertyCommon.market.type"
+                            (modelUpdate)="propertyService.propertyCommon.market.type = $event; propertyService.updatePropertyFlipTotals()"
+                            [options]="propertyService.propertyFlipListPriceTypes">
+                        </bourbon-select>
+                    </div>
+                    <div class="value" [ngClass]="{editable: propertyService.propertyCommon.market.type == 'other'}">
+                        <span class="currency">$</span>
+                        <span class="value" *ngIf="propertyService.propertyCommon.market.type != 'other'">{{propertyService.property.market[propertyService.propertyCommon.market.type] | number:'1.0-0'}}</span>
+                        <span class="input-value" *ngIf="propertyService.propertyCommon.market.type == 'other'">
+                            <input type="number" step="100" [(ngModel)]="propertyService.propertyCommon.market.otherValue" />
+                        </span>
+                    </div>
+                </header>
+            </div>
+        </article>
+        <!-- 1st level -->
+        <article>
+            <div class="group">
+                <accordion class="group values-two-column">
+                    <accordion-group class="accordion">
+                        <accordion-heading class="accordion-header calc-gray-gradient">
+                            <header>
+                                <div class="label">
+                                    <h3>Cost to Flip</h3>
+                                </div>
+                                <div class="value">
+                                    <span class="currency">$</span>
+                                    <span class="value">{{propertyService.propertyFlipData.costToFlip | number:'1.0-0'}}</span>
+                                </div>
+                            </header>
+                        </accordion-heading>
+                        <div class="subsection-wrap">
+                            <div class="subsection-content subsection-a">
+                                <div class="group values-two-column">
+                                    <accordion>
+                                        <accordion-group class="accordion">
+                                            <accordion-heading class="accordion-header">
+                                                <div class="label">
+                                                    <h3>Purchase Closing Cost</h3>
+                                                </div>
+                                                <div class="values">
+                                                    <div class="value value-wrap">
+                                                        <span class="currency">$</span>
+                                                        <span class="value">{{propertyService.propertyFlipData.purchaseClosingCostTotal | number:'1.0-0'}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </accordion-heading>
+                                            <div class="subsection-wrap">
+                                                <div class="subsection-content subsection-a">
+                                                    <div class="subsection-header group values-two-column label-only">
+                                                        <header>
+                                                            <div class="values">
+                                                                <div class="value label">Cash</div>
+                                                                <div class="value label">Financed</div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column" [ngClass]="{'is-dim-faded': !propertyService.propertyFlip.purchaseClosingCost.buyerPays}">
+                                                        <header>
+                                                            <div class="label">
+                                                                <div class="calctooltip checkbox">
+                                                                    <input type="checkbox" [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.buyerPays" style="margin-top: -15px" />
+                                                                    <span class="calctooltiptext">The convention in Texas is for the Seller to pay this premium— check this box if the Buyer is paying.</span>
+                                                                </div>
+                                                                <h3>
+                                                                    <div class="calctooltip">Title Policy
+                                                                        <span class="calctooltiptext">The title policy premium displayed is based on the current tax value. It is indicative of Basic coverage and may vary depending on the final Purchase price and any additional endorsements you may request. The convention in Texas is for the Seller to pay the premium; Buyer may pay in selected cases.</span>
+                                                                    </div>
+                                                                </h3>
+                                                            </div>
+                                                            <div class="values" [ngClass]="{'is-dim-faded-opacity': !propertyService.propertyFlip.purchaseClosingCost.buyerPays}">
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [contenteditableModel]="propertyService.propertyFlip.purchaseClosingCost.cash.titlePolicy">
+                   <!--                                                      <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.cash.titlePolicy"
+                                                                            [disabled]="!propertyService.propertyFlip.purchaseClosingCost.buyerPays || (propertyService.propertyFlip.purchaseClosingCost.selected == 'financed')" /> -->
+                                                                    </span>
+                                                                </div>
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.purchaseClosingCost.financed.titlePolicy">
+                                                                        <!-- <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.financed.titlePolicy"
+                                                                            [disabled]="!propertyService.propertyFlip.purchaseClosingCost.buyerPays || (propertyService.propertyFlip.purchaseClosingCost.selected == 'cash')" /> -->
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Title Company Fees</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [contenteditableModel]="propertyService.propertyFlip.purchaseClosingCost.cash.titleCompanyFees">
+            <!--                                                             <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.cash.titleCompanyFees"
+                                                                            [disabled]="propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'" /> -->
+                                                                    </span>
+                                                                </div>
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.purchaseClosingCost.financed.titleCompanyFees">
+            <!--                                                             <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.financed.titleCompanyFees"
+                                                                            [disabled]="propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'" /> -->
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Title Company Escrow Fees</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.purchaseClosingCost.cash.titleCompanyEscrowFees">
+            <!--                                                             <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.cash.titleCompanyEscrowFees"
+                                                                            [disabled]="propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'" /> -->
+                                                                    </span>
+                                                                </div>
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.purchaseClosingCost.financed.titleCompanyEscrowFees">
+            <!--                                                             <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.financed.titleCompanyEscrowFees"
+                                                                            [disabled]="propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'" /> -->
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column" *ngIf="propertyService.getCurrentProperty().mls.hoaFee">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>HOA</h3>
+                                                                <div class="calctooltip checkbox">
+                                                                    <input type="checkbox" [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.resaleCertificate" style="margin-top: -15px" />
+                                                                    <span class="calctooltiptext">Check this box to include a HOA resale certificate.</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true"  
+                                                                        [attr.disabled]="!propertyService.propertyFlip.purchaseClosingCost.resaleCertificate">{{propertyService.propertyFlip.purchaseClosingCost.cash.hoa}}
+                                                                    </span>
+                                                                </div>
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [attr.disabled]="!propertyService.propertyFlip.purchaseClosingCost.resaleCertificate"> {{propertyService.propertyFlip.purchaseClosingCost.financed.hoa}}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Insurance</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.purchaseClosingCost.cash.insurance">
+                                                                        <!-- <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.cash.insurance"
+                                                                            [disabled]="propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'" /> -->
+                                                                    </span>
+                                                                </div>
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.purchaseClosingCost.financed.insurance">
+            <!--                                                             <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.financed.insurance"
+                                                                            [disabled]="propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'" /> -->
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column" *ngIf="propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'">
+                                                        <!-- begin a nested accordion -->
+                                                        <accordion>
+                                                            <accordion-group class="accordion">
+                                                                    <accordion-heading class="accordion-header accordion-subheader">
+                                                                        <div class="label">
+                                                                            <h3>Real Estate Taxes</h3>
+                                                                        </div>
+                                                                        <div class="values">
+                                                                            <div class="value value-wrap" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}">
+                                                                                <span class="currency">$</span>
+                                                                                <span class="value">{{propertyService.propertyFlip.purchaseClosingCost.financed.taxEscrow}}</span>
+                                                                            </div>
+                                                                            <div class="value value-wrap" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'}">
+                                                                                <span class="currency">&nbsp;</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </accordion-heading>
+                                                                    <div class="subsection-wrap">
+                                                                        <div class="subsection-content subsection-a">
+                                                                            <div class="group values-two-column">
+                                                                                <header>
+                                                                                    <div class="label">
+                                                                                        <h3>Escrow</h3>
+                                                                                    </div>
+                                                                                    <div class="values">
+                                                                                        <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}">
+                                                                                            <!--span class="currency">$</span>
+                                                                                            <span class="value">{{propertyService.propertyFlipData.expenses.realEstateTaxes}}</span-->
+                                                                                        </div>
+                                                                                        <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}">
+                                                                                            <span class="currency">$</span>
+                                                                                            <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.purchaseClosingCost.financed.taxEscrow">
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </header>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                            </accordion-group>
+                                                        </accordion>
+                                                    </div>
+                                                    <div class="group values-two-column">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Survey</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [contenteditableModel]="propertyService.propertyFlip.purchaseClosingCost.cash.survey">
+              <!--                                                           <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.cash.survey"
+                                                                            [disabled]="propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'" /> -->
+                                                                    </span>
+                                                                </div>
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [contenteditableModel]="propertyService.propertyFlip.purchaseClosingCost.financed.survey">
+            <!--                                                             <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.financed.survey"
+                                                                            [disabled]="propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'" /> -->
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column" *ngIf="propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Loan Origination</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [contenteditableModel]="propertyService.propertyFlip.purchaseClosingCost.cash.loanOrigination">
+            <!--                                                             <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.cash.loanOrigination"
+                                                                            [disabled]="true" /> -->
+                                                                    </span>
+                                                                </div>
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [contenteditableModel]="propertyService.propertyFlip.purchaseClosingCost.financed.loanOrigination">
+            <!--                                                             <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.financed.loanOrigination"
+                                                                            [disabled]="propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'" /> -->
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column is-dim-faded">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>
+                                                                    <div class="calctooltip">Transfer Tax
+                                                                        <span class="calctooltiptext">Not applicable in Texas.</span>
+                                                                    </div>
+                                                                </h3>
+                                                            </div>
+                                                            <div class="values is-dim-faded-opacity">
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [contenteditableModel]="propertyService.propertyFlip.purchaseClosingCost.cash.transferTax">
+            <!--                                                             <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.cash.transferTax"
+                                                                            [disabled]="propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'" /> -->
+                                                                    </span>
+                                                                </div>
+                                                                <div class="value value-wrap editable" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" value="287" [contenteditableModel]="propertyService.propertyFlip.purchaseClosingCost.financed.transferTax"></span>
+            <!--                                                             <input type="number" step="1"
+                                                                            [(ngModel)]="propertyService.propertyFlip.purchaseClosingCost.financed.transferTax"
+                                                                            [disabled]="propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'" /> -->
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column" *ngIf="propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Downpayment</h3>
+                                                                <div class="values editable">
+                                                                    <span class="input-value">
+                                                                        <input type="text" placeholder="%" min="0" max="1" step="0.01"
+                                                                            [ngModel]="decimalToPercent(propertyService.propertyFlip.purchaseClosingCost.financed.loanDownPaymentFraction)"
+                                                                            (ngModelChange)="propertyService.propertyFlip.purchaseClosingCost.financed.loanDownPaymentFraction = $event / 100"
+                                                                            [disabled]="propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'"
+                                                                            style="background-image: none; background-color: white" />
+                                                                    </span>
+                                                                    <span class="currency">%</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value value-wrap" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'}">
+                                                                    <span class="currency">$0</span>
+                                                                    <!--span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.purchaseClosingCost.cash.downpayment"></span-->
+                                                                </div>
+                                                                <div class="value value-wrap" [ngClass]="{'is-dimmed': propertyService.propertyFlip.purchaseClosingCost.selected == 'cash'}">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value">{{getLoanDownPaymentDollars()}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </accordion-group>
+                                    </accordion>
+                                </div>
+                            </div>
+                            <div class="subsection-content subsection-a">
+                                <div class="group values-two-column">
+                                    <accordion>
+                                        <accordion-group class="accordion">
+                                            <accordion-heading class="accordion-header">
+                                                <div class="label select-value-small">
+                                                    <h3>Repair & Remodel</h3>
+                                                    <span *ngIf="propertyService.getFlipRepairsCondition() >= 0" style="font-weight: 300; font-size: 80% !important">
+                                                        $ {{(propertyService.propertyFlipData.repairRemodelTotal / propertyService.getCurrentProperty().building?.size?.bldgSize) | number:'1.0-2'}} / sqft
+                                                    </span>
+                                                </div>
+                                                <div class="values">
+                                                    <div class="value value-wrap">
+                                                        <span class="currency">$</span>
+                                                        <span class="value">{{propertyService.propertyFlipData.repairRemodelTotal | number:'1.0-0'}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </accordion-heading>
+                                            <div class="subsection-wrap">
+                                                <div class="subsection-content subsection-a">
+                                                    <div class="group" style="min-height: 250px; border-bottom: 4px solid #e7e7be">
+                                                        <header [ngSwitch]="propertyService.getFlipSelectedQuality()">
+                                                            <div class="q-selector-image q1-example" *ngSwitchCase="0"></div>
+                                                            <div class="q-selector-image q2-example" *ngSwitchCase="1"></div>
+                                                            <div class="q-selector-image q3-example" *ngSwitchCase="2"></div>
+                                                            <div class="q-selector-image q4-example" *ngSwitchCase="3"></div>
+                                                            <div class="q-selector-image q5-example" *ngSwitchCase="4"></div>
+                                                            <div class="q-selector-image q6-example" *ngSwitchCase="5"></div>
+                                                            <div class="q-selector-controls">
+                                                                <button type="button" class="q-selector-btn" (click)="selectNextQuality()">
+                                                                    <svg width="20px" height="20px" viewBox="0 0 70 70" xml:space="preserve" *ngIf="propertyService.getFlipSelectedQuality() > 0">
+                                                                        <polyline fill="none" stroke="#636363" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" points="10,65 40,35 70,65"></polyline>
+                                                                    </svg>
+                                                                </button>
+                                                                <button type="button" class="q-selector-btn" style="margin-top: 190px" (click)="selectPrevQuality()">
+                                                                    <svg width="20px" height="20px" viewBox="0 0 70 70" xml:space="preserve" *ngIf="propertyService.getFlipSelectedQuality() < 5">
+                                                                        <polyline fill="none" stroke="#636363" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" points="10,35 40,65 70,35"></polyline>
+                                                                    </svg>
+                                                                </button>
+                                                            </div>
+                                                            <div class="label" style="width: 31%">
+                                                                <h3 [innerHTML]="propertyService.getRepairConditionDescription(propertyService.getFlipRepairsCondition())"
+                                                                    style="font-size: 100% !important" *ngIf="propertyService.getFlipRepairsCondition() >= 0"></h3>
+                                                                <h3 style="font-size: 100% !important" *ngIf="propertyService.getFlipRepairsCondition() < 0">
+                                                                    <b>Condition Scores:</b>
+                                                                    <br>Excellent C1 - Poor C6
+                                                                    <br><br>- As repairs are added the condition score changes
+                                                                    <br>- The score is in all places condition is needed
+                                                                </h3>
+                                                            </div>
+                                                            <div class="label" style="width: 31%; min-height: 250px; border-left: 1px solid #e7e7be">
+                                                                <h3 style="font-size: 100% !important"
+                                                                    [innerHTML]="propertyService.getQualityDescription(propertyService.getFlipSelectedQuality(), propertyService.getCurrentProperty().building?.summary?.levels)"></h3>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column is-checkbox"
+                                                        [ngClass]="{'is-dimmed': !propertyService.propertyFlip.repairAndRemodel.noRepairs}">
+                                                        <header>
+                                                            <div class="checkbox">
+                                                                <input type="checkbox" checked
+                                                                    [(ngModel)]="propertyService.propertyFlip.repairAndRemodel.noRepairs"
+                                                                    (click)="propertyService.toggleFlipNoRepairs()" />
+                                                            </div>
+                                                            <div class="label">
+                                                                <h3>No Repairs Necessary</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value"></div>
+                                                                <div class="value" style="pointer-events: initial; opacity: 1">
+                                                                    <button type="button" class="q-selector-btn" (click)="propertyService.cleanAndRecalcFlipRepairs()">Save</button>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div *ngFor="let item of propertyService.getCurrentFlipRepairItems()"
+                                                        class="group values-two-column is-checkbox" [ngClass]="{'is-dimmed': !item.included, 'is-locked': false}">
+                                                        <header>
+                                                            <div class="checkbox">
+                                                                <input type="checkbox" checked [(ngModel)]="item.included" (click)="propertyService.toggleFlipRepairIncluded(item)" />
+                                                            </div>
+                                                            <div class="label">
+                                                                <h3 *ngIf="!item.labelTooltip">{{item.labelName}}</h3>
+                                                                <h3 *ngIf="item.labelTooltip">
+                                                                    <div class="calctooltip">{{item.labelName}} <span class="calctooltiptext">{{item.labelTooltip}}</span></div>
+                                                                </h3>
+                                                                <div class="description" *ngIf="item.labelIntermediary && itemHasSourceUnit(item)">{{item.labelIntermediary}}</div>
+                                                                <div class="description" *ngIf="itemHasCount(item)">pc(s)</div>
+                                                                <div class="value editable" style="float: right">
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="item.sourceUnit" *ngIf="itemHasSourceUnit(item)"></span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="item.count" *ngIf="itemHasCount(item)"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="values values2">
+                                                                <div class="value editable" *ngIf="!itemHasCost0(item) || !itemHasCost1(item)">
+                                                                    <span class="value" *ngIf="!itemHasCost0(item)"></span>
+                                                                    <span class="currency" *ngIf="itemHasCost0(item)">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="item.costBase0" *ngIf="itemHasCost0(item)"></span>
+                                                                </div>
+                                                                <div class="values" style="float: left" *ngIf="itemHasCost0(item) && itemHasCost1(item)">
+                                                                    <div class="value editable calctooltip">
+                                                                        <span class="currency">$</span>
+                                                                        <span class="value" contenteditable="true" [(contenteditableModel)]="item.costBase0"></span>
+                                                                        <span class="calctooltiptext" *ngIf="item.labelBase0">{{item.labelBase0}}</span>
+                                                                    </div>
+                                                                    <div class="value editable calctooltip">
+								        <span class="currency">$</span>
+                                                                        <span class="value" contenteditable="true" [(contenteditableModel)]="item.costBase1"></span>
+                                                                        <span class="calctooltiptext" *ngIf="item.labelBase1">{{item.labelBase1}}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="value">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value">{{item.cost}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </accordion-group>
+                                    </accordion>
+                                </div>
+                            </div>
+                            <div class="subsection-content subsection-a">
+                                <div class="group values-two-column">
+                                    <accordion>
+                                        <accordion-group class="accordion">
+                                            <accordion-heading class="accordion-header"> 
+                                                <div class="label select-value-small">
+                                                    <h3>Expenses</h3>
+                                                    <bourbon-select [model]="propertyService.propertyFlip.expenses.months"
+                                                        (modelUpdate)="propertyService.propertyFlip.expenses.months = $event"
+                                                        [options]="propertyService.propertyFlipData.expensesMonthsOptions"
+                                                        [input]="true">
+                                                    </bourbon-select>
+                                                </div>
+                                                <div class="values">
+                                                    <div class="value value-wrap">
+                                                        <span class="currency">$</span>
+                                                        <span class="value">{{propertyService.propertyFlipData.expensesTotal | number:'1.0-0'}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="cleaefix"></div>
+                                            </accordion-heading>
+                                            <div class="subsection-wrap">
+                                                <div class="subsection-a subsection-content">
+                                                    <div class="subsection-header group values-two-column label-only">
+                                                        <header>
+                                                            <div class="values">
+                                                                <div class="value label">Monthly</div>
+                                                                <div class="value label">Total</div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column is-dim-faded">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>
+                                                                    <div class="calctooltip">Real Estate Taxes
+                                                                        <span class="calctooltiptext">Taxes are an expense to the transaction that are paid at closing. Taxes are shown as an expense that is accrued and passes directly to the Seller Expenses</span>
+                                                                    </div>
+                                                                </h3>
+                                                            </div>
+                                                            <div class="values is-dim-faded-opacity">
+                                                                <div class="value editable value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlipData.expenses.realEstateTaxes"></span>
+                                                                </div>
+                                                                <div class="value value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value">{{propertyService.propertyFlip.expenses.realEstateTaxes | number:'1.0-0'}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Insurance</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value editable value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlipData.expenses.insurance"></span>
+                                                                </div>
+                                                                <div class="value value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value">{{propertyService.propertyFlip.expenses.insurance | number:'1.0-0'}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Mowing</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value editable value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlipData.expenses.mowing"></span>
+                                                                </div>
+                                                                <div class="value value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value">{{propertyService.propertyFlip.expenses.mowing | number:'1.0-0'}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+
+                                                    <div class="group values-two-column" *ngIf="propertyService.getCurrentProperty().mls.hoaFee"
+                                                            [ngClass]="{'dimmed': propertyService.propertyFlipData.expenses.hoaAbsent}">
+                                                        <header *ngIf="!propertyService.propertyFlipData.expenses.hoaAbsent">
+                                                            <div class="label">
+                                                                <h3>HOA</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value editable value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlipData.expenses.hoa">
+                                                                    </span>
+                                                                </div>
+                                                                <div class="value value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value">{{propertyService.propertyFlip.expenses.hoa | number:'1.0-0'}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                    
+                                                    <div class="group values-two-column" *ngIf="propertyService.getCurrentProperty().lot.poolInd && ('0' != propertyService.getCurrentProperty().lot.poolInd)">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Pool Service</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value editable value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlipData.expenses.poolService">
+                                                                    </span>
+                                                                </div>
+                                                                <div class="value value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value">{{propertyService.propertyFlip.expenses.poolService | number:'1.0-0'}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                    
+                                                    <div class="group values-two-column" *ngIf="propertyService.propertyFlip.purchaseClosingCost.selected == 'financed'">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Financing Payment</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value editable value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlipData.expenses.financing">
+                                                                    </span>
+                                                                </div>
+                                                                <div class="value value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value">{{propertyService.propertyFlip.expenses.financing | number:'1.0-0'}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    
+                                                    <div class="group values-two-column">
+                                                        <accordion>
+                                                            <accordion-group class="accordion">
+                                                                    <accordion-heading class="accordion-header accordion-subheader">
+                                                                        <div class="label">
+                                                                            <h3>Utilities</h3>
+                                                                        </div>
+                                                                        <div class="values">
+                                                                            <div class="value value-wrap">
+                                                                                <span class="currency">$</span>
+                                                                                <span class="value">{{propertyService.propertyFlipData.expenses.utilitiesTotal | number:'1.0-0'}}</span>
+                                                                            </div>
+                                                                            <div class="value value-wrap">
+                                                                                <span class="currency">$</span>
+                                                                                <span class="value">{{propertyService.propertyFlipData.expenses.utilityCostsMonthlyTotal | number:'1.0-0'}}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </accordion-heading>
+                                                                    <div class="subsection-wrap">
+                                                                        <div class="subsection-content subsection-a">
+                                                                            <div class="group values-two-column">
+                                                                                <header>
+                                                                                    <div class="label">
+                                                                                        <h3>Water / Sewer</h3>
+                                                                                    </div>
+                                                                                    <div class="values">
+                                                                                        <div class="value editable value-wrap">
+                                                                                            <span class="currency">$</span>
+                                                                                            <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlipData.expenses.utilityCosts.waterAndSewer">
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div class="value value-wrap">
+                                                                                            <span class="currency">$</span>
+                                                                                            <span class="value">{{propertyService.propertyFlip.expenses.utilityCosts.waterAndSewer | number:'1.0-0'}}</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </header>
+                                                                            </div>
+                                                                            <div class="group values-two-column">
+                                                                                <header>
+                                                                                    <div class="label">
+                                                                                        <h3>Electrical</h3>
+                                                                                    </div>
+                                                                                    <div class="values">
+                                                                                        <div class="value editable value-wrap">
+                                                                                            <span class="currency">$</span>
+                                                                                            <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlipData.expenses.utilityCosts.electrical"></span>
+                                                                                        </div>
+                                                                                        <div class="value value-wrap">
+                                                                                            <span class="currency">$</span>
+                                                                                            <span class="value">{{propertyService.propertyFlip.expenses.utilityCosts.electrical | number:'1.0-0'}}</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </header>
+                                                                            </div>
+                                                                            <div class="group values-two-column" *ngIf="propertyService.getCurrentProperty().utilities.utilityDesc.toLowerCase().indexOf('gas') != -1">
+                                                                                <header>
+                                                                                    <div class="label">
+                                                                                        <h3>Gas</h3>
+                                                                                    </div>
+                                                                                    <div class="values">
+                                                                                        <div class="value editable value-wrap">
+                                                                                            <span class="currency">$</span>
+                                                                                            <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlipData.expenses.utilityCosts.gas">
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div class="value value-wrap">
+                                                                                            <span class="currency">$</span>
+                                                                                            <span class="value">{{propertyService.propertyFlip.expenses.utilityCosts.gas | number:'1.0-0'}}</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </header>
+                                                                            </div>
+                                                                            <div class="group values-two-column">
+                                                                                <header>
+                                                                                    <div class="label">
+                                                                                        <h3>Alarm</h3>
+                                                                                    </div>
+                                                                                    <div class="values">
+                                                                                        <div class="value editable value-wrap">
+                                                                                            <span class="currency">$</span>
+                                                                                            <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlipData.expenses.utilityCosts.alarm">
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div class="value value-wrap">
+                                                                                            <span class="currency">$</span>
+                                                                                            <span class="value">{{propertyService.propertyFlip.expenses.utilityCosts.alarm | number:'1.0-0'}}</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </header>
+                                                                            </div>
+                                                                            <div class="group values-two-column">
+                                                                                <header>
+                                                                                    <div class="label">
+                                                                                        <h3>Other</h3>
+                                                                                    </div>
+                                                                                    <div class="values">
+                                                                                        <div class="value editable value-wrap">
+                                                                                            <span class="currency">$</span>
+                                                                                            <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlipData.expenses.utilityCosts.other">
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div class="value value-wrap">
+                                                                                            <span class="currency">$</span>
+                                                                                            <span class="value">{{propertyService.propertyFlip.expenses.utilityCosts.other | number:'1.0-0'}}</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                            </header>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </accordion-group>
+                                                        </accordion>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </accordion-group>
+                                    </accordion>
+                                </div>
+                            </div>
+                            <div class="subsection-content subsection-a">
+                                <div class="group values-two-column">
+                                    <accordion>
+                                        <accordion-group class="accordion">
+                                            <accordion-heading class="accordion-header">
+                                                <div class="label">
+                                                    <h3>Selling Closing Cost</h3>
+                                                </div>
+                                                <div class="values">
+                                                    <div class="value value-wrap">
+                                                        <span class="currency">$</span>
+                                                        <span class="value">{{propertyService.propertyFlipData.sellingClosingCostTotal | number:'1.0-0'}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </accordion-heading>
+                                            <div class="subsection-wrap">
+                                                <div class="subsection-content subsection-a">
+                                                    <div class="group values-two-column">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>
+                                                                    <div class="calctooltip">Title Policy
+                                                                        <span class="calctooltiptext">The title policy premium displayed here is based on the current list price. It is indicative of Basic coverage; you may spend more depending on the final selling price and additional coverage requested by the Buyer.</span>
+                                                                    </div>
+                                                                </h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value"></div>
+                                                                <div class="value value-wrap editable hang-right">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.sellingClosingCost.titlePolicy">
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Title Company Fees</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value"></div>
+                                                                <div class="value value-wrap editable">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.sellingClosingCost.titleCompanyFees">
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group values-two-column">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>
+                                                                    <div class="calctooltip">Commission
+                                                                      <span class="calctooltiptext">Commissions are based on the current list price. The commissions considered indicative, not accurate depending on the final selling rice. Commissions can be changed globally or on individual properties including zero.</span>
+                                                                    </div>
+                                                                </h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value value-wrap editable">
+                                                                    <span class="value input-value">
+                                                                        <input type="text" min="0" max="1" step="0.05"
+                                                                            [ngModel]="decimalToPercent(propertyService.propertyFlip.sellingClosingCost.realEstateCommission)"
+                                                                            (ngModelChange)="propertyService.propertyFlip.sellingClosingCost.realEstateCommission = $event / 100"
+                                                                            style="background-image: none; background-color: white" />
+                                                                    </span>
+                                                                    <span class="currency">%</span>
+                                                                </div>
+                                                                <div class="value value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value">{{getRealEstateCommDollars()}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>
+                                                                    <div class="calctooltip">Real Estate Taxes
+                                                                        <span class="calctooltiptext">For non-auction properties— Seller credit for taxes from Jan 1st was paid to you in the form of cash; when you sell you will pay your portion of the year and the credit you received. If you are holding the property on Dec 31st, you will be responsible for the entire year of taxes. The amount posted here is for the period in which you owned the property.</span>
+                                                                    </div>
+                                                                </h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value"></div>
+                                                                <div class="value editable value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value">{{propertyService.propertyFlip.expenses.realEstateTaxes | number:'1.0-0'}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group" *ngIf="propertyService.getCurrentProperty().mls.hoaFee">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>
+                                                                    <div class="calctooltip">HOA Resale
+                                                                        <span class="calctooltiptext">Typically, the Seller pays for the resale certificate. These certificates are dictated by the HOA and management company. <!--MLS shows the management company to be _ with a contact number of _; you can contact them for a more detailed accounting.--> The current value is offered as typical for most HOAs in Texas; this is offered as indicative, not definitive.</span>
+                                                                    </div>
+                                                                </h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value"></div>
+                                                                <div class="value editable value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.sellingClosingCost.hoaResale">
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Misc Lender</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value"></div>
+                                                                <div class="value editable value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.sellingClosingCost.miscLender">
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                    <div class="group">
+                                                        <header>
+                                                            <div class="label">
+                                                                <h3>Other</h3>
+                                                            </div>
+                                                            <div class="values">
+                                                                <div class="value"></div>
+                                                                <div class="value editable value-wrap">
+                                                                    <span class="currency">$</span>
+                                                                    <span class="value" contenteditable="true" [(contenteditableModel)]="propertyService.propertyFlip.sellingClosingCost.other">
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </header>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </accordion-group>
+                                    </accordion>
+                                </div>
+                            </div>
+                        </div>
+                    </accordion-group>
+                </accordion>
+                        
+
+                <!--ngb-accordion activeIds="1">
+                        <ngb-panel id="1">
+                            <template ngbPanelTitle>
+                                <header class="accordion-header">
+
+                                </header>
+                            </template>
+                            <template ngbPanelContent>
+                            </template>
+                        </ngb-panel>
+                        <ngb-panel>
+                            <template ngbPanelTitle>
+                                <header class="accordion-header">
+
+                                </header>
+                            </template>
+                            <template ngbPanelContent>
+
+                            </template>
+                        </ngb-panel>
+
+                        <ngb-panel>
+                            <template ngbPanelTitle>
+                                <header class="accordion-header">
+
+                                </header>
+                            </template>
+                            <template ngbPanelContent>
+                                
+                            </template>
+                        </ngb-panel>
+                        <ngb-panel>
+                            <template ngbPanelTitle>
+                                <header class="accordion-header">
+
+                                </header>
+                            </template>
+                            <template ngbPanelContent>
+                                
+                            </template>
+                        </ngb-panel>
+                </ngb-accordion-->
+            </div>
+        </article>
+        <!-- /1st level -->
+        <!-- 1st level -->
+        <article>
+            <div class="group slider">
+                <header>
+                    <div class="label">
+                        <h3>Profit</h3>
+                    </div>
+                    <div class="slider">
+                        <span class="handle"
+                            slideAble
+                            slideDirection="horisontal"
+                            (onSliding)="handleChangeProfit($event)"
+                            (onStopSliding)="handleFixProfitPercent($event)"
+                            [ngStyle]="{'left': propertyService.propertyFlipData.absROIFormatted}">
+                            <span>ROI {{propertyService.propertyFlipData.ROIFormatted}}</span>
+                        </span>
+                    </div>
+                    <div class="value">
+                        <span class="currency">$</span>
+                        <span class="value">{{propertyService.propertyFlip.profit | number:'1.0-0'}}</span>
+                    </div>
+                </header>
+            </div>
+        </article>
+        <!-- /1st level -->
+        <!-- 1st level -->
+        <article class="featured">
+            <div class="group">
+                <header>
+                    <div class="label">
+                        <h3>Max Bid</h3>
+                    </div>
+                    <div class="value editable">
+                        <span class="currency">$</span>
+                        <span class="input-value">
+                            <input type="number" step="1" [(ngModel)]="propertyService.propertyFlipData.maxBid" />
+                        </span>
+                    </div>
+                </header>
+            </div>
+            <div class="group">
+                <header>
+                    <div class="label">
+                        <h3>Opening Bid</h3>
+                    </div>
+                    <div class="value editable">
+                        <span class="currency">$</span>
+                        <span class="input-value">
+                            <input type="number" step="1" [(ngModel)]="propertyService.propertyFlipData.startingBid" />
+                        </span>
+                    </div>
+                </header>
+            </div>
+        </article>
+        <!-- /1st level -->
+    </div>
+    <!-- Revisions -->
+    <div class="widget revisions" *ngIf="propertyService.propertyFlipRevisions.length > 0">
+        <ngb-accordion class="group">
+            <ngb-panel>
+                <template ngbPanelTitle>
+                    <header style="opacity: .5">
+                        <div class="label">
+                            <h2>Calculator Revisions</h2>
+                        </div>
+                    </header>
+                </template>
+                <template ngbPanelContent>
+                    <article>
+                        <ol>
+                            <li *ngFor="let revision of propertyService.propertyFlipRevisions">
+                                <p class="revision-author">{{revision.author}}</p>
+                                <p class="revision-time">{{formatTime(revision.time)}}</p>
+                                <div class="revision-data">
+                                    <ul>
+                                        <li *ngFor="let rev of revision.revisions">{{propertyService.renderRevision(rev, 'flip')}}</li>
+                                    </ul>
+                                </div>
+                                <div class="actions">
+                                    <a (click)="revertRevision(revision)" class="button">Revert Changes</a>
+                                </div>
+                            </li>
+                        </ol>
+                    </article>
+                </template>
+            </ngb-panel>
+        </ngb-accordion>
+    </div>
+    <!-- /Revisions -->
+</div>

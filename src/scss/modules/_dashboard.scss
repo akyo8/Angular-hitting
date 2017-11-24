@@ -1,0 +1,177 @@
+//  Dashboard
+.dashboard {
+  h2 {
+    margin-bottom: gutter();
+  }
+  article {
+    box-shadow: $box-shadow-a;
+    float: left;
+    width: 32.75%;
+    margin-left: .875%;
+    margin-bottom: .875%;
+    transition: $transition-fast;
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+    &:nth-of-type(3n+1) {
+      clear: both;
+      margin-left: 0;
+    }
+    //  Hover state
+    &.is-preview {
+      //       @include transform(scale(1.1) translate(rem(5), rem(5)));
+      //       transform: scale(1.15);
+      @include transform(scale(1.035));
+      /*
+      position: relative;
+*/
+    }
+    &.is-dimmed {
+      opacity: .5;
+    }
+    //  Color coding for price change
+    &.price-change-positive {
+/*      border-top: 5px solid $color-positive;*/
+      .information .meta {
+        background: $color-positive;
+      }
+    }
+    &.price-change-negative {
+/*      border-top: 5px solid $color-negative;*/
+      .information .meta {
+        background: $color-negative;
+      }
+    }
+    //  Header
+    header {
+      padding: rem($spacing-s);
+      position: relative;
+      overflow: hidden;
+      * {
+        position: relative;
+        z-index: 10;
+      }
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 2;
+        @include linear-gradient(transparent-color($black, .5), transparent-color($black, 0));
+      }
+      h3 {
+        margin: 0;
+        @include font-size(20);
+        line-height: 1.25;
+        color: $white;
+        //         font-weight: $font-bold;
+      }
+      .address {
+        @extend %smallprint;
+        color: $darkwhite;
+        margin-bottom: rem($spacing-m);
+      }
+      .information {
+        float: left;
+        .meta {
+          float: left;
+          background: transparent-color($black, .8);
+          @include font-size(16);
+          font-weight: $font-bold;
+          color: $white;
+          padding: rem(4) rem(10);
+          margin-right: rem($spacing-s/4);
+          em {
+            font-style: normal;
+          }
+        }
+      }
+      .actions {
+        float: right;
+        .button {
+          width: rem(32);
+          height: rem(32);
+          float: left;
+          margin-left: rem($spacing-s/4);
+          padding: 0;
+          &:before {
+            @include font-size(16);
+            line-height: 1;
+            padding: rem(8);
+            color: $white;
+          }
+        }
+        .buy {
+          &:before {
+            @extend .icon-dollar;
+          }
+        }
+        .notebook {
+          @extend .button.secondary;
+          &:before {
+            @extend .icon-notebook;
+            color: $darkgrey;
+          }
+        }
+        .watchlist {
+          @extend .button.white;
+          &:before {
+            color: $brandcolor;
+          }
+        }
+        .watchlist.add:before {
+          @extend .icon-star-empty;
+        }
+        .watchlist.remove:before {
+          @extend .icon-star-full;
+        }
+        .buy {}
+      }
+      img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        min-width: 100%;
+      }
+    }
+    //  Additional information
+    .additional-information {
+      @include list-reset;
+      @extend %smallprint;
+      padding: rem($spacing-s);
+      li {
+        display: inline;
+        color: $grey;
+        &:after {
+          content: " / ";
+          color: $bordercolor;
+        }
+      }
+    }
+  }
+}
+
+.dashboard>article>header {
+  border-top: 5px solid #9e9e9e;
+  transition: all 0.2s ease-in-out;
+}
+
+.dashboard>article>header:hover {
+  -webkit-transform: scale(1.035);
+  -moz-transform: scale(1.035);
+  -ms-transform: scale(1.035);
+  -o-transform: scale(1.035);
+  transform: scale(1.035);
+}
+
+.dashboard>article.price-change-positive>header {
+    border-top: 5px solid #6ab800 !important;
+}
+
+.dashboard>article.price-change-negative>header {
+    border-top: 5px solid #9e0b0f !important;
+}
+

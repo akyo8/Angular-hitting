@@ -1,0 +1,158 @@
+<div class="tabswrapper" [ngClass]="{'loading-image': !propertyService.areaPropertyGroups || propertyService.areaPropertyGroups.length < 1}">
+  <ul class="infotabs general">
+    <template ngFor let-group [ngForOf]="propertyService.areaPropertyGroups">
+        <li class="tab" (click)="changeStatus(group.status)"
+            [attr.data-pane-id]="'pane' + groupStatusIndex(group.status)">{{group.status}}</li>
+    </template>
+  </ul>
+  <div class="panes">
+    <div class="inner_panes">
+      <div *ngFor="let group of propertyService.areaPropertyGroups" class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent" style="padding: 0px">
+            <div class="padding" style="padding: 0px">
+              <div class="widget table narrow">
+                <h2>{{group.status}} Properties</h2>
+                <table style="font-weight: bold">
+                  <thead>
+                    <tr>
+                      <!-- gallery image (link?) -->
+                      <!--<th>&#10070;</th>-->
+                      <!--th *ngIf="isExpanded(group.status)">MLS</th>
+                      <th *ngIf="isExpanded(group.status)">&#9873;</th>
+                      <th *ngIf="isExpanded(group.status)">Addr.</th>
+                      <th *ngIf="isExpanded(group.status)">City</th-->
+                      <th colspan="4">Listings</th>
+                      <th>Bed</th>
+                      <th>Bth</th>
+                      <th>Gar</th>
+                      <th>Year</th>
+                      <th>SqFt</th>
+                      <th>$ / SqFt</th>
+                      <th>Acres</th>
+                      <th>Price</th>
+                    </tr>
+                  </thead>
+                  <tbody class="trends-comp">
+                    <tr>
+                        <td colspan="3" class="center"># LISTINGS: {{group.count}}</td>
+                        <td class="right">Medians:</td>
+                        <td>{{group.medians.beds}}</td>
+                        <td>{{group.medians.bathsFull}}/{{group.medians.bathsHalf}}</td>
+                        <td>{{group.medians.garages}}</td>
+                        <td>{{group.medians.yearBuilt}}</td>
+                        <td>{{group.medians.buildingSize | number : '1.0-0'}}</td>
+                        <td>${{group.medians.pricePerSQFT | number : '1.0-0'}}</td>
+                        <td>{{group.medians.lotSizeInAcres | number : '1.0-3'}}</td>
+                        <td>${{group.medians.listPrice | number : '1.0-0'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">&nbsp;</td>
+                        <td class="right">Minimums:</td>
+                        <td>{{group.minimums.beds}}</td>
+                        <td>{{group.minimums.bathsFull}}/{{group.minimums.bathsHalf}}</td>
+                        <td>{{group.minimums.garages}}</td>
+                        <td>{{group.minimums.yearBuilt}}</td>
+                        <td>{{group.minimums.buildingSize | number : '1.0-0'}}</td>
+                        <td>${{group.minimums.pricePerSQFT | number : '1.0-0'}}</td>
+                        <td>{{group.minimums.lotSizeInAcres | number : '1.0-3'}}</td>
+                        <td>${{group.minimums.listPrice | number : '1.0-0'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">&nbsp;</td>
+                        <td class="right">Maximums:</td>
+                        <td>{{group.maximums.beds}}</td>
+                        <td>{{group.maximums.bathsFull}}/{{group.maximums.bathsHalf}}</td>
+                        <td>{{group.maximums.garages}}</td>
+                        <td>{{group.maximums.yearBuilt}}</td>
+                        <td>{{group.maximums.buildingSize | number : '1.0-0'}}</td>
+                        <td>${{group.maximums.pricePerSQFT | number : '1.0-0'}}</td>
+                        <td>{{group.maximums.lotSizeInAcres | number : '1.0-3'}}</td>
+                        <td>${{group.maximums.listPrice | number : '1.0-0'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">&nbsp;</td>
+                        <td class="right">Averages:</td>
+                        <td>{{group.averages.beds}}</td>
+                        <td>{{group.averages.bathsFull}}/{{group.averages.bathsHalf}}</td>
+                        <td>{{group.averages.garages}}</td>
+                        <td>{{group.averages.yearBuilt}}</td>
+                        <td>{{group.averages.buildingSize | number : '1.0-0'}}</td>
+                        <td>${{group.averages.pricePerSQFT | number : '1.0-0'}}</td>
+                        <td>{{group.averages.lotSizeInAcres | number : '1.0-3'}}</td>
+                        <td>${{group.averages.listPrice | number : '1.0-0'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="left">Address</th>
+                      <th>&nbsp;</th>
+                      <th>Bed</th>
+                      <th>Bth</th>
+                      <th>Year Built</th>
+                      <th>SqFt</th>
+                      <th>Acres</th>
+                      <th>List Price</th>
+                      <th>$ / Sqft</th>
+                      <th>CDOM</th>
+                    </tr>
+                  </thead>
+                  <tbody class="trends-comp" [ngClass]="{active: group.count > 10}">
+                    <template ngFor let-property [ngForOf]="group.group | paginate: { itemsPerPage: 10, currentPage: getCurrentPage(group.status) }">
+                      <tr>
+                        <td class="left">
+                          <a (click)="togglePropertySummary(property)" class="clickable">
+                            <b>{{propertyService.getPropertyData(property).address?.line1}}<br>{{propertyService.getPropertyData(property).address?.line2}}</b>
+                          </a>
+                        </td>
+                        <td class="picture">
+                          <div class="image"><img src="{{propertyService.getFirstPhoto(property)}}"></div>
+                        </td>
+                        <td>{{propertyService.getPropertyData(property).building.rooms.beds}}</td>
+                        <td>{{propertyService.getPropertyData(property).building.rooms.bathsFull}}/{{propertyService.getPropertyData(property).building.rooms.bathsHalf}}</td>
+                        <td>{{propertyService.getPropertyData(property).summary?.yearBuilt}}</td>
+                        <td>{{propertyService.getPropertyData(property).building?.size?.bldgSize}}</td>
+                        <td>{{propertyService.getPropertyData(property).lot?.lotSizeInAcres}}</td>
+                        <td>
+                          <div [ngClass]="{calctooltip: propertyService.hasClosePrice(property)}">
+                            ${{propertyService.getListPrice(property)}}
+                            <span class="calctooltiptext" style="width: 100px" *ngIf="propertyService.hasClosePrice(property)">${{propertyService.getClosePrice(property)}}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div [ngClass]="{calctooltip: propertyService.hasClosePrice(property)}">
+                            ${{pricePerFootage(propertyService.getListPrice(property), propertyService.getPropertyData(property).building?.size?.bldgSize) | number:'1.0-0'}}
+                            <span class="calctooltiptext" style="width: 100px" *ngIf="propertyService.hasClosePrice(property)">
+                              ${{pricePerFootage(propertyService.getClosePrice(property), propertyService.getPropertyData(property).building?.size?.bldgSize) | number:'1.0-0'}}
+                            </span>
+                          </div>
+                        </td>
+                        <td>{{roundDom(propertyService.getPropertyData(property).mls?.cdom)}}</td>
+                      </tr>
+                      <tr class="listing-summary" [ngClass]="{active: isPropertySummaryOpen(property)}">
+                        <td colspan="16">
+                          <!-- TODO fix -->
+                          <app-property-info *ngIf="false && isPropertySummaryOpen(property)" 
+                              [property]="property"
+                              hasClose="true"
+                              (close)="togglePropertySummary(property)"
+                              mode="summary">
+                          </app-property-info>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+                <pagination-controls *ngIf="group.count > 10"
+                    (pageChange)="setCurrentPage(group.status, $event)" ></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div> <!-- end inner_pane -->
+      </div> <!-- end pane -->
+    </div> <!-- end inner_panes -->
+  </div> <!-- end panes -->
+</div> <!-- end tabswrapper -->

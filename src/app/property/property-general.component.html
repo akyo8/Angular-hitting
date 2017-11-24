@@ -1,0 +1,204 @@
+<div class="content" [ngClass]="{'collapsed-accordions': !viewedAccordions, 'expanded-accordions': viewedAccordions}">
+  <ngb-accordion class="accordion-styled" [closeOthers]="true">
+    <article class="accordion is-open" ngbPanel *ngIf="propertyService.property?.hitMergedResponse?.auction?.auctionDate">
+      <template ngbPanelTitle>
+        <header (click)="toggleAccordionViewed(0)">
+          <h2>Auction Properties</h2>
+          <a class="action-button" href=""></a>
+        </header>
+      </template>
+      <template ngbPanelContent>
+        <app-property-auctions [property]="propertyService.property">
+        </app-property-auctions>
+      </template>
+    </article>
+    <article class="accordion is-open" ngbPanel *ngIf="propertyService.property?.mls">
+      <template ngbPanelTitle>
+        <header (click)="toggleAccordionViewed(1)">
+          <h2>MLS Public Remarks</h2>
+          <a class="action-button" href=""></a>
+        </header>
+      </template>
+      <template ngbPanelContent>
+        <app-property-info [property]="propertyService.property" mode="summary"></app-property-info>
+      </template>
+    </article>
+    <article class="accordion is-open" ngbPanel forceRendered="true">
+      <template ngbPanelTitle>
+        <header (click)="toggleAccordionViewed(2)">
+          <h2>Tax and Property Information</h2>
+          <a class="action-button" href=""></a>
+        </header>
+      </template>
+      <template ngbPanelContent>
+        <app-property-tax [property]="propertyService.property"></app-property-tax>
+      </template>
+    </article>
+    <article class="accordion is-open" ngbPanel>
+      <template ngbPanelTitle>
+        <header (click)="toggleAccordionViewed(3)">
+          <h2>Notes</h2>
+          <a class="action-button" href=""></a>
+        </header>
+      </template>
+      <template ngbPanelContent>
+        <div class="padding paper">
+          <div class="paper-head"></div>
+          <template ngFor let-currentNote [ngForOf]="notesService.notes">
+            <!--div *ngIf="currentNote.authorCode == 'user'">
+              <small><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADDSURBVDhPtZKxEYJAEEWvBoYWVKrwlA5uoBETCzCwBgZowNiATrhACtDQCr78dZFAPS/xz/yZv3v7bpM1wzbDYJcY1os4c3ZkDMPtuMf9fIoyZ8kY/sJGrDhL5g1smgZd12kFyexN+goaY+Cc0wqS2ZsUBIui0AqS/w+WZakVJEeBSZLAWqsVJKdpqlUArKpKNuR5Lmau61pfAyDV9z3athV777X71Au8fABDmjduVrgedtKI8XxyPPIR5mb+9NNy5BkeGrpMiA1LOuEAAAAASUVORK5CYII%3D"
+                  width="14px" height="14px"/> User submitted note on {{currentNote.created | date:'MM-dd-yyyy'}}</small>
+            </div>
+            <div *ngIf="currentNote.authorCode == 'system'">
+              <small><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAESSURBVDhPjZK/aoRAEMYXwU4LG0sLweQq8QnyR0H0OXwB0wRsLQI+hnbpxLSWPoCNIkSxTbBKo51fbjebO0g4z4GPnZlvfjvNkP7xgP7+Bv2dsU909sgQmny+POPr7XWX6CxlCP2FNvYGnaXMP3BZFsRxDMuymIIgwDiO3N0AXdeFLMvIsgxpmkLXdSRJwt0NkBAC0zTRti3vAE3T8GwDDMOQwb9yHAdd13H3AriuK3vrukYURfA8D4IgQFVV1qdxcaPv+xiGgVeAbduQJIlXG6CiKBBFEYZhQNM0Vud5zt0NcJ5nVFWFoihQliWmaeLOT5zA9z/gtThvfLjFR/zEGnt0Pjl65EeYbqY/XRU78gO+AdfCSFCfisOzAAAAAElFTkSuQmCC"
+                  width="14px" height="14px"/> System generated note on {{currentNote.created | date:'MM-dd-yyyy'}}</small>
+            </div-->
+            <p [innerHTML]="currentNote.content"></p>
+          </template>
+        </div>
+      </template>
+    </article>
+    <article class="accordion is-open" ngbPanel>
+      <template ngbPanelTitle>
+        <header (click)="toggleAccordionViewed(4)">
+          <h2>Census</h2>
+          <a class="action-button" href=""></a>
+        </header>
+      </template>
+      <template ngbPanelContent>
+        <app-property-census [property]="propertyService.property"></app-property-census>
+      </template>
+    </article>
+    <article class="accordion is-open" ngbPanel>
+      <template ngbPanelTitle>
+        <header (click)="toggleAccordionViewed(5)">
+          <h2>Nearby Schools</h2>
+          <a class="action-button" href=""></a>
+        </header>
+      </template>
+      <template ngbPanelContent>
+        <div class="padding">
+          <div class="form-layout">
+            <section class="sec-block">
+              <table class="table-info">
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="title-text"><strong>School Dist</strong></div>
+                    </td>
+                    <td>
+                      <div class="text-box">{{propertyService.getCurrentProperty().mls?.school?.schoolDistrict}}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="title-text"><strong>Elementary School</strong></div>
+                    </td>
+                    <td>
+                      <div class="text-box">{{propertyService.getCurrentProperty().mls?.school?.elementarySchoolName}}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="title-text"><strong>Primary School</strong></div>
+                    </td>
+                    <td>
+                      <div class="text-box">{{propertyService.getCurrentProperty().mls?.school?.primarySchoolName}}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="title-text"><strong>Middle School</strong></div>
+                    </td>
+                    <td>
+                      <div class="text-box">{{propertyService.getCurrentProperty().mls?.school?.middleSchoolName}}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="title-text"><strong>Intermediate School</strong></div>
+                    </td>
+                    <td>
+                      <div class="text-box">{{propertyService.getCurrentProperty().mls?.school?.intermediateSchoolName}}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="title-text"><strong>Junior High School</strong></div>
+                    </td>
+                    <td>
+                      <div class="text-box">{{propertyService.getCurrentProperty().mls?.school?.juniorHighSchoolName}}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="title-text"><strong>High School</strong></div>
+                    </td>
+                    <td>
+                      <div class="text-box">{{propertyService.getCurrentProperty().mls?.school?.highSchoolName}}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+          </div>
+        </div>
+      </template>
+    </article>
+    <article class="accordion is-open" ngbPanel>
+      <template ngbPanelTitle>
+        <header (click)="toggleAccordionViewed(6)">
+          <h2>Trends and CMAs</h2>
+          <a class="action-button" href=""></a>
+        </header>
+      </template>
+      <template ngbPanelContent>
+        <app-property-trends [property]="propertyService.property"></app-property-trends>
+      </template>
+    </article>
+    <article class="accordion is-open" ngbPanel>
+      <template ngbPanelTitle>
+        <header>
+          <h2>Analytics</h2>
+          <a class="action-button" href=""></a>
+        </header>
+      </template>
+      <template ngbPanelContent>
+        <app-property-analytics [property]="propertyService.property"></app-property-analytics>
+      </template>
+    </article>
+    <article class="accordion is-open" ngbPanel>
+      <template ngbPanelTitle>
+        <header>
+          <h2>Area Points of Interest</h2>
+          <a class="action-button" href=""></a>
+        </header>
+      </template>
+      <template ngbPanelContent>
+        <app-property-poi [property]="propertyService.property"></app-property-poi>
+      </template>
+    </article>
+  </ngb-accordion>
+</div>
+<div class="secondary-content">
+  <div class="widget map small">
+    <header>
+      <h2>Map</h2>
+    </header>
+    <div class="content">
+      <app-google-map [active]="propertyService.getCurrentProperty().location?.latitude && propertyService.getCurrentProperty().location?.longitude" [property]="propertyService.property">
+      </app-google-map>
+    </div>
+  </div>
+</div>
+<div class="secondary-content">
+  <div class="widget map small">
+    <header>
+      <h2>Street View</h2>
+    </header>
+    <div class="content">
+      <app-google-streetview [active]="isMapActive()" [property]="{latitude: propertyService.getCurrentProperty().location?.latitude, longitude: propertyService.getCurrentProperty().location?.longitude}">
+      </app-google-streetview>
+    </div>
+  </div>
+</div>

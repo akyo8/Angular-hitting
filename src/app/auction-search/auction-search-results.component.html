@@ -1,0 +1,51 @@
+<!-- Page Title -->
+<div id="page-title">
+    <div class="container">
+
+        <h1>Auctions for {{ county }} County</h1>
+        <p>
+            You found {{searchService.meta.totalElements}}
+            {{(1 != searchService.meta.totalElements) ? 'auctions' : 'auction'}}
+            searching for <strong>{{ county }} County</strong>.
+        </p>
+
+    </div>
+</div>
+<!-- /Page Title -->
+
+<!-- Main -->
+<div id="main" class="section-main">
+    <div class="container">
+
+        <!-- Main content -->
+        <div class="main-content" role="main">
+
+            <div class="widget table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th class="left">Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let property of searchService.properties | paginate: { itemsPerPage: searchService.size, currentPage: page, totalItems: searchService.meta.totalElements }">
+                            <td class="picture">
+                                <div class="image"><img src="{{searchService.getFirstPhoto(property)}}"></div>
+                            </td>
+                            <td class="watchlist-select"><a href="search-result-simple#" class="button icon watchlist">Add to watchlist</a></td>
+                            <td class="left"><a class="clickable" [routerLink]="['/property', searchService.getPropertyId(property)]">{{property.address.oneLine}}</a></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <pagination-controls (pageChange)="page = $event; search()" ></pagination-controls>
+
+        </div>
+        <!-- /Main content -->
+
+    </div>
+</div>
+<!-- /Main -->

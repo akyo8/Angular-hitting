@@ -1,0 +1,70 @@
+//  Login + Simple register shared styles
+.widget.login, .widget.register-simple {
+  .site-branding {
+    @include hide-text;
+    width: rem(220);
+    height: rem(97);
+    background: url('../assets/images/logo-white.svg') no-repeat 0 0;
+    background-size: rem(220) rem(97);
+    position: absolute;
+    top: rem(-140);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+//  Login
+#template.login, #template.register, #template.subscribe {
+  background: url('../assets/images/background.jpg') no-repeat center center;
+  background-size: cover;
+  #main {
+    background: none;
+    .container {}
+  }
+}
+
+.widget.login, .widget.register.register-simple {
+  width: rem(340);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: - rem(170);
+  @include transform(translateY(-50%));
+  box-shadow: $box-shadow;
+  label {
+    display: none;
+  }
+  input[type="submit"], .button {
+    width: 100%;
+  }
+  p {
+    text-align: right;
+    margin-top: rem($spacing-s);
+  }
+}
+
+.widget.login.subscribe {
+  width: rem(680);
+  margin-left: - rem(340);
+}
+
+//  Register
+.widget.register {
+  width: rem(680);
+  margin: 0 auto;
+  /*
+  &.register-simple {
+    width: rem(340);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: - rem(170);
+    @include transform(translateY(-50%));
+    box-shadow: $box-shadow;
+  }
+*/
+}
+
+input.ng-invalid.ng-touched {
+  border: 1px solid #f00 !important;
+}

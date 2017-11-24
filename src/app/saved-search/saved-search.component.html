@@ -1,0 +1,40 @@
+<div class="content">
+    <div id="tab-content3" class="tab-content">
+        <div id="saved-searches" class="tab">
+            <div class="widget saved-searches">
+                <header>
+                    <p>Here you can see your saved searches. Once you save a search you can access it from this tab. If you
+                        click on a search you will see the properties that are filtered through that search and you can change
+                        the search parameters itself. You have <strong>{{searchService.savedProperties.length}} saved {{(1 != searchService.savedProperties.length) ? 'searches' : 'search'}}</strong>.</p>
+                </header>
+                <article *ngFor="let savedSearch of searchService.savedProperties | paginate: { itemsPerPage: searchService.size, currentPage: page, totalItems: searchService.savedSearch.totalElements }"
+                    (click)="viewSavedSearch(savedSearch)">
+                    <header>
+                        <h2><a class="clickable" (click)="viewSavedSearch(savedSearch)">{{savedSearch.searchName}}</a>
+                            &nbsp;<a class="clickable" (click)="deleteSavedSearch(savedSearch.id)">Delete</a></h2>
+                        <div class="information">
+                            <ol>
+                                <li *ngFor="let searchMeta of savedSearch.metas" class="meta" ngClass="searchmeta.class"><span [innerHTML]="searchMeta.content"></span></li>
+                            </ol>
+                        </div>
+                    </header>
+                    <div class="information">
+                        <ol>
+                            <li class="meta date">Search started <strong>{{searchService.getDate(savedSearch.updated)}}</strong></li>
+                            <li class="meta date">Last change <strong>{{searchService.getDate(savedSearch.updated)}}</strong></li>
+                        </ol>
+                    </div>
+                    <footer>
+                        <div class="information">
+                            <ol>
+                                <li class="meta total-properties"><strong>{{savedSearch.totalSearchResultsCount}}</strong> Total properties</li>
+                                <li class="meta new-properties"><strong>{{savedSearch.newSearchResultsCount}}</strong> New properties <em>since {{searchService.getTimeAgo(savedSearch.updated)}}</em></li>
+                            </ol>
+                        </div>
+                    </footer>
+                </article>
+                <pagination-controls (pageChange)="page = $event; search()" ></pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>

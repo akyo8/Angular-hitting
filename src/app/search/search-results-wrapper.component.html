@@ -1,0 +1,39 @@
+<!-- Page Title -->
+<div id="page-title">
+  <div class="container">
+    <h1 style="margin-top: -30px">{{searchName}}</h1>
+    <p style="margin-bottom: 14px">
+      You found {{searchService.meta?.totalElements}} {{(1 != searchService.meta?.totalElements) ? 'listings' : 'listing'}} for your {{searchid ? 'saved search' : 'search'}} <strong>{{searchName}}</strong>.
+    </p>
+    <!-- Tabs -->
+    <div (click)="$event.preventDefault()">
+      <ngb-tabset tabsId="results-tabs" tabsOnly="true" class="tab-selector search" (tabChange)="activeTab=$event.nextId; doChange()">
+        <ngb-tab title="Properties" id="search-results">
+          <template ngbTabContent>
+            <app-search-results [searchQuery]="searchQuery"></app-search-results>
+          </template>
+        </ngb-tab>
+        <ngb-tab title="Edit Search" id="search-form">
+          <template ngbTabContent>
+            <app-search-form [mode]="searchid ? 'saved' : 'advance'"></app-search-form>
+          </template>
+        </ngb-tab>
+      </ngb-tabset>
+    </div>
+    <!-- /Tabs -->
+    <!--ul *ngIf="searchService.renderedSearch.length > 0">
+      <li *ngFor="let term of searchService.renderedSearch">{{term.term}}: {{term.value}}</li>
+    </ul-->
+  </div>
+</div>
+<!-- Main -->
+<div id="main" class="section-main">
+  <div class="container">
+    <!-- Main content -->
+    <div class="main-content" role="main">
+      <ngb-tabset-content tabsId="results-tabs"></ngb-tabset-content>
+    </div>
+    <!-- /Main content -->
+  </div>
+</div>
+<!-- /Main -->

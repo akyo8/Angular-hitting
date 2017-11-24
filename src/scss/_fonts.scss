@@ -1,0 +1,170 @@
+@import "bourbon/css3/font-face";
+
+//
+
+// @include font-face("opensans", "../assets/fonts/opensans/light/OpenSans-Light-webfont", 300);
+// @include font-face("opensans", "../assets/fonts/opensans/regular/OpenSans-Regular-webfont", 400);
+// @include font-face("opensans", "../assets/fonts/opensans/semibold/OpenSans-Semibold-webfont", 500);
+// @include font-face("opensans", "../assets/fonts/opensans/bold/OpenSans-Bold-webfont", 700);
+
+@include font-face("proxima-nova", "../assets/fonts/proxima/proximanova-regular", 400);
+@include font-face("proxima-nova", "../assets/fonts/proxima/proximanova-semibold", 500);
+@include font-face("proxima-nova", "../assets/fonts/proxima/proximanova-bold", 700);
+
+@include font-face("icomoon", "../assets/fonts/icomoon/icomoon");
+
+[class^="icon-"], [class*=" icon-"], .icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  // Better Font Rendering
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-dollar:before {
+  content: "\e900";
+}
+.icon-credit-card:before {
+  content: "\ea16";
+}
+.icon-lock:before {
+  content: "\eb53";
+}
+.icon-lock-unlocked:before {
+  content: "\eb54";
+}
+.icon-remove:before {
+  content: "\ebfe";
+}
+.icon-more2:before {
+  content: "\ec5d";
+}
+.icon-eye:before {
+  content: "\ecae";
+}
+.icon-eye-blocked:before {
+  content: "\ecb1";
+}
+.icon-star-empty:before {
+  content: "\ece3";
+}
+.icon-star-full:before {
+  content: "\ece5";
+}
+.icon-plus:before {
+  content: "\ed5b";
+}
+.icon-close:before {
+  content: "\ed6d";
+}
+.icon-close-small:before {
+  content: "\ed6e";
+}
+.icon-checkmark:before {
+  content: "\ed71";
+}
+.icon-arrow-up:before {
+  content: "\edb9";
+}
+.icon-arrow-up-light:before {
+  content: "\edba";
+}
+.icon-arrow-right3:before {
+  content: "\edbd";
+}
+.icon-arrow-right-light:before {
+  content: "\edbe";
+}
+.icon-arrow-down:before {
+  content: "\edc1";
+}
+.icon-arrow-down-light:before {
+  content: "\edc2";
+}
+.icon-arrow-left3:before {
+  content: "\edc5";
+}
+.icon-arrow-left-light:before {
+  content: "\edc6";
+}
+.icon-checkbox-checked2:before {
+  content: "\ee6e";
+}
+.icon-checkbox-unchecked2:before {
+  content: "\ee6f";
+}
+.icon-radio-checked:before {
+  content: "\ee71";
+}
+.icon-radio-unchecked:before {
+  content: "\ee73";
+}
+.icon-circle:before {
+  content: "\ee78";
+}
+.icon-calculator:before {
+  content: "\ea17";
+}
+.icon-calculator2:before {
+  content: "\ea18";
+}
+.icon-notebook:before {
+  content: "\ea2e";
+}
+.icon-more:before {
+  content: "\ec5c";
+}
+.icon-minus-light:before {
+  content: "\ed5e";
+}
+.icon-home3:before {
+  content: "\e902";
+}
+.icon-location2:before {
+  content: "\e948";
+}
+.icon-user:before {
+  content: "\e971";
+}
+.icon-ctrl:before {
+  content: "\ea50";
+}
+.icon-image:before {
+  content: "\e90d";
+}
+.icon-camera:before {
+  content: "\e90f";
+}
+.icon-compass2:before {
+  content: "\e94a";
+}
+.icon-enlarge:before {
+  content: "\e989";
+}
+.icon-enlarge2:before {
+  content: "\e98b";
+}
+.icon-arrow-right:before {
+  content: "\ea34";
+}
+.icon-arrow-left:before {
+  content: "\ea38";
+}
+.icon-arrow-right2:before {
+  content: "\ea3c";
+}
+.icon-arrow-left2:before {
+  content: "\ea40";
+}
+.icon-equalizer:before {
+  content: "\e992";
+}
+.icon-cog:before {
+  content: "\e994";
+}

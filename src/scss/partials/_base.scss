@@ -1,0 +1,147 @@
+/* =Project specific
+===================================================== */
+
+// Media queries & breakpoints
+@mixin breakpoint($point) {
+
+	// Does browser support media queries
+	$media-query-support: true !global !default;
+
+	// Mobile first
+	@if ($media-query-support) {
+
+		$x-large:      "(min-width: 1600px)";
+		$large:        "(min-width: 1300px)";
+		$medium-large: "(min-width: 1000px)";
+		$medium:       "(min-width: 800px)";
+		$small-medium: "(min-width: 600px)";
+		$small:        "(min-width: 400px)";
+
+		@if $point == x-large {
+			@media #{$x-large}  { @content; }
+		}
+		@else if $point == large {
+			@media #{$large}  { @content; }
+		}
+		@else if $point == medium-large {
+			@media #{$medium-large}  { @content; }
+		}
+		@else if $point == medium {
+			@media #{$medium}  { @content; }
+		}
+		@else if $point == small-medium {
+			@media #{$small-medium}  { @content; }
+		}
+		@else if $point == small {
+			@media #{$small}  { @content; }
+		}
+
+	}
+
+	// max-width
+	@if ($media-query-support) {
+
+		$to-x-large:      "(max-width: 1599px)";
+		$to-large:        "(max-width: 1299px)";
+		$to-medium-large: "(max-width: 999px)";
+		$to-medium:       "(max-width: 799px)";
+		$to-small-medium: "(max-width: 599px)";
+		$to-small:        "(max-width: 399px)";
+
+		@if $point == to-x-large {
+			@media #{$to-x-large}  { @content; }
+		}
+		@else if $point == to-large {
+			@media #{$to-large}  { @content; }
+		}
+		@else if $point == to-medium-large {
+			@media #{$to-medium-large}  { @content; }
+		}
+		@else if $point == to-medium {
+			@media #{$to-medium}  { @content; }
+		}
+		@else if $point == to-small-medium {
+			@media #{$to-small-medium}  { @content; }
+		}
+		@else if $point == to-small {
+			@media #{$to-small}  { @content; }
+		}
+
+	}
+
+	@else {
+		@content;
+	}
+
+}
+
+//	Em base
+$em-base:	16px;
+
+//	Max Width
+$max-width:	1200px;
+
+//	Proportions
+//	Use proportions with em($proportion-small);
+
+$spacing-s			: 20px;		// 	Used for mobile padding (i.e.)
+$spacing-m			: 30px;		//	Used for tablet padding (i.e.)
+$spacing-l			: 80px;		//	Used for desktop padding (i.e.)
+
+// Colors
+$white:     #fff;
+$darkwhite: #f5f5f5;
+$black:     #111;
+$darkgrey:  #363636;
+$grey:      #636363;
+$lightgrey: #959595;
+
+$brandcolor:            #dc4128;
+$brandcolor-darker:     #cd352f;
+$brandcolor-secondary:  #fecf40;
+$linkcolor:             #0076a3;
+$bodycolor:             $darkwhite;
+
+//	Text
+$color-heading:     $black;
+$color-emphasis:    $darkgrey;
+$color-text:        $grey;
+
+//	Other colors
+$bordercolor:     #e1e1e1;
+$success:         #6ab800;
+$warning:         #9e0b0f;
+$danger:          $warning;
+$notecolor:       #ffffd1; //#f5e9b6;
+$buttoncolor:     #f26522;
+$color-positive:  $success;
+$color-negative:  $warning;
+
+// Font family
+$alphafont: 	"proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$betafont: 		"Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
+
+// Font weights
+$font-light:    300;
+$font-regular:  400;
+$font-medium:   500;
+$font-bold:     700;
+$font-black:    900;
+
+//	Transition
+$transition: all .5s ease-in-out;
+$transition-fast: all .2s ease-in-out;
+$transition-lightbox: .8s .5s cubic-bezier(.1, .87, .48, 1);
+
+//	Shadows
+$box-shadow: 0 0 10px transparent-color($black,.1);
+$box-shadow-minimal: 0 1px 3px transparent-color($black, .15);
+$box-shadow-heavy: 0 1px 10px transparent-color($black, .5);
+$input-shadow: inset 0 rem(2) rem(3) transparent-color($black, .2);
+$input-shadow-focus:  inset 0 rem(2) rem(3) transparent-color($black, .1);
+$text-shadow-heavy: 0 2px 4px transparent-color($black, .2);
+$text-shadow-invert: 1px 0 0 transparent-color($white, .5);
+//	Radius
+$radius-small: 2px;
+$radius: 3px;
+$radius-large: 5px;

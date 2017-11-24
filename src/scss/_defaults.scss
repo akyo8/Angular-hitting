@@ -1,0 +1,136 @@
+/* =Global styles
+===================================================== */
+
+//  Margins
+ul, ol, dl, p {
+  margin: rem($spacing-s) 0
+}
+
+h1, h2, h3, h4 {}
+
+//  Heading and text
+h1, h2, h3, h4 {
+  font-family: $alphafont;
+}
+
+h2 {
+  margin: rem($spacing-s) 0;
+  line-height: 1.2;
+  //  @extend %title;
+}
+
+h3 {
+  //  @extend %subtitle;
+  margin: rem($spacing-s) 0;
+}
+
+p, li, table {
+  //  @extend %text;
+  margin: 0;
+}
+
+li {
+  list-style: none;
+}
+
+strong {
+  font-weight: $font-bold;
+}
+
+em {
+  font-style: italic;
+}
+
+sup {
+  vertical-align: text-top;
+  font-size: 75%;
+}
+
+sub {
+  vertical-align: bottom;
+  font-size: 75%;
+}
+
+blockquote {
+  font-style: italic;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+//  Tables
+//  Blockquote
+//  Images
+//  Links
+a {
+  color: $linkcolor;
+  text-decoration: none;
+  // border-bottom: 1px solid $bordercolor;
+  transition: $transition-fast;
+  &:hover, &:focus {
+    // border-bottom: 1px solid darken($bordercolor, 20%);
+    color: lighten($linkcolor, 25%);
+  }
+}
+
+* {
+  box-sizing: border-box;
+  // -moz-box-sizing: border-box;
+}
+
+body {
+  font: 100%/1.5 $alphafont;
+  color: $color-text;
+  background: $bodycolor;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+// Welcome
+#template {
+  min-height: 100vh;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+// New Loading Screen (will need a spinner or something...)
+app-root:empty {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-image: linear-gradient($brandcolor, $brandcolor-darker);
+  &:before {
+    content: "App Loading";
+    color: $brandcolor;
+    font-weight: 700;
+    position: absolute;
+    background: $white;
+    font-size: rem(30);
+    padding: rem(5) rem(15);
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  &:after {
+    content: "Please wait...";
+    color: $white;
+    position: absolute;
+    font-size: rem(15);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

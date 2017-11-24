@@ -1,0 +1,22 @@
+<div class="completer-holder">
+    <input type="text"
+        class="completer-input"
+        [(ngModel)]="searchStr"
+        (keyup)="keyupHandler($event)"
+        (keydown)="keydownHandler($event)"
+        [attr.name]="inputName"
+        [placeholder]="placeholder"
+        [attr.maxlength]="maxChars"
+        (blur)="onBlur()"
+        [tabindex]="fieldTabindex"
+        [disabled]="disableInput"
+        completer="off"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+    />
+    <completer-list *ngIf="showDropdown" class="completer-dropdown-holder" [results]="results"  [searchStr]="searchStr" (selected)="selectResult($event)" 
+       [matchClass]="matchClass" [textSearching]="textSearching" [searching]="searching" [textNoResults]="textNoResults" [displaySearching]="displaySearching">
+    </completer-list>
+
+</div>

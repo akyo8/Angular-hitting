@@ -1,0 +1,294 @@
+<div class="tabswrapper" *ngIf="mode == 'basic'">
+  <ul class="infotabs general">
+    <li class="tab" data-pane-id="pane1">Info</li>
+    <li class="tab" data-pane-id="pane2">Rooms</li>
+  </ul>
+  <div class="panes">
+    <div class="inner_panes">
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <h2>Property Description</h2>
+            <p><!-- put property info like address here --></p>
+          </div>
+          <!-- end tabcontent -->
+        </div>
+        <!-- end inner_pane -->
+      </div>
+      <!-- end pane -->
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent no-padding map" style="height: 560px; margin-top: -20px">
+            <app-google-map [active]="(infoTab == 2) && getProperty().location?.latitude && getProperty().location?.longitude" [property]="{latitude: getProperty().location?.latitude, longitude: getProperty().location?.longitude, mls: {listPrice: 0}}" [subjectProperty]="{latitude: getSubjectProperty().location?.latitude, longitude: getSubjectProperty().location?.longitude, mls: {listPrice: 0}}">
+            </app-google-map>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end inner_panes -->
+  </div>
+  <!-- end panes -->
+</div>
+<!-- end tabswrapper -->
+<div class="tabswrapper" *ngIf="mode == 'summary' || mode == 'summary-with-values' || mode == 'comps'">
+  <ul class="infotabs general">
+    <li class="tab" data-pane-id="pane1">Description</li>
+    <li class="tab" data-pane-id="pane2">General</li>
+    <li class="tab" data-pane-id="pane3">Rooms</li>
+    <li class="tab" data-pane-id="pane4">Space</li>
+    <li class="tab" data-pane-id="pane5">Map</li>
+    <li class="tab" data-pane-id="pane6">Gallery</li>
+    <!--li class="tab" data-pane-id="pane7">Notes</li-->
+    <li class="tab" data-pane-id="pane1" style="float: right" *ngIf="hasClose" (click)="closeInfo($event)">Close</li>
+  </ul>
+  <div class="panes">
+    <div class="inner_panes">
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <p class="address property-info-heading">
+              <span>{{getProperty().address?.line1}}</span>, {{getProperty().address?.line2}}
+              <span style="float: right">List Price {{getProperty().mls?.listPrice | currency:'USD':true:'1.0-0'}}</span>
+            </p>
+            <div *ngIf="mode == 'summary-with-values'">
+              <div class="title four-cols">ARV {{getProperty().comps?.arv > 0 ? '$' + getProperty().comps?.arv : ''}}</div>
+              <div class="title four-cols">MA {{getProperty().comps?.asIs > 0 ? '$' + getProperty().comps?.asIs : ''}}</div>
+              <div class="title four-cols">Wholesale {{getProperty().comps?.wholesale > 0 ? '$' + getProperty().comps?.wholesale : ''}}</div>
+              <div class="title four-cols">Rents {{getProperty().comps?.rentAverage > 0 ? '$' + getProperty().comps?.rentAverage : ''}}</div>
+            </div>
+            <br><br>
+            <div class="leftside" style="margin-top: -1px">
+              <div class="title" style="width: 100%">Legal Description</div>
+              <div class="value" style="width: 100%">{{getProperty().mls?.legalDesc | placeholder:'Legal description was absent.'}}</div>
+            </div>
+            <div class="rightside">
+              <div class="title" style="width: 100%" *ngIf="getProperty().mls?.status != 'Sold'">Proposed Financing</div>
+              <div class="title" style="width: 100%" *ngIf="getProperty().mls?.status == 'Sold'">Financing Used</div>
+              <div class="value" style="width: 100%" *ngIf="getProperty().mls?.status != 'Sold'">{{getProperty().mls?.proposedFinancing | placeholder:'Proposed financing was absent.'}}</div>
+              <div class="value" style="width: 100%" *ngIf="getProperty().mls?.status == 'Sold'">{{getProperty().mls?.listFinancing | placeholder:'Listed financing was absent.'}}</div>
+            </div>
+            <div style="margin-top: 198px; background-color: white; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">
+              <p class="property-info-field" style="padding: 10px"><b>Property Description</b></p>
+              <p style="padding: 10px">{{getProperty().mls?.publicRemarks}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <p class="address">
+              <span>{{getProperty().address?.line1}}</span>, {{getProperty().address?.line2}}
+              <span style="float: right">{{getProperty().mls?.listPrice | currency:'USD':true:'1.0-0'}}</span>
+            </p>
+            <div>
+              <div class="leftside">
+                <div class="title">MLS #</div>
+                <div class="value">{{getProperty().identifier?.mlsNumber}}</div>
+                <div class="title">Lease MLS #</div>
+                <div class="value">{{getProperty().identifier?.mlsNumberLease | placeholder:'Not for lease in MLS'}}</div>
+                <div class="title">Status</div>
+                <div class="value">{{getProperty().mls?.status}}</div>
+                <div class="title">Type</div>
+                <div class="value">{{getProperty('mls').summary?.propType || getProperty().summary?.propType}}</div>
+                <div class="title">Sub Type</div>
+                <div class="value">{{getProperty('mls').summary?.propSubType || getProperty().summary?.propSubType}}</div>
+                <div class="title">Lot Size / Acreage</div>
+                <div class="value">{{getProperty().lot?.lotSizeEnum}}</div>
+                <div class="title">Area</div>
+                <div class="value">{{getProperty().area?.countyUse1}}/{{getProperty().area?.munCode}}</div>
+                <div class="title">County</div>
+                <div class="value">{{getProperty().area?.countrysecsubd}}</div>
+                <div class="title">Subdv</div>
+                <div class="value">{{getProperty().area?.subdName}}</div>
+                <div class="title">Lot, Block</div>
+                <div class="value">{{getProperty().lot?.lotNum}}, {{getProperty().area?.blockNum}}</div>
+              </div>
+              <div class="rightside">
+                <div class="title">Legal</div>
+                <div class="value double-tall-cell">{{getProperty().mls?.legalDesc}}</div>
+                <div class="title">&nbsp;</div>
+                <div class="title">Multi Prcl</div>
+                <div class="value">{{standardizeYesNo(getProperty().mls?.multiParcel)}}</div>
+                <div class="title">Mud Dst</div>
+                <div class="value">{{standardizeYesNo(getProperty().mls?.municipalUtility)}}</div>
+                <div class="title">Will Subdivide</div>
+                <div class="value">{{getProperty().mls?.willSubdivide}}</div>
+                <div class="title">Lot Size</div>
+                <div class="value">{{getProperty().lot?.lotSizeInAcres | number:'1.3-3'}} acres ({{getProperty().lot?.lotSizeInSQFT | number:'1.0-0'}} sqft)</div>
+                <div class="title">Living Area</div>
+                <div class="value">{{propertyService.getFootageSourceDescription(getProperty())}}</div>
+                <div class="title">HOA</div>
+                <div class="value" *ngIf="getProperty().mls?.hoaType == 'None'">None</div>
+                <div class="value" *ngIf="getProperty().mls?.hoaType != 'None'">{{getProperty().mls?.hoaType}}</div>
+                <div class="title" *ngIf="getProperty().mls?.hoaType == 'None'">HOA Fee</div>
+                <div class="value" *ngIf="getProperty().mls?.hoaType == 'None'">No HOA</div>
+                <div class="title" *ngIf="getProperty().mls?.hoaType != 'None'">{{getProperty().mls?.hoaPeriod}} HOA Fee</div>
+                <div class="value" *ngIf="getProperty().mls?.hoaType != 'None'">{{getProperty().mls?.hoaFee | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Yr Built</div>
+                <div class="value">{{getProperty().summary?.yearBuilt}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <!--h2>Other Information</h2-->
+            <p class="address">
+              <span>{{getProperty().address?.line1}}</span>, {{getProperty().address?.line2}}
+              <span style="float: right">{{getProperty().mls?.listPrice | currency:'USD':true:'1.0-0'}}</span>
+            </p>
+            <div>
+              <div class="leftside">
+                <div class="title">Num. Stories</div>
+                <div class="value">{{getProperty().building?.summary?.levels}}</div>
+                <div class="title">Num. Rooms</div>
+                <div class="value">{{getProperty().building?.rooms?.roomsTotal}}</div>
+                <div class="title">Num. Bedrooms</div>
+                <div class="value">{{getProperty().building?.rooms?.beds}}</div>
+                <div class="title">Num. Full Baths</div>
+                <div class="value">{{getProperty().building?.rooms?.bathsFull}}</div>
+                <div class="title">Num. Half Baths</div>
+                <div class="value">{{getProperty().building?.rooms?.bathsHalf}}</div>
+                <div class="title">Num. Living Areas</div>
+                <div class="value">{{getProperty().building?.rooms?.livingAreas}}</div>
+                <div class="title">Num. Dining Areas</div>
+                <div class="value">{{getProperty().building?.rooms?.diningAreas}}</div>
+                <div class="title">Num. Buildings</div>
+                <div class="value">{{getProperty().building?.summary?.bldgsNum}}</div>
+                <div class="title"></div>
+                <div class="value"></div>
+                <div class="title"></div>
+                <div class="value"></div>
+              </div>
+              <div class="rightside">
+                <div class="title">Garage Type</div>
+                <div class="value">{{getProperty().building?.parking?.garageType | placeholder:'Not given in MLS'}}</div>
+                <div class="title">Num. Covered Spaces</div>
+                <div class="value">{{getProperty().building?.parking?.coveredSpaces | placeholder:'Not given in MLS'}}</div>
+                <div class="title">Num. Garage Spaces</div>
+                <div class="value">{{propertyService.getGarageSpaces(getProperty())}}</div>
+                <div class="title">Num. Carports</div>
+                <div class="value">{{getProperty().building?.parking?.prkgSpaces | placeholder:'Not given in MLS'}}</div>
+                <div class="title">Garage Size, sqft</div>
+                <div class="value">{{getProperty().building?.parking?.prkgSize | placeholder:'Not given in MLS'}}</div>
+                <div class="title">Pool</div>
+                <div class="value" *ngIf="getProperty().lot?.poolInd">{{getProperty().lot?.poolInd}}</div>
+                <div class="value" *ngIf="!getProperty().lot?.poolInd">None</div>
+                <div class="title">Fireplaces</div>
+                <div class="value">{{getProperty().building?.interior?.fireplacesTotal}}</div>
+                <div class="title">Fireplace Type</div>
+                <div class="value" *ngIf="getProperty().building?.interior?.fireplacesTotal">{{getProperty().building?.interior?.fireplaceType | placeholder:'Not given in MLS'}}</div>
+                <div class="value" *ngIf="!getProperty().building?.interior?.fireplacesTotal">N/A</div>
+                <div class="title">Security System</div>
+                <div class="value" *ngIf="getProperty().building?.interior?.securityFeatures">{{getProperty().building?.interior?.securityFeatures}}</div>
+                <div class="value" *ngIf="!getProperty().building?.interior?.securityFeatures">None</div>
+                <div class="title">Accessibility Features</div>
+                <div class="value">{{getProperty().mls?.accessibility | placeholder:'None given in MLS'}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <p class="address">
+              <span>{{getProperty().address?.line1}}</span>, {{getProperty().address?.line2}}
+              <span style="float: right">{{getProperty().mls?.listPrice | currency:'USD':true:'1.0-0'}}</span>
+            </p>
+            <div>
+              <div class="leftside">
+                <div class="title">Construction</div>
+                <div class="value">{{getProperty('mls').building?.construction?.constructionType || getProperty().building?.construction?.constructionType}}</div>
+                <div class="title">Foundation</div>
+                <div class="value">{{getProperty('mls').building?.construction?.foundationType || getProperty().building?.construction?.foundationType}}</div>
+                <div class="title">Heating / Cooling</div>
+                <div class="value double-tall-cell">{{getProperty('mls').utilities?.heatingType || getProperty().utilities?.heatingType}}</div>
+                <div class="title">&nbsp;</div>
+                <div class="title">Kitchen Equipment</div>
+                <div class="value triple-tall-cell">{{getProperty().building?.interior?.applianceFeatures}}</div>
+                <div class="title">&nbsp;</div>
+                <div class="title">&nbsp;</div>
+                <div class="title">Flooring</div>
+                <div class="value">{{getProperty().building?.interior?.flooring}}</div>
+                <div class="title">Roof</div>
+                <div class="value">{{getProperty().building?.construction?.roofType | placeholder:'Not given in MLS'}}</div>
+                <div class="title">Fencing</div>
+                <div class="value">{{getProperty().building?.construction?.fenceType | placeholder:'Not given in MLS'}}</div>
+              </div>
+              <div class="rightside">
+                <div class="title">Utilities</div>
+                <div class="value double-tall-cell">{{getProperty().utilities?.utilityDesc | placeholder:'Not given in MLS'}}</div>
+                <div class="title">&nbsp;</div>
+                <div class="title">Lot Description</div>
+                <div class="value">{{getProperty().lot?.lotFeatures | placeholder:'Not given in MLS'}}</div>
+                <div class="title">Restrictions</div>
+                <div class="value">{{getProperty().mls?.restrictions | placeholder:'None given in MLS'}}</div>
+                <div class="title">Exterior Features</div>
+                <div class="value">{{getProperty().building?.construction?.exteriorFeatures | placeholder:'None given in MLS'}}</div>
+                <div class="title">Interior Features</div>
+                <div class="value">{{getProperty().building?.interior?.interiorFeatures | placeholder:'None given in MLS'}}</div>
+                <div class="title">Soil</div>
+                <div class="value">{{getProperty().mls?.soilType | placeholder:'Not given in MLS'}}</div>
+                <div class="title">Green Features</div>
+                <div class="value">{{getProperty().building?.interior?.greenFeatures | placeholder:'None given in MLS'}}</div>
+                <div class="title">Energy Efficiency</div>
+                <div class="value">{{getProperty().building?.interior?.energySavingFeatures | placeholder:'None given in MLS'}}</div>
+                <div class="title">Easements</div>
+                <div class="value">{{getProperty().mls?.easements | placeholder:'None given in MLS'}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent no-padding map" style="height: 560px; margin-top: -20px">
+            <app-google-map
+                [mapMode]="'sat'"
+                [active]="(infoTab == 5) && getProperty().location?.latitude && getProperty().location?.longitude"
+                [property]="{latitude: getProperty().location?.latitude, longitude: getProperty().location?.longitude, mls: {listPrice: getProperty().mls?.listPrice}}"
+                [subjectProperty]="{latitude: getSubjectProperty().location?.latitude, longitude: getSubjectProperty().location?.longitude, mls: {listPrice: getSubjectProperty().mls?.listPrice}}">
+            </app-google-map>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent no-padding">
+            <div [id]="ninjaSliderId" class="ninja-slider infotab propertyGallerySlider" *ngIf="getProperty().resources?.photos?.urls && (getProperty().resources?.photos?.urls.length > 0)">
+              <div>
+                <div class="slider-inner">
+                  <ul>
+                    <li *ngFor="let photo of getProperty().resources?.photos?.highResUrls">
+                      <a class="ns-img" href="{{photo}}"></a>
+                    </li>
+                    <li *ngIf="propertyService.getFirstPhoto(_property)"><a class="ns-img" href="{{propertyService.getFirstPhoto(_property)}}"></a></li>
+                  </ul>
+                  <div class="fs-icon" title="Expand/Close"></div>
+                </div>
+                <div id="thumbs">
+                    <span *ngFor="let photo of getProperty().resources?.photos?.urls let i = index" (click)="showImage(i)">
+                        <img src="{{photo}}">
+                    </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <form>
+              <textarea class="comp-textarea" placeholder="Personal notes are autosaved..."></textarea>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

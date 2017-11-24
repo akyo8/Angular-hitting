@@ -1,0 +1,14 @@
+<template ngbModalContainer></template>
+<div id="root">
+  <div id="main-content">
+    <div id="template" [ngClass]="templateClass + (isAuth ? ' blank' : '')">
+      <app-header *ngIf="!isAuth"></app-header>
+
+      <!-- Routed views go here -->
+      <router-outlet></router-outlet>
+
+      <app-footer *ngIf="!isAuth"></app-footer>
+      <!--<div class="modal-container"></div>-->
+    </div>
+  </div>
+</div>

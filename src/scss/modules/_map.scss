@@ -1,0 +1,262 @@
+//  Map
+.widget.map {
+  .content {
+    width: 100% !important;
+    padding: 0;
+  }
+  iframe {
+    width: 100% !important;
+  }
+}
+
+app-google-map, app-google-streetview, app-bing-birdseyeview, app-google-map .map, app-google-streetview .streetview, app-bing-birdseyeview .birdseyeview {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+app-google-map, .widget.map app-google-streetview, .widget.gallery app-google-streetview, app-bing-birdseyeview, app-google-map .map, .widget.map app-google-streetview .streetview, .widget.gallery app-google-streetview .streetview, app-bing-birdseyeview .birdseyeview {
+  min-height: rem(275);
+}
+
+//  Map
+.widget.map {
+  position: relative;
+  background: none;
+  &.small {
+    height: auto;
+    p {
+      color: $white;
+    }
+    .content {
+      // height: calc(100% - 3.416rem);
+      height: auto;
+      padding: 0;
+      margin-bottom: rem(10);
+    }
+  }
+  &.full-width {
+    height: rem(400);
+  }
+  //  Map layer
+  .map-layer {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    position: absolute;
+    left: -50%;
+    top: 0;
+    //  Sample background
+    background: url('../assets/everyproject/example-map.jpg') no-repeat center center;
+    background-size: cover;
+  }
+  //  Markers
+  .markers {
+    position: absolute;
+    left: -50%;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    @include list-reset;
+    li {
+      @include position(absolute, 50% null null 50%);
+      cursor: pointer;
+      transition: $transition-fast;
+      &.is-active {
+        .marker {
+          background: $brandcolor;
+        }
+      }
+      &.positive {
+        .marker {
+          background: $color-positive;
+        }
+        .change {
+          color: $color-positive;
+        }
+      }
+      &.negative {
+        //  Will use default bg color for marker
+        .marker {}
+        .change {
+          color: $color-negative;
+        }
+      }
+      &:hover {
+        @include transform(scale(1.2));
+        z-index: 1000;
+      }
+      .marker {
+        width: rem(24);
+        height: rem(24);
+        border-radius: rem(20);
+        background: $darkgrey;
+        text-indent: -8000px;
+        display: block;
+        border: 3px solid $white;
+        box-shadow: $box-shadow-minimal;
+      }
+      .marker-information {
+        @include font-size(12);
+        line-height: 1.1;
+        background: transparent-color($white, .85);
+        text-align: center;
+        padding: rem($spacing-s/3) rem($spacing-s/2);
+        border-radius: $radius;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        @include transform(translateX(-50%));
+        margin-top: rem(2);
+        box-shadow: $box-shadow-minimal;
+        span {
+          display: block;
+          white-space: nowrap;
+          font-weight: $font-bold;
+        }
+      }
+      .additional-information {
+        position: absolute;
+        bottom: 100%;
+        margin-bottom: 0;
+        left: 50%;
+        z-index: 200;
+        background: $white;
+        padding: rem(12) rem(16);
+        border-radius: $radius;
+        box-shadow: $box-shadow;
+        @include transform(translateX(-50%));
+        transition: $transition-fast;
+        max-width: rem(240);
+        visibility: hidden;
+        opacity: 0;
+        display: block;
+        transition: $transition-fast;
+        &:before {
+          content: "";
+          @include triangle(20px, $white, down);
+          position: absolute;
+          bottom: rem(-9);
+          left: 50%;
+          margin-left: rem(-10);
+        }
+        p {
+          @include font-size(12);
+          line-height: 1.5;
+          color: $grey;
+          width: rem(200);
+        }
+      }
+      &:hover .additional-information {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
+}
+
+.infoBox {
+  position: absolute;
+  display: none;
+  z-index: 1100;
+  background: #fff;
+  padding: gutter() / 2;
+  width: rem(230);
+  max-width: rem(230);
+  visibility: hidden;
+  opacity: 0;
+  border-radius: 5px 0 5px 5px;
+  box-shadow: $box-shadow-heavy;
+  transform: translateX(-50%);
+  transition: $transition-fast;
+  .closebtn {
+    background-color: $white;
+    position: absolute;
+    opacity: 1;
+    top: 0;
+    right: -22px;
+    width: 22px;
+    height: 22px;
+    padding: 7px;
+    border-radius: 0 5px 5px 0;
+    box-shadow: 7px 0px 7px rgba(0, 0, 0, 0.2);
+    img {
+      opacity: .5;
+    }
+    &:hover {
+      opacity: 1;
+    }
+  }
+  .thumb {
+    width: 100%;
+    display: block;
+    img {
+      width: 100%;
+      height: rem(100);
+    }
+  }
+  .info {
+    display: block;
+    margin-top: gutter() / 4;
+    width: 100%;
+    .addr, .dist, .space, .gla, .lot, .build {
+      text-align: left;
+      border-bottom: 1px dotted #ccc;
+      display: block;
+      padding: rem(5) 0;
+      &:last-of-type {
+        border-bottom: 0;
+      }
+      span {
+        margin-right: rem(5);
+        strong {
+          color: $color-text;
+        }
+      }
+    }
+  }
+  &.open {
+    display: block;
+    opacity: 1;
+    &:before {
+      content: "";
+      height: 0;
+      width: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid #fff;
+      position: absolute;
+      bottom: -0.5625rem;
+      left: 50%;
+      margin-left: -0.625rem;
+    }
+  }
+}
+
+.infoLabel {
+  font-size: 12px;
+  font-size: 0.75rem;
+  line-height: 1.1;
+  background: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  padding: rem(6.6666) rem(10);
+  border-radius: 3px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: rem(2);
+  box-shadow: 0 1px 3px rgba(17, 17, 17, 0.15);
+  span {
+    display: block;
+    white-space: nowrap;
+    font-weight: 700;
+    &.positive {
+      color: #6ab800;
+    }
+    &.negative {
+      color: #9e0b0f;
+    }
+  }
+}

@@ -1,0 +1,1119 @@
+//  Calculator
+%calculator-editable-input {
+  text-align: right;
+  line-height: rem(28);
+  border: solid 1px transparent;
+  box-shadow: none;
+}
+
+.calculator {
+  $bordercolorlevel3: mix(saturate(#ffffd1, 10%), $black, 90%);
+  .group, accordion > accordion-group > .panel > .panel-collapse {
+    transition: $transition-fast;
+  }
+  accordion, accordion > accordion-group {
+    display: block;
+    background: white;
+  }
+  accordion > header, .accordion > header {
+    cursor: pointer;
+  }
+  .editable {
+    cursor: pointer;
+    transition: $transition-fast;
+    &:hover {
+      background: transparent-color($black, .05);
+    }
+    &.is-focus {
+      background: transparent-color($black, .15);
+      outline: none;
+      box-shadow: inset 0 0 rem(7) transparent-color($black, .25);
+      color: $darkwhite;
+      .currency {
+        visibility: hidden;
+        opacity: 0;
+      }
+    }
+    :focus {
+      outline: none;
+    }
+    input {
+      padding: 0 rem(13.333);
+    }
+  }
+  [contenteditable="true"] {
+    border-bottom: 1px solid rgba(17, 17, 17, 0.2);
+  }
+  > .featured > .group > .editable,
+  > article > .group,
+  > article.featured > .group > header > .editable .input-value input {
+    color: $white !important;
+  }
+  > article > .group .editable .input-value input {
+    color: $brandcolor !important;
+  }
+  //  Dimmed
+  .is-dimmed {
+    opacity: .3;
+    background: $white;
+    .value {
+      pointer-events: none;
+    }
+    .value span {
+      color: $darkgrey;
+    }
+    &:hover {
+      opacity: .6;
+    }
+  }
+  > article {
+    box-shadow: $box-shadow-minimal;
+    margin-bottom: rem($spacing-s/1.5);
+    > .group {
+      position: relative;
+      @include border-left(rem(5), transparent-color(lighten($black, 7%), .30));
+      &, > .accordion > a > header, .editable .input-value input {
+        @include linear-gradient($lightgrey, darken($lightgrey, 10%));
+      }
+      .editable .input-value input {
+        font-size: 24px;
+        font-size: rem(24);
+        @extend %calculator-editable-input;
+      }
+      &.accordion, &accordion {
+        &:before {
+          @extend .icon;
+          @extend .icon-arrow-down;
+          color: transparent-color($white, .5);
+          position: absolute;
+          //           @include font-size(16);
+          top: rem($spacing-s + 6px);
+          right: rem($spacing-s + 5px);
+          z-index: 1000;
+        }
+        &.active:before, &.panel-open:before {
+          @extend .icon-arrow-up;
+        }
+        section {
+          display: none !important;
+        }
+        &.active section, &.panel-open > section {
+          display: block !important;
+        }
+      }
+    }
+    section .group.accordion:before {
+      color: $lightgrey;
+    }
+    section .subsection-a .group.accordion:before {
+      top: rem($spacing-s/1.5 + 2px);
+      right: rem($spacing-m*2 - 5px);
+    }
+    section .subsection-a .group.accordion.active:before,
+    section .subsection-a accordion.group.panel-open:before {
+      color: $white;
+    }
+    &.featured > .group,
+    &.featured > .group > .accordion > a > header,
+    &.featured > .group .editable .input-value input {
+      @include linear-gradient($brandcolor, darken($brandcolor, 10%));
+    }
+
+    // buy-and-flip accordion styling
+    .accordion {
+      .dropup {
+        .panel-heading {
+          .accordion-header {
+
+          }
+        }
+      }
+    }
+
+    accordion accordion {
+      .accordion {
+        .dropup{
+          .panel-heading {
+            .accordion-header{
+              background-color: #fecf40;
+              background-image: -webkit-linear-gradient(#fecf40, #fec20d);
+              background-image: linear-gradient(#fecf40, #fec20d);
+              &::before{
+                content: "\edb9";
+                color: white!important;
+              }
+              .label {
+                h3 {
+                  color: white!important;
+                }
+              }
+              .values {
+                .value {
+                  color: white!important;
+                }
+              }
+            }
+          }
+        }
+        .panel-heading .accordion-header {
+            background: #ffffd1;
+            &::before {
+              content: "\edc2";
+              top: 1.1rem;
+            }
+            .value {
+              width: auto;
+            }
+        }
+      }
+      .subsection-wrap {
+        width: 100%!important;
+      }
+    }
+
+    &>.group {
+      &> accordion {
+          &>.panel-group > .accordion {
+            &>.panel{
+                border-bottom: 1px solid #e1e1e1;
+              &.dropup {
+                padding-bottom: 20px;
+                &>.panel-heading {
+                  .accordion-header::before {
+                    content: "\edb9";
+                  }
+                }
+              }
+            }
+          }
+      }
+    }
+
+    .group {
+      .accordion {
+        background: white;
+
+        .accordion-header {
+          cursor: pointer;
+          background: white;
+          display: block;
+          position: relative;
+          &::before{
+            color: #959595;
+            font-family: 'icomoon' !important;
+            speak: none;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            content: "\edc2";
+            position: absolute;
+            top: 1.625rem;
+            right: 1.5625rem;
+            z-index: 1000;
+          }
+          .label {
+            display:inline-block;
+          }
+          h3 {
+            color: #636363;
+            font-weight: 100;
+            font-size: 1.25rem;
+            padding: 1.375rem 1.875rem;
+            margin: 0;
+            line-height: 1.625rem;
+            display: inline-block;
+          }
+          .value {
+            float: right;
+            padding: 1.3125rem 1.875rem;
+            padding-right: 3.75rem;
+            text-align: right;
+            font-size: 1.5rem;
+            line-height: 1.75rem;
+            color: #636363;
+            position: relative;
+            font-weight: normal;
+            &.hang-right {
+              float: right!important;
+            }
+            .value {
+              padding: 0;
+            }
+          }
+        }
+        .value {
+          color: #404040;
+        }
+
+        .panel-title {
+          margin: 0;
+        }
+
+        .subsection-wrap {
+          width: 95%;
+          margin: 0 auto;
+        }
+
+        .subsection-content {
+          .subsection-header {
+            div.value {
+              font-size: 1rem !important;
+              color: #363636 !important;
+              font-weight: 700;
+              padding: 0.6875rem 1.875rem;
+              padding-right: 5.625rem;
+            }
+          }
+          background: #ffffd1;
+          &>.group {
+            position: relative;
+            border-top: 1px solid #e7e7be;
+            &:nth-of-type(1){
+              border-top: none;
+            }
+            &::after{
+              content: "";
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              left: 0;
+              width: 0.3125rem;
+              background: rgba(17, 17, 17, 0.07);
+              transition: all 0.5s ease-in-out;
+              display: block;
+            }
+            .label {
+              h3 {
+                color: #636363;
+                font-size: 1.125rem;
+                padding: 0.6875rem 1.875rem;
+              }
+            }
+          }
+          .value-wrap {
+            border-left: 1px solid #e7e7be;
+            font-size: 1.375rem;
+            padding: 0.6875rem 1.875rem;
+            padding-right: 5.625rem;
+            &.no-padding {
+              padding: 0;
+            }
+            &.editable {
+              color: #dc4128 !important;
+              .value {
+                color: #dc4128 !important;
+              }
+            }
+            &.select-editable {
+              div.select-value {
+                padding:0;
+                padding-left: 32px;
+                &::before{
+                  top: 6px;
+                }
+              }
+            }
+            .value {
+              display: inline-block;
+            }
+          }
+          .value {
+          }
+        }
+      }
+    }
+    //  2nd level
+    section {
+        > .group {
+            &, & > .accordion, & .editable .input-value input {
+              background: $white !important;
+              &[disabled] {
+                background: $bordercolor !important;
+                color: $lightgrey !important;
+              }
+            }
+            border-bottom: 1px solid $bordercolor;
+            @include border-left(rem(5), transparent-color(lighten($black, 7%), .15));
+            > .subsection-a:last-child,
+            > accordion-group > .panel > .panel-body > .subsection-a:last-child {
+              margin-bottom: rem($spacing-s);
+            }
+            .editable .input-value input {
+              font-size: 22px;
+              font-size: rem(22);
+              @extend %calculator-editable-input;
+            }
+            > header .values > .value.select-editable {
+              padding: 0 rem($spacing-m);
+            }
+        }
+
+        .editable {
+            color: $brandcolor !important;
+        }
+        &:last-child > .group {
+            border-bottom: 0;
+        }
+    }
+    // 3rd level
+    section .subsection-a {
+      left: rem($spacing-m);
+      width: calc(100% - 3.75rem);
+      position: relative;
+      background: $white;
+      &:last-of-type {
+        //         margin-bottom: rem($spacing-s);
+      }
+      > .group {
+        @include border-left(rem(5), transparent-color($black, 0)); // removed trans border
+        background: #ffffd1 !important;
+        border-bottom: 1px solid $bordercolorlevel3;
+        border-top: 1px solid $bordercolorlevel3;
+        &.dimmed {
+          background: #636363 !important;
+          color: $white;
+          strong, header h3, header .values > .value {
+            color: $white;
+          }
+        }
+        &:first-child {
+          border-top: 0;
+        }
+      }
+      .accordion.active,
+      accordion.panel-open {
+        > a > header,
+        > accordion-group > .panel > .panel-heading header {
+          @include linear-gradient($brandcolor-secondary, darken($brandcolor-secondary, 10%));
+          h3 {
+            color: $white;
+          }
+          .value {
+            color: $white;
+          }
+        }
+      }
+    }
+    //  4th level
+    section .subsection-a .subsection-b {
+      left: 0;
+      margin: 0 !important;
+      width: 100% !important;
+      &:after {
+        display: none;
+      }
+      > .group {
+        &, .editable .input-value input {
+          background: #ffffd1 !important;
+          //background: #ffffe7 !important;
+        }
+        border-top: 1px solid $bordercolorlevel3;
+        &:last-child {
+          border-bottom: 0 !important;
+        }
+        &:after {
+          display: none;
+        }
+      }
+    }
+  }
+  //  Header
+  header {
+    @include clearfix;
+    position: relative;
+    padding: 0;
+    margin-bottom: 0;
+    .label {
+      float: left;
+      width: 75%;
+    }
+    h3 {
+      margin: 0;
+      padding: rem($spacing-s+2px) rem($spacing-m); // compensate for larger font on .value
+      @include subtitle;
+      line-height: rem(26);
+      color: $white;
+      display: inline-block;
+      float: left;
+
+      &.clickable:after {
+        // background: lighten($lightgrey, 40%);
+        // color: $white;
+        // padding: rem(5) rem(6);
+        // text-align: center;
+        // border-radius: 5rem;
+        color: lighten($lightgrey, 25%);
+        margin-left: rem(10);
+        vertical-align: top;
+        content: "\edc2";
+        font-size: 60%;
+        font-family: 'icomoon' !important;
+        transition: $transition;
+      }
+    }
+    > .value, .values > .value {
+      float: right;
+      width: 25%;
+      padding: rem($spacing-s + 1px) rem($spacing-m);
+      // padding-right: rem($spacing-m*2);
+      text-align: right;
+      @include subtitle;
+      @include font-size(24);
+      line-height: rem(28);
+      color: $white;
+      position: relative;
+      em {
+        font-size: 100%;
+        color: $white;
+        padding: 0 rem(4);
+      }
+    }
+    > .value.editable {
+      padding: 0 rem(30);
+      height: rem(70);
+      .input-value, .input-value input {
+        height: 100%;
+      }
+    }
+    .widget#{&} .tab-selector-inline {
+      @extend %widget-tab-selector-inline;
+    }
+  }
+  .values-two-column header, .accordion-header {
+    .label {
+      width: 50%;
+      &>.editable {
+        display: inline-block;
+        margin-top: 10px;
+      }
+    }
+    .values {
+      width: 50%;
+      float: right;
+      > .value {
+        width: 50%!important;
+        float: left;
+        border-left: 1px solid transparent-color($white, .1);
+        /*
+        @include font-size(20);
+        color: $grey;
+        border-left: 1px solid $bordercolorlevel3;
+*/      
+        &.hang-right {
+          float: right;
+        }
+      }
+    }
+  }
+  .input-value {
+    width: 80%;
+    display: inline-block;
+  }
+  //  Checkbox control
+  header {
+    .checkbox input {
+      position: absolute;
+      top: rem(15);
+      left: rem($spacing-m - 10);
+      width: rem(16);
+      height: rem(16);
+      background: none;
+      border: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      cursor: pointer;
+      pointer-events: all;
+      &:before {
+        @extend .icon;
+        @extend .icon-checkbox-unchecked2;
+        @include font-size(16);
+        color: $black;
+      }
+      &:checked {
+        &:before {
+          @extend .icon-checkbox-checked2;
+        }
+      }
+    }
+  }
+  .is-dimmed header .checkbox input:before {
+    color: $lightgrey;
+  }
+  .is-checkbox header .label h3 {
+    padding-left: rem($spacing-m + 20);
+  }
+  //  Lock control
+  .icon-lock {
+    pointer-events: all;
+    &:before {
+      @include font-size(16);
+      position: absolute;
+      top: 50%;
+      @include transform(translateY(-50%));
+      left: rem($spacing-s);
+      @extend .icon-lock-unlocked;
+      color: $brandcolor;
+    }
+  }
+  .group.is-locked {
+    .value {
+      pointer-events: none;
+      span {
+        color: $grey;
+      }
+    }
+    .icon-lock {
+      &:before {
+        color: $lightgrey;
+        content: "\eb53" !important;
+      }
+    }
+  }
+  //  Counter control
+  header {
+    .counter {
+      position: absolute;
+      width: rem(24 * 2 + 4);
+      top: 50%;
+      right: rem($spacing-s/2);
+      @include transform(translateY(-50%));
+      .icon {
+        @include icon-remove-text;
+        width: rem(24);
+        height: rem(24);
+        display: block;
+        float: right;
+        &:before {
+          @include font-size(10);
+          color: $white;
+          padding: rem(6);
+          background: $lightgrey;
+          border-radius: rem(20);
+          margin: 1px;
+          transition: $transition-fast;
+        }
+        &:hover:before {
+          background: $darkgrey;
+        }
+      }
+    }
+  }
+  //  Header 2nd level
+  article section header {
+    h3 {
+      color: $grey;
+      // color: $brandcolor-secondary;
+      @include font-size(20);
+      padding: rem($spacing-s + 2px) rem($spacing-m);
+    }
+    > .value, .values > .value {
+      color: $grey;
+      // color: $brandcolor-secondary;
+    }
+    .description {
+      padding: rem($spacing-s + 1px) rem($spacing-m);
+      @include subtitle;
+      @include font-size(16);
+      line-height: rem(28);
+      color: $lightgrey;
+      float: right;
+    }
+  }
+  article section .values-two-column {
+    .values > .value {
+      border-left: 1px solid $bordercolor;
+    }
+  }
+  //  Header 3rd level
+  article section .subsection-a header {
+    h3 {
+      @include font-size(18);
+      padding: rem($spacing-s/2 + 1px) rem($spacing-m);
+    }
+    > .value, .values > .value {
+      padding: rem($spacing-s/2 + 1px) rem($spacing-m);
+      padding-right: rem($spacing-m*3);
+      @include font-size(22);
+      border-left: 1px solid $bordercolor;
+    }
+    .values > .value.editable {
+      padding-right: rem(58);
+    }
+    .description {
+      padding: rem($spacing-s/1.5 + 1px) rem($spacing-m);
+      line-height: rem(22);
+    }
+    .value.label {
+      @include font-size(16, !important);
+      color: $darkgrey !important;
+      // color: $white !important;
+      font-weight: $font-bold;
+    }
+  }
+  article section .subsection-a .values-two-column {
+    .values > .value {
+      border-left: 1px solid $bordercolorlevel3;
+    }
+  }
+  //  Header 4th level
+  article section .subsection-a .subsection-b {
+    header {
+      .label {
+        > div {
+          float: right;
+        }
+      }
+      > .value, .values > .value {
+        padding: rem($spacing-s/2 + 1px) rem($spacing-m);
+        padding-right: rem($spacing-m*3);
+      }
+      .description {
+        float: right;
+      }
+    }
+    .select .select-value {
+      padding: rem(($spacing-s / 2) + 1px) rem($spacing-m);
+      &:before {
+        top: rem(16);
+      }
+    }
+  }
+  //  Select dropdown
+  .select {
+    @extend %calculator-select;
+    float: none;
+  }
+  article section {
+    .select .value {
+      color: $lightgrey;
+      @include font-size(20);
+      padding: 0 rem($spacing-m);
+      &:before {
+        color: $lightgrey;
+        top: rem(7);
+      }
+    }
+    header {
+      .select .value {
+        padding: rem($spacing-s + 2px) rem($spacing-m);
+        &:before {
+          top: rem($spacing-s + 8px);
+        }
+      }
+      .values .select .value {
+        padding: 0 rem($spacing-m);
+        &:before {
+          top: rem(7);
+        }
+      }
+    }
+  }
+  article section .subsection-a .select {
+    > .select-value {
+      @include font-size(16);
+      padding: rem(2) rem($spacing-m);
+      line-height: rem(28);
+      &:before {
+        left: auto;
+        top: rem(9);
+        right: rem(10);
+        @include font-size(16);
+      }
+    }
+  }
+}
+
+//  Cash on Cash
+%widget-tab-selector-inline {
+  float: right;
+  width: auto;
+  ol {
+    border-bottom: 0;
+  }
+  li {
+    border-bottom-width: 1px;
+    padding: 0;
+    font-weight: $font-regular;
+    @include font-size(24);
+    line-height: rem(30);
+    &.is-active {
+      border-bottom-width: 2px;
+    }
+  }
+}
+
+%calculator-select {
+  float: left;
+  cursor: pointer;
+  position: relative;
+  //   z-index: 1000;
+  .select-value {
+    padding: rem($spacing-s + 1px) rem($spacing-m);
+    @include subtitle;
+    @include font-size(20);
+    line-height: rem(28);
+    color: darken($white, 15%);
+    position: relative;
+    &:before {
+      @extend .icon;
+      @extend .icon-equalizer;
+      position: absolute;
+      top: rem($spacing-s + 7px);
+      left: rem(8);
+      @include font-size(16);
+      // color: $grey;
+    }
+  }
+  .select-dropdown {
+    @include clearfix;
+    position: absolute;
+    top: 0; //rem(-$spacing-s);
+    left: rem(-10);
+    min-width: rem(250);
+    width: auto !important;
+    @include linear-gradient($darkgrey, darken($darkgrey, 10%));
+    border-radius: $radius;
+    z-index: 10000;
+    padding: rem($spacing-s/2);
+    visibility: hidden;
+    opacity: 0;
+    transition: $transition-fast;
+    //     @include transform(scale(.85));
+    &.is-visible {
+      left: 0;
+      /*
+      top: rem(-$spacing-s/2);
+      right: rem($spacing-s/2);
+*/
+      visibility: visible;
+      opacity: 1;
+      //       opacity: .9;
+      //       @include transform(translateX(100%));
+    }
+    .select-value {
+      width: 100%;
+      display: block;
+      border-radius: $radius;
+      padding: rem($spacing-s/2) rem($spacing-m);
+      text-align: center;
+      position: relative;
+      margin: rem(3) 0;
+      color: $white;
+      @include font-size(22);
+      white-space: nowrap;
+      &:before {
+        display: none;
+      }
+      &.input {
+        padding: 0;
+        input {
+          text-align: center;
+          padding: rem(13.333) 0;
+        }
+      }
+    }
+    .select-value.is-active, .select-value:hover {
+      display: block;
+      @include linear-gradient($brandcolor, darken($brandcolor, 10%));
+      &:before {
+        //         display: none;
+      }
+    }
+  }
+}
+
+.widget.coc {
+  border: 1px solid $bordercolor;
+  box-shadow: $box-shadow-minimal;
+  background: $notecolor;
+  @include clearfix;
+  position: relative;
+  header {
+    @include clearfix;
+    padding: rem($spacing-s) rem($spacing-m);
+    border-bottom: 1px solid mix($black, $notecolor, 10%);
+    ;
+    background: mix($black, $notecolor, 3%);
+    h2 {
+      margin: 0;
+      color: $grey;
+      float: left;
+      line-height: rem(30);
+    }
+    .tab-selector-inline {
+      @extend %widget-tab-selector-inline;
+    }
+  }
+  //  Data
+  .data {
+    width: 50%;
+    float: left;
+    padding: rem($spacing-s) rem($spacing-m);
+  }
+  table {
+    width: 100%;
+    border-top: 1px solid mix($black, $notecolor, 10%);
+    th, td {
+      @include font-size(18);
+      font-weight: $font-regular;
+      text-align: left;
+      border-bottom: 1px solid mix($black, $notecolor, 10%);
+      padding: $spacing-s/2 0;
+    }
+    td {
+      text-align: right;
+      &.positive {
+        color: $color-positive;
+      }
+      &.negative {
+        color: $color-negative;
+      }
+    }
+  }
+  //  Fetured information
+  .featured {
+    /*
+    width: auto;
+    float: right;
+    padding: rem($spacing-s) rem($spacing-m);
+*/
+    position: absolute;
+    bottom: rem($spacing-s);
+    right: rem($spacing-m);
+    > div {
+      float: left;
+      margin-left: rem($spacing-s);
+      &.positive .value {
+        color: $color-positive;
+      }
+      &.positive.invert .value {
+        background: $color-positive;
+        border: 1px solid darken($color-positive, 3%);
+      }
+      &.negative .value {
+        color: $color-negative;
+      }
+      &.negative.invert .value {
+        background: $color-negative;
+        border: 1px solid darken($color-negative, 3%);
+      }
+      &.invert .value {
+        color: $white;
+      }
+    }
+    .label {
+      @include font-size(18);
+      width: 100%;
+      text-align: right;
+    }
+    .value {
+      // border: 1px solid mix($black, $notecolor, 10%);
+      clear: both;
+      width: 100%;
+      @include font-size(32);
+      padding: $spacing-s/2 $spacing-s*1.5;
+    }
+  }
+  .select {
+    @extend %calculator-select;
+    float: none;
+  }
+}
+
+.accordion-header .label .select {
+  float: none!important;
+  display:inline-block;
+}
+
+div.is-checkbox header div.label {
+  padding-left: 1%;
+}
+
+.editable>span {
+    color: #dc4128!important;
+}
+
+.cftoggle-position {
+  float: right;
+  width: auto;
+  margin-right: 23%;
+}
+
+.is-dim-faded {
+  background: rgba(209, 209, 163, .6);
+}
+
+.is-dim-faded-opacity {
+  opacity: .6;
+}
+
+.calc-gray-gradient {
+  background-image: linear-gradient(#969696,#7d7d7d) !important;
+}
+
+.calc-gray-gradient span {
+  color: white !important;
+}
+
+.calc-gray-gradient h3 {
+  color: white !important;
+}
+
+.calc-red-gradient {
+  background-image: linear-gradient(#dc4128,#b4321d) !important;
+}
+
+.calc-red-gradient span {
+  color: white !important;
+}
+
+.calc-red-gradient h3 {
+  color: white !important;
+}
+
+app-property-rent .input-field {
+  background-color: white !important;
+  background-image: none !important;
+}
+
+.narr-show-less .narr-muted {
+  display: none !important;
+}
+
+.calctooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.calctooltip .calctooltiptext {
+  font-size: 80%;
+  line-height: 100%;
+  visibility: hidden;
+  width: 520px;
+  background-color: black;
+  color: #f3f3f3 !important;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 10;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.calctooltip:hover .calctooltiptext {
+  visibility: visible;
+}
+
+.left-col-pct {
+  float: right;
+  width: 25%;
+}
+
+app-property-trends th {
+  color: black !important;
+  font-weight: normal !important;
+}
+
+app-property-trends td {
+  color: black !important;
+  font-weight: normal !important;
+}
+
+app-property-trends thead {
+  background-color: #959595 !important;
+}
+
+app-property-trends b {
+  color: black;
+}
+
+.select-value-small div {
+  padding-bottom: 0px !important;
+  padding-top: 0px !important;
+}
+
+.select-value-small div:before {
+  top: .4rem !important;
+}
+
+.select-value-small div {
+  color: #838383 !important;
+}
+
+.accordion-subheader {
+  background-color: #ffffd1 !important;
+}
+
+.q-selector-image {
+  width: 33%;
+  height: 250px;
+  background-size: 100% auto;
+  position: relative;
+  float: right;
+}
+
+.q1-example {
+  background-image: url(../assets/images/q1-example.png);
+}
+
+.q2-example {
+  background-image: url(../assets/images/q2-example.png);
+}
+
+.q3-example {
+  background-image: url(../assets/images/q3-example.png);
+}
+
+.q4-example {
+  background-image: url(../assets/images/q4-example.png);
+}
+
+.q5-example {
+  background-image: url(../assets/images/q5-example.png);
+}
+
+.q6-example {
+  background-image: url(../assets/images/q6-example.png);
+}
+
+.q-selector-controls {
+  float: right;
+  width: 4%;
+  height: 250px;
+}
+
+.q-selector-btn {
+  width: 100%;
+  padding: 0;
+  padding-top: .1rem;
+  height: 30px;
+/*  background-color: #fecf40;*/
+/*  background-image: linear-gradient(#fecf40,#fec20d);*/
+  background-color: #ffffd1;
+  background-image: none !important;
+  color: #636363;
+}
+
+.values2>.value {
+  text-align: left !important;
+  padding-left: 18% !important;
+}
+
+#property-information h1 em.calctooltip, #property-information h2 em.calctooltip {
+  text-align: center;
+}
+
+#property-information h1 em.calctooltip .calctooltiptext, #property-information h2 em.calctooltip .calctooltiptext {
+  font-size: 100%;
+  left: -100%;
+}
+

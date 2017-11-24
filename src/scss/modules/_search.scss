@@ -1,0 +1,100 @@
+//  Search template
+#template {
+  #page-title {
+    &.search {
+      padding-bottom: rem($spacing-m + 50);
+    }
+  }
+}
+
+//  Search
+.widget.search {
+  fieldset {
+    padding: 0;
+  }
+  label {}
+  .content {
+    padding: 0;
+  }
+  &.simple-search {
+    width: rem(500);
+    input[type="submit"], .button {
+    }
+  }
+  &.detailed-search {
+    width: rem(600);
+    fieldset {
+      padding: rem($spacing-s) 0;
+      &:first-of-type {
+        padding-top: 0;
+      }
+    }
+    .group {
+      label {
+        width: 40%;
+        float: left;
+        padding-top: rem(11);
+      }
+      input, select, .description {
+        width: 60%;
+        float: right;
+        margin-left: 2%;
+        padding-top: rem($spacing-s/2);
+        padding-bottom: rem($spacing-s/2);
+      }
+    }
+    .text-range {
+      .group {
+        width: 26.5%;
+        padding: 0;
+        input {
+          width: 100%;
+        }
+        + .group {
+          width: 33.5%;
+          input {
+            width: 80%;
+          }
+        }
+        label {
+          width: 20%;
+          float: left;
+          text-align: center;
+        }
+      }
+    }
+    .checkbox {
+      margin-left: 40%;
+    }
+  }
+}
+
+.ranged-input-wrapper {
+  width: 61% !important;
+  float: right !important;
+}
+
+.ranged-input-wrapper>input {
+  float: left !important;
+  width: 48% !important;
+}
+
+ng2-completer>div>input {
+  margin-left: 0px !important;
+}
+
+rl-tag-input>form>input {
+  margin-top: 10px !important;
+}
+
+.group-thirds {
+  width: 33% !important;
+  clear: none !important;
+  margin-left: 0 !important;
+}
+
+.group-single-centered {
+  margin-left: 25% !important;
+  width: 50% !important;
+}
+

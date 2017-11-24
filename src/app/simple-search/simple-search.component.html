@@ -1,0 +1,16 @@
+<div class="content">
+  <div id="tab-content1" class="tab-content">
+    <div id="simple-search" class="tab is-active">
+      <div class="form simple-search">
+        <form #simpleSearchForm="ngForm" (ngSubmit)="onSubmit(simpleSearchForm.value)">
+          <div class="group">
+              <input id="simple_search" type="text" name="simple_search" [(ngModel)]="address" required placeholder="Address, City, St or MLS # or Auction #">
+          </div>
+          <div class="group button-group ">
+            <input type="submit" value="Search" [disabled]="!simpleSearchForm.valid" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

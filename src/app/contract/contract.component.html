@@ -1,0 +1,222 @@
+<!-- Property Basic Information -->
+<div id="property-information">
+  <div class="container">
+    <!-- All Information -->
+    <div class="all-information">
+      <div class="basic-information">
+        <h1>{{propertyService.getCurrentProperty().address?.line1}} <em>{{propertyService.getCurrentProperty().address?.line2}}</em><em>MLS #{{propertyService.getCurrentProperty().identifier?.mlsNumber}}</em></h1>
+        <h2 class="condition">{{propertyService.getCurrentProperty().hit?.condition}} <em>HIT Condition</em></h2>
+        <h2 class="score">{{propertyService.getCurrentProperty().hit?.score}} <em>HIT Score</em></h2>
+        <h2 class="status">{{propertyService.getCurrentProperty().mls?.statusShortValue}} <em>{{propertyService.getStatusChangeDate() | date:'mediumDate'}}</em></h2>
+        <h2 class="list-price">${{propertyService.getListPrice()}} <em>List Price</em></h2>
+      </div>
+      <div class="additional-information">
+        <ol class="tags featured">
+          <li><strong>{{propertyService.getCurrentProperty().building?.rooms?.beds}}</strong> bed</li>
+          <li><strong>{{propertyService.getCurrentProperty().building?.rooms?.bathsTotal}}</strong> bath</li>
+          <li><strong>{{propertyService.getGarageSpaces()}}</strong> car</li>
+          <li class="more-info" *ngIf="propertyService.getCurrentProperty().building?.parking?.garageType">
+            <strong>Garage</strong>
+            <div>
+              <p>{{propertyService.getCurrentProperty().building?.parking?.garageType}}</p>
+              <p>{{propertyService.getGarageSpaces()}} / {{propertyService.getCurrentProperty().building?.parking?.prkgSpaces}} spaces</p>
+            </div>
+          </li>
+          <li [ngClass]="{'dimmed': !propertyService.getCurrentProperty().lot?.poolInd || ('0' == propertyService.getCurrentProperty().lot?.poolInd), 'more-info': propertyService.getCurrentProperty().lot?.poolInd && ('0' != propertyService.getCurrentProperty().lot?.poolInd)}">
+            <strong>Pool</strong>
+            <div>
+              <p>{{propertyService.getCurrentProperty().lot?.poolType}}</p>
+            </div>
+          </li>
+          <li><strong>{{propertyService.getCurrentProperty().building?.size?.bldgSize | number : '1.0-0'}}</strong> SQ FT</li>
+          <li [ngClass]="{'more-info': propertyService.getCurrentProperty().lot?.lotSizeInAcres}" *ngIf="propertyService.getCurrentProperty().lot?.lotSizeInSQFT">
+            <strong>{{propertyService.getCurrentProperty().lot?.lotSizeInSQFT | number : '1.0-0'}}</strong> SQ FT <strong>Lot Size</strong>
+            <div>
+              <p *ngIf="propertyService.getCurrentProperty().lot?.lotSizeInAcres"><strong>{{propertyService.getCurrentProperty().lot?.lotSizeInAcres | number : '1.0-3'}}</strong> Acres <strong>Lot Size</strong></p>
+            </div>
+          </li>
+        </ol>
+        <ol class="tags">
+          <li><strong>{{roundDom(propertyService.getCurrentProperty().mls?.dom)}}</strong> DOM</li>
+          <li><strong>{{roundDom(propertyService.getCurrentProperty().mls?.cdom)}}</strong> CDOM</li>
+          <li>Built in: <strong>{{propertyService.getCurrentProperty().summary?.yearBuilt}}</strong></li>
+          <li class="more-info">
+            School: <strong>{{propertyService.getCurrentProperty().mls?.school?.schoolDistrict}}</strong>
+            <div>
+              <p *ngIf="propertyService.getCurrentProperty().mls?.school?.elementarySchoolName">Elementary: {{propertyService.getCurrentProperty().mls.school.elementarySchoolName}}</p>
+              <p *ngIf="propertyService.getCurrentProperty().mls?.school?.middleSchoolName">Middle: {{propertyService.getCurrentProperty().mls.school.middleSchoolName}}</p>
+              <p *ngIf="propertyService.getCurrentProperty().mls?.school?.juniorHighSchoolName">Junior High: {{propertyService.getCurrentProperty().mls.school.juniorHighSchoolName}}</p>
+              <p *ngIf="propertyService.getCurrentProperty().mls?.school?.highSchoolName">High: {{propertyService.getCurrentProperty().mls.school.highSchoolName}}</p>
+              <p *ngIf="propertyService.getCurrentProperty().mls?.school?.seniorHighSchoolName">Senior High: {{propertyService.getCurrentProperty().mls.school.seniorHighSchoolName}}</p>
+            </div>
+          </li>
+          <li class="more-info" *ngIf="propertyService.getCurrentProperty().assessment?.assessed?.assdTtlValue">
+            Tax value: <strong>{{propertyService.getCurrentProperty().assessment?.assessed?.assdTtlValue | currency:'USD':true:'1.0-0'}}</strong>
+            <div>
+              <p>Tax authority: {{propertyService.getCurrentProperty().area?.countyUse1}}</p>
+              <p>Annual tax: {{propertyService.getTaxAmt() | currency:'USD':true:'1.0-0'}}</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+      <div *ngIf="propertyService.getCurrentProperty().resources?.photos?.urls?.length > 0" class="image-tabs tab-selector-inline" (click)="$event.stopPropagation(); $event.preventDefault()">
+        <ul>
+          <li [ngClass]="{'is-active': imageTab == 'tab-image'}" (click)="selectImage('tab-image')">Image</li>
+          <li [ngClass]="{'is-active': imageTab == 'tab-streetview'}" (click)="selectImage('tab-streetview')">Streetview</li>
+        </ul>
+      </div>
+      <div class="image" [ngClass]="{'is-active': imageTab == 'tab-image'}" *ngIf="propertyService.getCurrentProperty().resources?.photos?.urls?.length > 0">
+        <img src="{{propertyService.getCurrentProperty().resources.photos.urls[0]}}" alt="" />
+      </div>
+      <div class="image" [ngClass]="{'is-active': (imageTab == 'tab-streetview') || (0 == propertyService.getCurrentProperty().resources?.photos?.urls?.length)}">
+        <app-google-streetview [active]="(imageTab == 'tab-streetview') || (0 == propertyService.getCurrentProperty().resources?.photos?.urls?.length)" [property]="{latitude: propertyService.getCurrentProperty().location?.latitude, longitude: propertyService.getCurrentProperty().location?.longitude}">
+        </app-google-streetview>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Main -->
+<div id="main" class="section-main">
+  <div class="container">
+    <!-- Main content -->
+    <div class="main-content user-content" *ngIf="contractStep == 1">
+      <form class="form contractform" #f="ngForm" (ngSubmit)="onSubmit()">
+        <section class="section bid">
+          <fieldset>
+            <h2><span>Great!</span> Let&apos;s make an offer...</h2>
+          </fieldset>
+          <p class="description">By clicking <strong>&ldquo;YES&rdquo;</strong> you are entering into a LIMITED Buyer Representation agreement with <strong>Property Align Inc</strong> as your exclusive Selling agent on</p>
+          <div class="clearfix"></div>
+          <br>
+          <div class="group">
+            <div class="twelve">
+              <label for="address">Address</label>
+              <input type="text" name="address" [(ngModel)]="contractService.contract.address" placeholder="Address">
+            </div>
+          </div>
+          <div class="group">
+            <div class="four">
+              <label for="city">City</label>
+              <input type="text" name="city" [(ngModel)]="contractService.contract.city" placeholder="City">
+            </div>
+            <div class="four">
+              <label for="state">State</label>
+              <select name="state" placeholder="State" [(ngModel)]="contractService.contract.state" required>
+                <option *ngFor="let state of authService.states" [value]="state">{{state}}</option>
+              </select>
+            </div>
+            <div class="four last">
+              <label for="zipcode">Zip Code</label>
+              <input type="text" name="zipcode" [(ngModel)]="contractService.contract.zipcode" class="form-control" placeholder="Zip" required pattern="[0-9]{5}" />
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <br>
+          <p><strong>Property Align Inc</strong> is held to the full range of services detailed in the Representation agreement in the agency terms on this site.</p>
+          <br>
+          <div class="group">
+            <input type="button" value="Yes" [ngClass]="{selected: contractService.contract.agreement=='Yes'}" (click)="contractService.contract.agreement='Yes'" />
+            <input type="button" value="Not Now" class="dark" [ngClass]="{selected: contractService.contract.agreement=='Not Now'}" (click)="contractService.contract.agreement='Not Now'" />
+          </div>
+          <div class="clearfix"></div>
+          <p class="notice">You are now leaving HIT web site to make an offer on <span>{{contractService.contract.address}}, {{contractService.contract.city}}, {{contractService.contract.state}}, {{contractService.contract.zipcode}}</span></p>
+          <div class="group">
+            <input class="next" type="button" value="Next" (click)="nextStep()" />
+          </div>
+        </section>
+      </form>
+    </div>
+    <div class="main-content user-content" *ngIf="contractStep == 2">
+      <form class="form contractform">
+        <section class="section bid bid2">
+          <fieldset>
+            <h2><span>Bid</span> Offer</h2>
+          </fieldset>
+          <div class="group radio-group">
+            <div class="ten">
+              <input type="text" name="buyHoldOffer" class="form-control date" placeholder="Buy & Hold" [(ngModel)]="contractService.contract.buyHoldOffer" />
+              <div class="clearfix"></div>
+              <br>
+              <input type="button" class="form-control date" value="Opening Bid" [ngClass]="{selected: contractService.contract.offerAmountType=='opening'}" (click)="contractService.contract.offerAmountType='opening'; contractService.chooseBuyHoldOfferType()">
+              <input type="button" class="form-control date" value="Max Bid" [ngClass]="{selected: contractService.contract.offerAmountType=='max'}" (click)="contractService.contract.offerAmountType='max'; contractService.chooseBuyHoldOfferType()">
+            </div>
+            <div class="two last">
+              <div class="hit-radio">
+                <input type="radio" name="offerType" [(ngModel)]="contractService.contract.offerType" (ngModelChange)="contractService.chooseBuyHoldOfferType()" value="hold">
+                <label>Label 1</label>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="group radio-group">
+            <div class="ten">
+              <input type="text" name="buyFlipOffer" class="form-control date" placeholder="Buy & Flip" [(ngModel)]="contractService.contract.buyFlipOffer">
+              <div class="clearfix"></div>
+              <br>
+              <input type="button" class="form-control date" value="Opening Bid" [ngClass]="{selected: contractService.contract.offerAmountType=='opening'}" (click)="contractService.contract.offerAmountType='opening'; contractService.chooseBuyHoldOfferType()">
+              <input type="button" class="form-control date" value="Max Bid" [ngClass]="{selected: contractService.contract.offerAmountType=='max'}" (click)="contractService.contract.offerAmountType='max'; contractService.chooseBuyHoldOfferType()">
+            </div>
+            <div class="two last">
+              <div class="hit-radio">
+                <input type="radio" name="offerType" [(ngModel)]="contractService.contract.offerType" (ngModelChange)="contractService.chooseBuyFlipOfferType()" value="flip">
+                <label>Label 2</label>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <h3>Your Offer</h3>
+          <div class="group">
+            <p class="notice">{{(contractService.contract.offerAmountType == 'opening') ? 'Opening Bid' : 'Max Bid'}} <span>${{contractService.contract.offerPrice | number : '1.0-0'}}</span></p>
+          </div>
+          <div class="group">
+            <div class="three">
+              Cash to close
+            </div>
+            <div class="eight last">
+              ${{contractService.contract.offerPrice | number : '1.0-0'}}
+            </div>
+          </div>
+          <div class="group">
+            <div class="three">
+              Down Payment
+            </div>
+            <div class="eight last">
+              {{(contractService.contract.loanDownPaymentFraction * 100) | number : '1.0-2'}}%
+            </div>
+          </div>
+          <div class="group">
+            <div class="three">
+              Loan Amount
+            </div>
+            <div class="eight last">
+              {{(contractService.contract.offerPrice * (1 - contractService.contract.loanDownPaymentFraction)) | number : '1.0-2'}}%
+            </div>
+          </div>
+          <div class="group">
+            <div class="three">
+              <label class="datelabel">Closing Days</label>
+            </div>
+            <div class="four">
+              <p-calendar name="closingDate" [(ngModel)]="contractService.contract.closingDate"></p-calendar>
+            </div>
+          </div>
+          <div class="group">
+            <div class="three">
+              <label class="datelabel">Inspection Days/Option</label>
+            </div>
+            <div class="four">
+              <p-calendar name="inspectionDate" [(ngModel)]="contractService.contract.inspectionDate"></p-calendar>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <hr>
+          <div class="group">
+            <input type="submit" value="Submit" />
+          </div>
+        </section>
+      </form>
+    </div>
+    <!-- /Main content -->
+  </div>
+</div>
+<!-- /Main -->

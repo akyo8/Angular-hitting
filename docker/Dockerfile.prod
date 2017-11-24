@@ -1,0 +1,6 @@
+FROM nginx
+
+RUN mkdir -p /usr/share/nginx/hit
+ADD build /usr/share/nginx/hit/
+
+COPY nginx.prod.conf /etc/nginx/nginx.conf

@@ -1,0 +1,37 @@
+<!-- Page Title -->
+<div id="page-title" class="search">
+  <div class="container">
+    <h1 style="margin-top: -30px">Search</h1>
+    <p style="margin-bottom: -50px">Use these tabs to perform <strong>simple or advanced</strong> searches or to access your <strong>saved searches</strong>.
+      <ngb-tabset tabsId="search-tabs" tabsOnly="true" class="tab-selector" (tabChange)="activeTab=$event.nextId; displayActiveTab()">
+        <ngb-tab title="Simple" id="simple">
+          <template ngbTabContent>
+            <app-simple-search></app-simple-search>
+          </template>
+        </ngb-tab>
+        <ngb-tab title="Advanced" id="advanced">
+          <template ngbTabContent>
+            <app-advance-search></app-advance-search>
+          </template>
+        </ngb-tab>
+        <ngb-tab title="Saved Searches" id="saved-searches">
+          <template ngbTabContent>
+            <app-saved-search></app-saved-search>
+          </template>
+        </ngb-tab>
+      </ngb-tabset>
+  </div>
+</div>
+<!-- Main -->
+<div id="main" class="section-main">
+  <div class="container">
+    <!-- Main content -->
+    <div class="main-content" role="main">
+      <!-- Tab selector -->
+      <ngb-tabset-content tabsId="search-tabs"></ngb-tabset-content>
+      <!-- /Tabs -->
+    </div>
+    <!-- /Main content -->
+  </div>
+</div>
+<!-- /Main -->

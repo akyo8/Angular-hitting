@@ -1,0 +1,669 @@
+//	Addons/Upgrades/Fixes for HIT
+
+@import 'bourbon/bourbon';		// Bourbon
+@import 'partials/addons'; 		// Mixins
+@import 'partials/base';	 	// Variables
+
+//	Header
+header[role="banner"] {
+	
+	//	Site branding
+	.site-branding {
+		a {
+			padding: rem(12) 0;
+		}
+	}
+	
+	// Site navigation
+	.site-nav {
+		li {
+			a {
+				font-weight: $font-regular;
+				@include font-size(16);
+				padding: rem(20);
+			}
+			&.my-profile {
+        min-width: none;
+        &:hover ul.submenu {
+//           margin-top: rem(-3);
+        }
+    		ul.submenu {
+          display: block;
+          z-index: 10000;
+          background: $darkgrey;
+          min-width: rem(200);
+          left: 50%;
+          @include transform(translateX(-50%));
+          transition: $transition-fast;
+          margin-top: rem(-3);
+          transition: $transition-fast !important;
+  				&:before {
+  					content: "";
+  					@include triangle(20px, $darkgrey, up);
+  					position: absolute;
+  					top: rem(-10);
+  					left: 50%;
+  					margin-left: rem(-10);
+  					transition: none;
+  				}
+          li {
+            background: none;
+            text-align: center;
+            a {
+              @include font-size(15);
+              padding: rem(10) rem(20);
+              line-height: 1.25;
+              border-top: 1px solid transparent-color($white, .1);
+              transition: $transition-fast;
+              &:hover {
+                background: darken($darkgrey, 10%);
+              }
+            }
+            &:first-child a {
+              border-top: 0;
+            }
+          }
+        }
+			}
+		}
+  	.notification {
+    	position: absolute;
+    	top: rem(-8);
+    	right: rem(-4);
+    	border-radius: rem(20);
+    	@include linear-gradient($white, darken($white, 20%));
+    	color: $darkgrey;
+    	@include font-size(12);
+    	font-weight: $font-bold;
+    	padding: rem(2) rem(8);
+    	min-width: rem($spacing-s*1.1);
+    	text-align: center;
+    	box-shadow: none;
+    	text-shadow: none;
+  	}
+
+	}
+	
+}
+
+//	Page Title
+#page-title {
+	box-shadow: none;
+	h1 {
+		font-weight: $font-regular;
+	}
+}
+
+//	Property Information
+#property-information {
+	padding: rem(30) 0 rem(80);
+	box-shadow: none;
+// 	transition: $transition-fast;
+	&.foldup {
+		padding: rem(30) 0;
+	}
+	.container {
+	}
+	.all-information {
+		padding-left: rem(250);
+		margin-bottom: 0;
+	}
+	.basic-information, .additional-information {
+		margin: 0;
+		width: 100%;
+		max-width: none;
+	}
+	.basic-information {
+
+	}
+	.image {
+		top: 50%;
+		@include transform(translateY(-50%));
+		margin-top: rem(-30);
+		width: rem(230);
+		margin-left: rem(-250);
+		img {
+			max-width: 100%;
+		}
+	}
+	h1, h2 {
+		font-weight: $font-regular;
+		text-shadow: none;
+		em {
+			color: $grey;
+		}
+	}
+	h2 {
+		border-left-color: darken($white, 20%);
+	}
+	.tags {		
+		li {
+			background: $darkgrey;
+			color: darken($white, 10%);
+			text-shadow: none;
+			@include font-size(14);
+			strong {
+				color: $white;
+			}
+		}
+		&.featured li {
+			@include font-size(14);
+		}
+	}
+}
+
+//	Global Tabs
+.tab-selector > ul {
+	li {
+		@include font-size(20);
+		line-height: 1.1;
+		margin-right: rem(5);
+		border-radius: rem(3) rem(3) 0 0;
+		cursor: pointer;
+		transition: $transition-fast;
+		&:hover {
+			background: #bfbfbf;
+		}
+		&.active a {
+			border-radius: rem(3) rem(3) 0 0;
+		}
+		a {
+			padding: rem(10) rem(20);
+			font-weight: $font-regular;
+			span {
+				margin-top: rem(3);
+			}
+		}
+	}
+}
+
+//	Accordions
+.expanded-accordions {
+	width: 70% !important;
+}
+
+//	Accordions Content
+
+	// General
+	.accordion > a {
+		h2 {
+			font-weight: $font-regular;
+		}
+	}
+
+	//	Tabs
+	ul.infotabs {
+		text-transform: uppercase;
+		font-weight: $font-bold;
+		border-bottom: 1px solid $bordercolor;
+		background: $white !important;
+		box-shadow: inset 0 2px 3px transparent-color($black, .1);
+		margin-bottom: rem(10);
+		&.general {
+			display: block;
+			padding-left: rem(30);
+			@include clearfix;
+			li {
+				display: block;
+				float: left;
+				padding: rem(10) 0;
+				border: 0;
+				color: $lightgrey;
+				margin-right: rem(15);
+				position: relative;
+				transition: $transition-fast;
+				&:before {
+					content: "";
+					width: 100%;
+					height: rem(4);
+					background: $bordercolor;
+					display: block;
+					position: absolute;
+					bottom: -1px;
+					transition: $transition-fast;
+				}
+				&.active, &:hover {
+					background: none !important;
+					color: $brandcolor;
+					&:before {
+						background: $brandcolor;
+					}
+				}
+			}
+		}
+		li {
+			background: none;
+			@include font-size(14);
+			font-weight: $font-medium;
+			&.active {
+				background: none !important;
+				color: $brandcolor;
+				&:after {
+					display: none;
+				}
+			}
+		}
+	}
+	
+	//	Map
+	.tabcontent.map {
+		margin-top: rem(-10) !important;
+		padding: rem($spacing-m) !important;
+		app-google-map {
+			min-height: rem(400);
+		}
+	}
+	
+	//	Panes
+	.pane {
+		* {
+			line-height: 1.5;
+		}
+		p {
+			@include font-size(15);
+			margin-bottom: rem($spacing-m/4);
+		}
+		h2 {
+			border: 0;
+			padding: 0;
+			font-weight: $font-bold;
+			color: $brandcolor;
+			margin: rem($spacing-m/2) 0 rem($spacing-m/4);
+			@include font-size(20);
+		}
+		br {
+			//	Info: added this because there are line breaks without any meaning whatsoever
+			display: none;
+		}
+		.address + .leftside {
+			margin-top: rem($spacing-m/2);
+		}
+		
+		//	Faux tables
+		.leftside, .rightside {
+			width: 100%;
+			float: left;
+			display: block;
+			margin: 0;
+			margin-bottom: rem($spacing-m/2);
+			border-bottom: 1px solid darken($bordercolor, 5%) !important;
+			&:empty {
+				display: none;
+			}
+			.leftside, .rightside {
+				padding: 0;
+				background: none;
+				border: 0 !important;
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+			div {
+				background: $bordercolor;
+				@include font-size(14);
+				line-height: 1.5;
+				padding: rem(6) rem(10);
+				min-height: rem(34);
+				border: 0;
+			}
+		}
+		.title, .value {
+			border-top: 1px solid darken($bordercolor, 5%) !important;
+		}
+		.title {
+			text-transform: uppercase;
+			color: $darkgrey;
+			&:empty {
+				display: none;
+			}
+		}
+		.value {
+			color: $brandcolor;
+		}
+		.title:empty + .value:empty {
+			display: none;
+		}
+		
+	}
+	.tabcontent > h2:first-child {
+		margin-top: 0;
+	}
+		
+	//	Real Tables
+	.form-layout .sec-block {
+		.table-info {
+			background: $bordercolor;
+			border: 0;
+			border-bottom: 1px solid darken($bordercolor, 5%) !important;
+			td {
+				border: 0;
+				border-top: 1px solid darken($bordercolor, 5%) !important;
+				div {
+					@include font-size(14);
+					line-height: 1.5;
+					padding: rem(6) rem(10);
+					min-height: rem(34);
+					text-transform: none;
+					&.title-text {
+						text-transform: uppercase;
+						color: $darkgrey;
+					}
+					&.text-box {
+						color: $brandcolor;
+					}
+				}
+			}
+		}
+	}
+
+//	Calculators
+
+	//	Inline Tabs + Tabs at CoC
+	.calc.tab-selector-inline, .widget.coc header .tab-selector-inline {
+		float: left;
+		li {
+			border: 0;
+			padding: 0;
+			margin: 0 rem(5) 0 0;
+			border-radius: rem(30);
+			padding: rem(5) rem(20);
+			@include font-size(16);
+			line-height: rem(24) !important;
+			text-transform: uppercase;
+			&.active {
+				@include linear-gradient($darkgrey, $black);
+// 				box-shadow: $box-shadow-minimal;
+				color: $white;
+			}
+		}
+	}
+	.calc.tab-selector-inline {
+		margin: rem(18) 0 0;
+		li {
+			color: mix($white, $brandcolor, 80%);
+			@include linear-gradient(darken($brandcolor, 15%), darken($brandcolor, 25%));
+			box-shadow: inset 0 1px 5px transparent-color($black, .5);
+		}
+	}
+	.widget.coc header .tab-selector-inline {
+		float: right;
+		li {
+			color: mix($black, $brandcolor-secondary, 50%);
+			@include linear-gradient($brandcolor-secondary, darken($brandcolor-secondary, 10%));
+			box-shadow: inset 0 1px 5px transparent-color($black, .25);
+		}
+	}
+	
+	//	CoC
+	.widget.coc {
+		background: $notecolor;
+		box-shadow: none;
+		header {
+			background: $brandcolor-secondary;
+			border-bottom: 1px solid darken($brandcolor-secondary, 10%);
+			h2 {
+				line-height: rem(34);
+			}
+		}
+	}
+	
+	//  Notice
+	.widget.notice {
+  	padding-top: rem(60);
+  	position: relative;
+  	h2 {
+    	display: block;
+    	width: 100%;
+    	position: absolute;
+    	top: 0;
+    	left: 0;
+    	float: none;
+    	line-height: rem(30);
+    	background: $brandcolor-secondary;
+    	border-bottom: 1px solid darken($brandcolor-secondary, 10%);
+    	padding: rem($spacing-s/1.5) rem(30);
+    	margin-bottom: 0;
+    	br {
+      	display: none;
+    	}
+    	a.clickable {
+      	display: block;
+        float: right;
+        color: $darkgrey;
+        &:hover {
+          color: mix($black, $brandcolor-secondary, 50%);
+        }
+    	}
+  	}
+  	.note {
+    	border: 0;
+    	margin-top: rem($spacing-s);
+  	}
+  	.calctooltip {
+    	//  Extended from .calctooltip from below
+			border-bottom: 1px dashed transparent-color($black, .4);
+			position: relative;
+			&:hover .calctooltiptext {
+				visibility: visible;
+				opacity: 1;
+			}
+			.calctooltiptext {
+				position: absolute;
+				width: auto !important;
+// 					min-width: rem(300);
+				z-index: 100;
+				height: auto !important;
+				margin: 0 0 rem(15) !important;
+				color: $lightgrey;
+				font-size: 15px !important;
+				font-size: 0.9375rem !important;
+				line-height: 1.3;
+				text-transform: none;
+				padding: rem(8) rem(16);
+				border-radius: $radius;
+				box-shadow: $box-shadow;
+				@include transform(translateX(-50%));
+				transition: $transition-fast;
+				visibility: hidden;
+				opacity: 0;
+				display: block;
+				min-width: rem(400);
+				max-width: rem(600);
+				&:before {
+					content: "";
+					@include triangle(20px, $black, down);
+					position: absolute;
+					bottom: rem(-10);
+					left: 50%;
+					margin-left: rem(-10);
+				}
+			}
+  	}
+	}
+	
+	//	Calculator
+	.calculator {
+		header {
+			.values > .value, > .value {
+				padding-right: rem(60);
+			}
+			>.value {
+				&.editable {
+					span {
+						color: mix($white, $brandcolor, 25%) !important;
+					}
+					input {
+						border-bottom: none;
+						background: inherit !important;
+					}
+					&:hover {
+						background: inherit;
+						cursor: auto;
+					}
+				}
+			}
+			.checkbox input {
+				z-index: 1000;
+			}
+		}
+		.panel {
+			.values > .value {
+				padding: rem(11) rem(20);
+				padding-right: rem(60);
+			}
+		}
+		.value.is-dimmed {
+			opacity: 1;
+			background: none;
+			span {
+				opacity: .25;
+			}
+		}
+		.group.is-dimmed {
+			opacity: 1;
+			background: none;
+			h3, .value, .currency {
+				opacity: .5;
+			}
+		}
+		.group.is-checkbox {
+			header .label h3 {
+				padding-left: rem(45) !important;
+			}
+			.checkbox input {
+				left: rem(30);
+			}
+		}
+		* [contenteditable="true"] {
+			border-bottom: 1px solid transparent-color($black, .4) !important;
+		}
+		> article .group .accordion {
+			.panel.dropup {
+				padding-bottom: 0 !important;
+// 				border-bottom: none !important;
+			}
+			.subsection-wrap {
+				width: auto;
+				* {
+					font-size: 18px !important;
+					font-size: 1.125rem !important;
+				}
+				.description {
+					font-size: 85% !important;
+					font-weight: $font-bold;
+					color: transparent-color($black, .35);
+					line-height: rem(28);
+					padding: rem(11) rem(20);
+					float: right;
+                                        width: 20% !important;
+				}
+			}
+			.subsection-content {
+				.value-wrap {
+					padding-right: rem(60);
+					line-height: rem(27);
+				}
+				.subsection-header div.value {
+					padding-right: rem(60);
+				}
+				> .group {
+					.label h3 {
+						line-height: rem(28);
+					}
+				}
+			}
+			.editable {
+				&:hover {
+
+				}
+			}
+			.editable .input-value input {
+				background: none !important;
+				position: relative;
+				right: rem(-14);
+			}
+			.calctooltip {
+				border-bottom: 1px dashed transparent-color($black, .4);
+				position: relative;
+				&:hover .calctooltiptext {
+					visibility: visible;
+					opacity: 1;
+				}
+				.calctooltiptext {
+					position: absolute;
+					width: auto !important;
+// 					min-width: rem(300);
+					z-index: 100;
+					height: auto !important;
+					margin: 0 0 rem(15) !important;
+					color: $lightgrey !important;
+					font-size: 15px !important;
+					font-size: 0.9375rem !important;
+					line-height: 1.3;
+					text-transform: none;
+					padding: rem(8) rem(16);
+					border-radius: $radius;
+					box-shadow: $box-shadow;
+					@include transform(translateX(-50%));
+					transition: $transition-fast;
+					visibility: hidden;
+					opacity: 0;
+					display: block;
+					min-width: rem(400);
+					max-width: rem(600);
+					&:before {
+						content: "";
+						@include triangle(20px, $black, down);
+						position: absolute;
+						bottom: rem(-10);
+						left: 50%;
+						margin-left: rem(-10);
+					}
+				}
+			}
+		}
+	}
+
+//	Modal Window
+.modal-content {
+	> div {
+		margin: 0;
+	}
+	.widget {
+		margin: 0;
+		border: 0;
+	}
+	.modal-body {
+		padding: rem(20) rem(30);
+		border: 0;
+		form {
+		}
+		fieldset {
+			padding: 0;
+			border: 0;
+		}
+		.ui-editor-container {
+			background: $white;
+		}
+	}
+}
+.modal-content.widget {
+
+}
+
+//  Floating buttons
+.flo-buttons {
+  margin: 0 rem(15);
+  ul {
+    background: transparent-color($black, .9);
+    border: none;
+    padding: rem(1) 0;
+    li {
+      max-width: rem(180);
+      a {
+        line-height: 1.1;
+        margin: rem(10);
+      }
+    }
+  }
+}

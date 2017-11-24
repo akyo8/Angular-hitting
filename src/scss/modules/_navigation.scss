@@ -1,0 +1,102 @@
+//  Navigation
+.widget.navigation {
+  background: darken($white, 5%);
+  h2 {
+    margin: 0;
+    padding: rem($spacing-s) rem($spacing-m);
+    padding-left: rem($spacing-m + 5); // add 5px for border when selected
+  }
+  ul {
+    @include list-reset;
+    border-top: 1px solid $bordercolor;
+  }
+  a {
+    @include font-size(18);
+    font-weight: $font-bold;
+    padding: rem($spacing-s/1.25) rem($spacing-m);
+    padding-left: rem($spacing-m + 5); // add 5px for border when selected
+    border-bottom: 1px solid $bordercolor;
+    color: $grey;
+    display: block;
+    position: relative;
+    &.selected, &:hover {
+      background: $grey;
+      color: $white;
+      &:before {
+        content: "";
+        display: block;
+        width: rem(5);
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: $darkgrey;
+      }
+    }
+  }
+}
+
+// Added navigation
+// .nav {
+//   margin-bottom: 0;
+//   padding-left: 0;
+//   /* Override default ul/ol */
+//   list-style: none;
+//   &:before, &:after {
+//     content: " ";
+//     /* 1 */
+//     display: table;
+//     /* 2 */
+//   }
+//   &:after {
+//     clear: both;
+//   }
+//   > li {
+//     position: relative;
+//     display: block;
+//     font-weight: $font-regular;
+//     > a {
+//       position: relative;
+//       display: block;
+//       padding: rem(14) rem(25);
+//       border-bottom: 0;
+//       color: darken($white, 10%);
+//       // font-size: rem(22);
+//       // font-weight: $font-bold;
+//       &:hover, &:focus {
+//         // text-decoration: none;
+//         // background-color: #eee;
+//         // color: lighten($brandcolor, 40%);
+//       }
+//       &.active {
+//         color: darken($white, 50%);
+//       }
+//       > img {
+//         max-width: none;
+//       }
+//     }
+//     &.disabled {
+//       > a {
+//         color: $grey;
+//       }
+//       &:hover, &:focus {
+//         color: $grey;
+//         text-decoration: none;
+//         cursor: not-allowed;
+//         background-color: transparent;
+//       }
+//     }
+//   }
+//   .open {
+//     > a, > a:hover, > a:focus {
+//       background-color: #eee;
+//       border-color: #337ab7;
+//     }
+//   }
+//   .nav-divider {
+//     height: 1px;
+//     margin: 9px 0;
+//     overflow: hidden;
+//     background-color: #e5e5e5;
+//   }
+// }

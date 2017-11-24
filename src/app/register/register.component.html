@@ -1,0 +1,48 @@
+<!-- Main -->
+<div id="main" class="section-main">
+  <div class="container">
+    <!-- Main content -->
+    <div class="main-content" role="main">
+      <div class="widget login">
+        <header>
+          <h2>Register to use HIT</h2>
+        </header>
+        <div class="form no-labels">
+          <form #f="ngForm" (ngSubmit)="onSubmit()">
+            <div class="message error" [hidden]="!showDuplicate">
+              <p>You have already registered with this email address. Please <a [routerLink]="['/login']">log in</a>.</p>
+            </div>
+            <div class="message error" [hidden]="!showError">
+              <p>There was a problem registering you. We kindly ask you to contact our <a [routerLink]="['/register']">support team</a>.</p>
+            </div>
+            <div class="message success" [hidden]="!showSuccess">
+              <p>Congratulations! You are now registered. Please check your email for further a verification link with instructions. You will need to verify your email before logging in.<br><br>If you have any problems, don't hesitate to contact our support team.<br><br>We'll take you back to the login page in a few seconds.</p>
+            </div>
+            <fieldset>
+              <div class="group">
+                <label for="email">Email address</label>
+                <input type="email" [(ngModel)]="authService.register.email" name="email" placeholder="Email address" required>
+              </div>
+              <div class="group ">
+                <label for="password">Password</label>
+                <input type="password" name="password" [(ngModel)]="authService.register.password" placeholder="Password" required #password="ngModel" />
+              </div>
+              <div class="group ">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" name="confirm_password" [(ngModel)]="authService.register.confirmpassword" placeholder="Password again" required validateEqual="password" #confirmPassword="ngModel" />
+              </div>
+            </fieldset>
+            <fieldset>
+              <div class="group button-group">
+                <input type="submit" class="button large" value="Register" [disabled]="!f.valid">
+              </div>
+            </fieldset>
+          </form>
+          <p><a [routerLink]="['/login']">Already have a login?</a></p>
+        </div>
+      </div>
+    </div>
+    <!-- /Main content -->
+  </div>
+</div>
+<!-- /Main -->

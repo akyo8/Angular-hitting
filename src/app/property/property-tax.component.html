@@ -1,0 +1,376 @@
+<div class="tabswrapper">
+  <ul class="infotabs general">
+    <li class="tab" data-pane-id="pane2">Location</li>
+    <li class="tab" data-pane-id="pane1">Parcel</li>
+    <li class="tab" data-pane-id="pane4">Improvement</li>
+    <li class="tab" data-pane-id="pane5">Construction</li>
+    <li class="tab" data-pane-id="pane6">Tax</li>
+    <li class="tab" data-pane-id="pane7">Value</li>
+    <li class="tab" data-pane-id="pane8">Deed &amp; MLS</li>
+  </ul>
+  <div class="panes">
+    <div class="inner_panes">
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <h2>Location</h2>
+            <div>
+              <div class="leftside">
+                <div class="title">Address Line One</div>
+                <div class="value">{{getProperty('tax').address?.line1}}</div>
+                <div class="title">Address Line Two</div>
+                <div class="value">{{getProperty('tax').address?.line2}}</div>
+                <div class="title">Locality</div>
+                <div class="value">{{getProperty('tax').address?.locality}}</div>
+                <div class="title">Country Subdivision</div>
+                <div class="value">{{getProperty('tax').address?.countrySubd}}</div>
+                <div class="title">Postal Code One</div>
+                <div class="value">{{getProperty('tax').address?.postal1}}</div>
+                <div class="title hideable">Postal Code Two</div>
+                <div class="value hideable">{{getProperty('tax').address?.postal2}}</div>
+                <div class="title hideable">Postal Code Three</div>
+                <div class="value hideable">{{getProperty('tax').address?.postal3}}</div>
+                <div class="title hideable">Country</div>
+                <div class="value hideable">{{getProperty('tax').address?.country}}</div>
+                <div class="title">Country Secondary Subdivision</div>
+                <div class="value">{{getProperty('tax').area?.countrysecsubd}}</div>
+                <div class="title hideable">Address Match</div>
+                <div class="value hideable">{{getProperty('tax').address?.matchCode}}</div>
+                <div class="title hideable">Location Accuracy</div>
+                <div class="value hideable">{{getProperty('tax').location?.accuracy}}</div>
+              </div>
+              <div class="rightside">
+                <div class="title">Location Type</div>
+                <div class="value">{{getProperty('tax').area?.locType ? getProperty('tax').area?.locType  : 'Not Identeified in Tax'}}</div>
+                <div class="title">Subdivision</div>
+                <div class="value">{{getProperty('tax').area?.subdName}}</div>
+                <div class="title">Subdivision Tract</div>
+                <div class="value">{{getProperty('tax').area?.subdTractNum  ? getProperty('tax').area?.subdTractNum : 'Not Identeified in Tax'}}</div>
+                <div class="title">Block Num</div>
+                <div class="value">{{getProperty('tax').area?.blockNum}}</div>
+                <div class="title">Lot Num</div>
+                <div class="value">{{getProperty('tax').lot?.lotNum}}</div>
+                <div class="title">Year Built</div>
+                <div class="value">{{getProperty('tax').summary?.yearBuilt}}</div>
+                <div class="title">Effective Year Built</div>
+                <div class="value">{{getProperty('tax').building?.summary?.yearBuiltEffective}}</div>
+                <div class="title">Census Place</div>
+                <div class="value">Coming Soon</div>
+                <div class="title">&mdash;</div>
+                <div class="value">Coming Soon</div>
+                <div class="title">&mdash;</div>
+                <div class="value">Coming Soon</div>
+                <div class="title">Latitude, Longitude</div>
+                <div class="value">{{getProperty('tax').location?.latitude}}, {{getProperty('tax').location?.longitude}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <h2>Parcel</h2>
+            <div>
+              <div class="leftside">
+                <div class="title">County Use Type One</div>
+                <div class="value">{{getProperty('tax').area?.countyUse1}}</div>
+                <div class="title hideable">County Use Type Two</div>
+                <div class="value hideable">{{getProperty('tax').area?.countyUse2 == null ? 'Single Use' : getProperty('tax').area?.countyUse2}}</div>
+                <div class="title">Lot Description</div>
+                <div class="value">{{getProperty('tax').lot?.lotType}}</div>
+                <div class="title">Lot Size (acres)</div>
+                <div class="value">{{getProperty('tax').lot?.lotSizeInAcres}}</div>
+                <div class="title">Lot Size (sqft)</div>
+                <div class="value">{{getProperty('tax').lot?.lotSizeInSQFT}}</div>
+                <div class="title">Lot Frontage</div>
+                <div class="value">{{getProperty('tax').lot?.frontage}}</div>
+                <div class="title">Lot Depth</div>
+                <div class="value">{{getProperty('tax').lot?.depth}}</div>
+                <div class="title">Land Use</div>
+                <div class="value">{{getProperty('tax').summary?.propLandUse}}</div>
+                <div class="title">Property Classification</div>
+                <div class="value">{{getProperty('tax').summary?.propClass}}</div>
+                <div class="title">Survey Range</div>
+                <div class="value">Not Available in Texas</div>
+                <div class="title">Survey Section</div>
+                <div class="value">Not Available in Texas</div>
+              </div>
+              <div class="rightside">
+                <div class="title">Survey Township</div>
+                <div class="value">Not Available in Texas</div>
+                <div class="title">Tax Code Area</div>
+                <div class="value">{{getProperty('tax').area?.taxCodeArea}}</div>
+                <div class="title">Appraised Land Value</div>
+                <div class="value">{{getProperty('tax').assessment?.appraised?.apprLandValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Market Land Value</div>
+                <div class="value">{{getProperty('tax').assessment?.market?.mktLandValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Assessed Land Value</div>
+                <div class="value">{{getProperty('tax').assessment?.assessed?.assdLandValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Assessed Land Value / sqft</div>
+                <div class="value">{{getProperty('tax').assessment?.assessed?.assdLandPerSizeUnit | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Calculated Land Value</div>
+                <div class="value">{{getProperty('tax').assessment?.calculations?.calcLandValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Calculated Land Value Indicator</div>
+                <div class="value">{{getProperty('tax').assessment?.calculations?.calcLandInd}}</div>
+                <div class="title">Calculated Land Value / sqft</div>
+                <div class="value">{{getProperty('tax').assessment?.calculations?.calcLandPerSizeUnit | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Assessed Improvement Value</div>
+                <div class="value">{{getProperty('tax').assessment?.appraised?.apprImprValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Mobile Home Indicator</div>
+                <div class="value">{{getProperty('tax').building?.summary?.mobileHomeInd == null ? 'No' : getProperty('tax').building?.summary?.mobileHomeInd}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <h2>Improvement</h2>
+            <div>
+              <div class="leftside">
+                <div class="title">Improvement Type</div>
+                <div class="value">{{getProperty('tax').building?.summary?.imprType}}</div>
+                <div class="title">Building Type</div>
+                <div class="value">{{getProperty('tax').building?.summary?.bldgType}}</div>
+                <div class="title">Building Name</div>
+                <div class="value">Not named</div>
+                <div class="title">Building Size, Number</div>
+                <div class="value">{{getProperty('tax').building?.size?.bldgSize}}, {{getProperty('tax').building?.summary?.bldgsNum}}</div>
+                <div class="title">Size Indicator</div>
+                <div class="value">{{getProperty('tax').building?.size?.sizeInd}}</div>
+                <div class="title">Gross Size</div>
+                <div class="value">{{getProperty('tax').building?.size?.grossSize}}</div>
+                <div class="title">Gross Size Adjusted</div>
+                <div class="value">{{getProperty('tax').building?.size?.grossSizeAdjusted}}</div>
+                <div class="title">Ground Floor Size</div>
+                <div class="value">{{getProperty('tax').building?.size?.groundFloorSize}}</div>
+                <div class="title">Basement Size</div>
+                <div class="value">{{getProperty('tax').building?.interior?.bsmtSize}}</div>
+                <div class="title">Living Size</div>
+                <div class="value">{{getProperty('tax').building?.size?.livingSize}}</div>
+                <div class="title">Parking Type, Size</div>
+                <div class="value">{{getProperty('tax').building?.parking?.prkgType}}, {{getProperty('tax').building?.parking?.prkgSize}}</div>
+              </div>
+              <div class="rightside">
+                <div class="title">Universal Size</div>
+                <div class="value">{{getProperty('tax').building?.size?.universalSize}}</div>
+                <div class="title">Units Count</div>
+                <div class="value">{{getProperty('tax').building?.summary?.unitsCount}}</div>
+                <div class="title">Total Rooms</div>
+                <!--
+                  Total Rooms = beds + 1 Kithcen Area + 1 Living Area + 1 Dining Area + Any Other Extra rooms
+                -->
+                <div class="value">{{getProperty('tax').building?.rooms?.roomsTotal != 0 ? getProperty('tax').building?.rooms?.roomsTotal : getProperty('tax').building?.rooms?.beds + 3}}</div>
+                <div class="title">Stories Description</div>
+                <div class="value">{{getProperty('tax').building?.summary?.storyDesc}}</div>
+                <div class="title">Number of Stories</div>
+                <div class="value">{{getProperty('tax').building?.summary?.levels}}</div>
+                <div class="title">Total Baths</div>
+                <div class="value">{{getProperty('tax').building?.rooms?.bathsTotal}}</div>
+                <div class="title hideable">Full Baths</div>
+                <div class="value hideable">{{getProperty('tax').building?.rooms?.bathsFull}}</div>
+                <div class="title hideable">Half Baths</div>
+                <div class="value hideable">{{getProperty('tax').building?.rooms?.bathsHalf}}</div>
+                <div class="title hideable">Bath Fixtures, Calculated</div>
+                <div class="value hideable">{{getProperty('tax').building?.rooms?.bathFixtures}}, {{getProperty('tax').building?.rooms?.bathsCalc}}</div>
+                <div class="title">Total Bedrooms</div>
+                <div class="value">{{getProperty('tax').building?.rooms?.beds}}</div>
+                <div class="title">Garage Type</div>
+                <div class="value">{{getProperty('tax').building?.parking?.garageType}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <h2>Construction</h2>
+            <div>
+              <div class="leftside">
+                <div class="title">Construction Type</div>
+                <div class="value">{{getProperty('tax').building?.construction?.constructionType}}</div>
+                <div class="title">Building Condition</div>
+                <div class="value">{{getProperty('tax').building?.construction?.condition}}</div>
+                <div class="title">Foundation Type</div>
+                <div class="value">{{getProperty('tax').building?.construction?.foundationType}}</div>
+                <div class="title">Basement Type</div>
+                <div class="value">Not described in {{getProperty('tax').area?.countrysecsubd}}</div>
+                <!--div class="value">{{getProperty('tax').building?.interior?.bsmtType}}</div-->
+                <div class="title">Frame Type</div>
+                <div class="value">Not described in {{getProperty('tax').area?.countrysecsubd}}</div>
+                <div class="title">Wall Type</div>
+                <div class="value">{{getProperty('tax').building?.construction?.wallType}}</div>
+                <div class="title">Energy Type</div>
+                <div class="value">{{getProperty('tax').utilities?.energyType}}</div>
+                <div class="title">Heating Type, Fuel</div>
+                <div class="value">{{getProperty('tax').utilities?.heatingType}}, {{getProperty('tax').utilities?.heatingFuel}}</div>
+                <div class="title">Cooling Type</div>
+                <div class="value">{{getProperty('tax').utilities?.coolingType}}</div>
+                <div class="title">Fireplace Type, Count</div>
+                <div class="value">{{getProperty('tax').building?.interior?.fplcType}}, {{getProperty('tax').building?.interior?.fplcCount}}</div>
+                <div class="title">Water Type</div>
+                <div class="value">PUBLIC</div>
+              </div>
+              <div class="rightside">
+                <div class="title">Property Type</div>
+                <div class="value">{{getProperty('tax').summary?.propType}}</div>
+                <div class="title">Property Sub Type</div>
+                <div class="value">{{getProperty('tax').summary?.propSubType}}</div>
+                <div class="title">Property Classification</div>
+                <div class="value">{{getProperty('tax').summary?.propClass}}</div>
+                <div class="title">Construction Quality</div>
+                <div class="value">{{getProperty('tax').building?.construction?.condition}}</div>
+                <div class="title">Elevation</div>
+                <div class="value">Not described in {{getProperty('tax').area?.countrysecsubd}}</div>
+                <!--div class="value">{{getProperty('tax').location?.elevation}}</div-->
+                <div class="title">Roof Cover</div>
+                <div class="value">{{getProperty('tax').building?.construction?.roofCover}}</div>
+                <div class="title">Roof Shape</div>
+                <div class="value">{{getProperty('tax').building?.construction?.roofShape}}</div>
+                <div class="title">Pool Indicator, Type</div>
+                <div class="value" *ngIf="getProperty('tax').lot?.poolInd">{{getProperty('tax').lot?.poolInd}}, {{getProperty('tax').lot?.poolType}}</div>
+                <div class="value" *ngIf="!getProperty('tax').lot?.poolInd">None</div>
+                <div class="title">Property View</div>
+                <div class="value" *ngIf="getProperty().address?.zipType != 'Rural'">PUBLIC</div>
+                <div class="value" *ngIf="getProperty().address?.zipType == 'Rural'">PRIVATE</div>
+                <div class="title">Architectural Style</div>
+                <div class="value">Not described in {{getProperty('tax').area?.countrysecsubd}}</div>
+                <!--div class="value">{{getProperty('tax').building?.summary?.archStyle}}</div-->
+                <div class="title">Sewer Type</div>
+                <div class="value">Not described in {{getProperty('tax').area?.countrysecsubd}}</div>
+                <!--div class="value">{{getProperty('tax').utilities?.sewerType}}</div-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <h2>Tax</h2>
+            <div>
+              <div class="leftside">
+                <div class="title">Assessor Parcel Number</div>
+                <div class="value">{{getProperty('tax').identifier?.apn}}</div>
+                <div class="title hideable">Original Assessor Parcel Number</div>
+                <div class="value hideable">{{getProperty('tax').identifier?.apnOrig}}</div>
+                <div class="title">FIPS Code</div>
+                <div class="value">{{getProperty('tax').identifier?.fips}}</div>
+                <div class="title">Tax Code Area</div>
+                <div class="value">{{getProperty('tax').area?.taxCodeArea}}</div>
+                <div class="title">Tax / sqft</div>
+                <div class="value">{{getProperty('tax').assessment?.tax?.taxPerSizeUnit | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Taxes to AVM</div>
+                <div class="value">{{getProperty('tax').avm?.calculations?.ratioTaxAmt}}</div>
+                <div class="title">Taxes to Market Value</div>
+                <div class="value">{{getProperty('tax').avm?.calculations?.ratioTaxValue}}</div>
+              </div>
+              <div class="rightside">
+                <div class="title">Tax Year</div>
+                <div class="value">{{getProperty('tax').assessment?.tax?.taxYear}}</div>
+                <div class="title">Total Tax Amount</div>
+                <div class="value">{{getProperty('tax').assessment?.tax?.taxAmt | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Assessed Total Value</div>
+                <div class="value">{{getProperty('tax').assessment?.assessed?.assdTtlValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Appraised Land Value</div>
+                <div class="value">{{getProperty('tax').assessment?.appraised?.apprLandValue | currency:'USD':true:'1.0-0'}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <h2>Value</h2>
+            <div>
+              <div class="leftside">
+                <div class="title">Market Improved Value</div>
+                <div class="value">{{getProperty('tax').assessment?.market?.mktImprValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Market Land Value</div>
+                <div class="value">{{getProperty('tax').assessment?.market?.mktLandValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Market Total Value</div>
+                <div class="value">{{getProperty('tax').assessment?.market?.mktTtlValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Value Range</div>
+                <div class="value">{{getProperty('tax').avm?.calculations?.rangePctOfValue}} %</div>
+                <div class="title">High Value, Low Value</div>
+                <div class="value">{{getProperty('tax').avm?.amount?.high | currency:'USD':true:'1.0-0'}}, {{getProperty('tax').avm?.amount?.low | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Assessed Improved Value / sqft</div>
+                <div class="value">{{getProperty('tax').assessment?.assessed?.assdImprPerSizeUnit | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Assessed Improved Value</div>
+                <div class="value">{{getProperty('tax').assessment?.assessed?.assdImprValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Assessed Land Value / sqft</div>
+                <div class="value">{{getProperty('tax').assessment?.assessed?.assdLandPerSizeUnit | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Assessed Land Value</div>
+                <div class="value">{{getProperty('tax').assessment?.assessed?.assdLandValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Appriased Improvement</div>
+                <div class="value">{{getProperty('tax').assessment?.appraised?.apprImprValue | currency:'USD':true:'1.0-0'}}</div>
+              </div>
+              <div class="rightside">
+                <div class="title">Assessed Total Value</div>
+                <div class="value">{{getProperty('tax').assessment?.assessed?.assdTtlValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Assessed Total Value / sqft</div>
+                <div class="value">{{getProperty('tax').assessment?.assessed?.assdTtlPerSizeUnit | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Calculated Improved Value</div>
+                <div class="value">{{getProperty('tax').assessment?.calculations?.calcImprValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Calculated Improved Value / sqft</div>
+                <div class="value">{{getProperty('tax').assessment?.calculations?.calcImprPerSizeUnit | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Calculated Land Value</div>
+                <div class="value">{{getProperty('tax').assessment?.calculations?.calcLandValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Calculated Land Value / sqft</div>
+                <div class="value">{{getProperty('tax').assessment?.calculations?.calcLandPerSizeUnit | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Calculated Total Value</div>
+                <div class="value">{{getProperty('tax').assessment?.calculations?.calcTtlValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Calculated Total Value / sqft</div>
+                <div class="value">{{getProperty('tax').assessment?.calculations?.calcValuePerSizeUnit | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Monthly Change Value</div>
+                <div class="value">{{getProperty('tax').avm?.calculations?.monthlyChgValue | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Monthly Change Percent</div>
+                <div class="value">{{getProperty('tax').avm?.calculations?.monthlyChgPct}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent">
+            <h2>Deed &amp; MLS</h2>
+            <div>
+              <div class="leftside">
+                <div class="title">Disclosure Type</div>
+                <div class="value">{{getProperty('tax').sale?.amount?.saleDisclosureType}}</div>
+                <div class="title">Last Modified</div>
+                <div class="value">{{getProperty('tax').vintage?.lastModified}}</div>
+                <div class="title">Publish Date</div>
+                <div class="value">{{getProperty('tax').vintage?.pubDate}}</div>
+                <div class="title">Transaction Type</div>
+                <div class="value">{{getProperty('tax').sale?.amount?.saleTransType}}</div>
+                <div class="title">Sale Contract Date</div>
+                <div class="value">{{getProperty('tax').sale?.saleTransDate}}</div>
+                <div class="title">Sale Amount</div>
+                <div class="value">{{getProperty('tax').sale?.amount?.saleAmt | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Price / sqft</div>
+                <div class="value">{{getProperty('tax').sale?.calculation?.pricePerSizeUnit | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Deed Recording Date</div>
+                <div class="value">{{getProperty('tax').sale?.amount?.saleRecDate}}</div>
+                <div class="title">Searchable Date</div>
+                <div class="value">{{getProperty('tax').sale?.saleSearchDate}}</div>
+                <div class="title">Document Number</div>
+                <div class="value">{{getProperty('tax').sale?.amount?.saleDocNum}}</div>
+              </div>
+              <div class="rightside">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end inner_panes -->
+  </div>
+  <!-- end panes -->
+</div>
+<!-- end tabswrapper -->

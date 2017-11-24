@@ -1,0 +1,59 @@
+//  Revision
+.widget.revisions {
+
+  border: 1px solid $bordercolor;
+  box-shadow: $box-shadow-minimal;
+
+  header {
+    h2 {
+      margin: 0;
+      padding: rem($spacing-s) rem($spacing-m);
+      border-bottom: 1px solid $bordercolor;
+    }
+  }
+
+  ol {
+    @include list-reset;
+    > li {
+      border-top: 1px solid $bordercolor;
+      padding: rem($spacing-s) rem($spacing-m);
+      &:first-child {
+        border-top: 0;
+      }
+    }
+    .revision-author, .revision-time {
+      @include font-size(18);
+      display: inline-block;
+      font-weight: $font-regular;
+    }
+    .revision-author {
+      color: $brandcolor;
+      &:after {
+        content: ", ";
+      }
+    }
+    .revision-data {
+      ul {
+        @include list-reset;
+      }
+      li {
+        @include font-size(13);
+        line-height: 1.25;
+        padding-left: rem($spacing-s);
+        position: relative;
+        &:before {
+          content: "\2014";
+          color: $lightgrey;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
+    }
+    .button {
+      @include font-size(14);
+      padding: rem($spacing-s/4) rem($spacing-s/2);
+      margin-top: rem($spacing-s/2);
+    }
+  }
+}

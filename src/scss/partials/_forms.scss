@@ -1,0 +1,460 @@
+/*
+@import 'bourbon/bourbon';    // Bourbon
+@import 'partials/addons';    // Mixins
+@import 'partials/base';      // Variables
+@import 'partials/extends';   // Extends
+*/
+
+/* =Forms
+===================================================== */
+
+.form {
+  
+  @include clearfix;
+  
+  //  Settings for register widget
+  .widget.register & {
+    padding: 0 !important;
+    fieldset {
+      padding-right: rem($spacing-m);
+      padding-left: rem($spacing-m);
+    }
+  }
+  
+  fieldset {
+    border: 0;
+    padding: rem($spacing-m) 0;
+    margin: 0;
+//     border-top: 1px solid $bordercolor;
+    @include clearfix;
+    h2 {
+      display: block;
+      border-bottom: 5px solid $bordercolor;
+    	margin-bottom: rem($spacing-m);
+      margin-top: 0;
+      span {
+        @extend %title;
+        display: inline-block;
+        padding-bottom: rem($spacing-s);
+        border-bottom: 5px solid $brandcolor;
+        margin-bottom: rem(-5);
+      }
+    }
+    &:first-child {
+      border-top: 0;
+      padding-top: rem($spacing-s);
+    }
+    .widget.login & {
+      padding: 0;
+    }
+    &:last-of-type {
+      margin-bottom: 0;
+      &:after {
+        display: none;
+      }
+    }
+  }
+  
+  .group {
+    margin-bottom: rem($spacing-s/2);
+    @include clearfix;
+  }
+  
+  label {
+    @extend %label;
+  }
+  .description {
+    @extend %description;
+    text-align: left !important;
+    margin-top: rem($spacing-s/4) !important;
+    float: left;
+  }
+  .radio-group > label, .file-upload label {
+    @extend %subtitle;
+    margin-bottom: rem($spacing-s/2);
+  }
+  
+  //  Radio group
+  .radio-group {
+    margin-left: 0 !important;
+    .group {
+      width: 100% !important;
+      margin-left: 0 !important;
+      position: relative;
+      padding-left: rem(22);
+      label {
+        float: left;
+      }
+      input {
+        position: absolute;
+        top: rem(3);
+        left: 0;
+      }
+    }
+  }
+
+  //  Checkbox
+  .checkbox {
+    position: relative;
+    padding-left: rem(22);
+    label {
+      float: left;
+    }
+    input {
+      position: absolute;
+      top: rem(14);
+      left: 0;
+      width: auto !important;
+    }
+  }
+  
+  //  Button group
+  .button-group {
+    margin-left: 0 !important;
+    margin-bottom: 0;
+    width: 100%;
+  }
+  
+  //  Text range
+  .text-range {
+    .group {
+      width: 50%;
+      float: left;
+      padding: 0 0 0 2%;
+      margin: 0;
+      &:first-of-type {
+        padding-left: 0;
+      }
+      label {
+        @extend %label-small;
+      }
+    }
+  }
+  
+  //  Selection
+  .selection {
+    margin-bottom: rem($spacing-s);
+    @include clearfix;
+    a {
+      display: block;
+      float: left;
+      @include linear-gradient($white, darken($darkwhite,15%));
+      box-shadow: $box-shadow;
+      text-align: center;
+      padding: rem($spacing-l/1.5) rem($spacing-m);
+      border-radius: $radius;
+      @extend %subtitle;
+      font-weight: $font-bold;
+      color: $darkgrey;
+      &.selected {
+        @include linear-gradient($brandcolor-secondary, darken($brandcolor-secondary, 20%));
+      }
+    }
+    .note {
+      text-align: center;
+      @extend %subtitle;
+      margin-bottom: rem($spacing-s/2);
+    }
+    &.three-columns a {
+      width: 32.75%;
+      margin-left: .875%;
+      &:nth-of-type(3n+1) {
+        clear: both;
+        margin-left: 0;
+      }
+    }
+  }
+  
+  //  Two columns
+  &.two-columns {
+    .group {
+      width: 48%;
+      float: left;
+      margin-left: 4%;
+      &:nth-child(2n+1) {
+        clear: both;
+        margin-left: 0;
+      }
+      &.radio-group, &.file-upload {
+        width: 100%;
+      }
+      &.text-range {
+        .group {
+          margin: 0;
+          clear: none;
+          width: 50%;
+        }
+      }
+    }
+  }
+  
+  //  Left labels
+  &.labels-left {
+    label {
+      width: 39%;
+      float: left;
+      padding-top: rem($spacing-s/1.5);
+      margin-right: 1%;
+    }
+    input, select {
+      width: 60%;
+      float: right;
+    }
+    .text-range {
+      .group {
+        width: 30% !important;
+      }
+      input {
+        float: none;
+        width: 100%;
+      }
+    }
+    .button-group {
+      padding-top: 2%;
+      padding-left: 40%;
+      input {
+        width: auto !important;
+        float: left !important;
+      }
+    }
+  }
+  
+  //  Search
+  //  Simple Search
+  &.simple-search {
+    .group {
+      width: 84%;
+      float: left;
+      label {
+        display: none;
+      }
+      input[type="text"] {
+        padding: rem($spacing-s/1.25) rem($spacing-s);
+      }
+    }
+    .button-group {
+      width: 15%;
+      float: right;
+      input {
+        width: 100%;
+        @extend .button.large;
+      }
+    }
+  }
+  
+  //  Advanced Search
+  &.advanced-search {
+    @extend .two-columns;
+    @extend .labels-left;
+    .group {
+      margin-bottom: rem($spacing-s);
+    }
+    .search-name {
+      width: 100%;
+      background: $notecolor;
+      padding: rem($spacing-s) rem($spacing-m);
+      margin-left: 0;
+      label {
+        width: 17.5%;
+        margin: 0;
+      }
+      input {
+        width: 82.5%;
+      }
+    }
+    .button-group {
+      float: right;
+      padding: 0;
+      input {
+        width: auto;
+        float: right !important;
+        @extend .button.large;
+      }
+    }
+  }
+  
+  //  No labels
+  &.no-labels {
+    label {
+      display: none;
+    }
+    .radio-group label, .file-upload label {
+      display: block;
+    }
+  }
+  
+  //  Messages
+  .message {
+    
+    margin: rem($spacing-m);
+    padding: rem($spacing-s);
+    background: $white;
+    border: 1px solid darken($bordercolor, 5%);
+    
+    
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+    
+    &.success {
+      background: $color-positive;
+      color: $white;
+      border: 1px solid darken($color-positive, 5%);
+      a {
+        color: $white;
+      }
+    }
+    
+    &.error {
+      background: $color-negative;
+      color: $white;
+      border: 1px solid darken($color-negative, 5%);
+      a {
+        color: $white;
+      }
+    }
+    
+    p {
+      line-height: 1.3;
+    }
+    
+  }
+  
+}
+#{$all-text-inputs}, select {
+  
+  width: 100%;
+  border-radius: $radius;
+  padding: rem($spacing-s/1.5) rem($spacing-s/1.25);
+  transition: $transition-fast;
+  background: $white;
+  border: 1px solid darken($white, 10%);
+  box-shadow: $input-shadow;
+//   border: 1px solid $bordercolor;
+
+  @include font-size(16);
+  line-height: 1.2;
+  font-family: $alphafont;
+  color: $darkgrey;
+  
+  @include placeholder {
+    @include font-size(16);
+    font-family: $alphafont;
+    font-weight: $font-regular;
+    color: $lightgrey;
+    text-transform: uppercase;
+    position: relative;
+    top: 3px;
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 rem(8) #b5deee;
+    border: 1px solid mix(#b5deee, $white, 80%);
+//     box-shadow: $input-shadow-focus; //, 0 0 rem(12) transparent-color($linkcolor, .35);
+  }
+  
+}
+textarea {
+  min-height: rem(150);
+}
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-shadow: none;
+    border: 1px solid $bordercolor;
+    background: url(../../assets/images/select-icon.png) no-repeat right center;
+    padding-right: 50px !important;
+    text-indent: 0.01px;
+    text-overflow: '';
+    cursor: pointer;
+}
+
+/* =Buttons
+===================================================== */
+
+#{$all-buttons}, .button {
+
+	display: inline-block;
+
+  @include font-size(18);
+	font-family: $alphafont;
+	font-weight: $font-bold;
+	color: $white;
+	text-align: center;
+  text-transform: uppercase;
+
+	padding: rem($spacing-s/2) rem($spacing-s);
+
+	border: none;
+	cursor: pointer;
+	border-radius: $radius;
+	background-color: $brandcolor;
+	@include background-image(linear-gradient(transparent, transparent-color($black, .2)));
+// 	@include background-image(linear-gradient(top, transparent-color($brandcolor, 1), transparent-color(darken($brandcolor,15%), 1)));
+// 	@include background-image(linear-gradient(bottom, rgba(0,0,0,.2), transparent));
+
+	transition:	$transition-fast;
+	
+	//  Different styles
+	&.flat {
+  	background-image: none !important;
+	}
+	
+	//  Different sizes
+	&.small {
+  	padding: rem($spacing-s/3) rem($spacing-s/1.5);
+  	font-weight: $font-regular;
+  	@include font-size(16);
+	}
+	
+	&.large {
+  	padding: rem($spacing-s/1.5) rem($spacing-s*1.5);
+  	font-weight: $font-bold;
+  	@include font-size(22);
+	}
+	
+	
+	//  Different colors
+	&.white {
+  	background: $white;
+  	color: $darkgrey !important;
+	}
+	&.secondary {
+  	background: $brandcolor-secondary;
+  	color: $darkgrey;
+	}
+	&.grey {
+  	background-color: $bordercolor;
+  	@include background-image(linear-gradient(transparent, transparent-color($grey, .5)));
+  	color: $darkgrey !important;
+  	&:hover, &:focus, &:active {
+    	background-color: $white;
+    	color: $black !important;
+  	}
+	}
+	
+	//  Different states
+	&:hover {
+  	background-color: $grey;
+  	@include background-image(linear-gradient(transparent, transparent-color($black, .2)));
+	}
+	&:hover,
+	&:focus {
+		color: $white !important;
+//     @include background-image(linear-gradient(top, transparent-color($grey, 1), transparent-color(darken($grey,15%), 1)));
+		text-decoration: none;
+		border: 0;
+	}
+	&:active {
+// 		@include background-image(linear-gradient(top, rgba(0,0,0,.2), transparent));
+		box-shadow: inset 0 .125em .75em 0 rgba(0,0,0,.4);
+	}
+	
+	//  Icon only
+	&.icon {
+  	@include icon-remove-text;
+	}
+
+}

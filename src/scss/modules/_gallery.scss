@@ -1,0 +1,370 @@
+//  Gallery
+.widget.gallery {
+  .content {
+    padding: 0;
+    width: 100% !important;
+  }
+  ol {
+    @include list-reset;
+  }
+  li {
+    width: 32%;
+    height: auto;
+    float: left;
+  }
+  a {
+    border: 0;
+  }
+  img {
+    display: block;
+    width: 100%;
+  }
+  .pagination {
+    list-style: none;
+    text-align: center;
+    padding: 5px 0;
+    margin: 0;
+    overflow: hidden;
+    li {
+      margin: 0 1px;
+      display: inline-block;
+      vertical-align: top;
+      width: 27.8%;
+      float: none;
+    }
+    a {
+      text-decoration: none;
+      display: block;
+      opacity: 0.8;
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    }
+    .active a {
+      opacity: 1;
+    }
+  }
+}
+
+.prevNext {
+  position: absolute;
+  z-index: 10;
+  height: 100%;
+  width: 35%;
+  padding: 0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  top: 0;
+  user-select: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: $transition-fast;
+  @include transform(scale(.9));
+  &#pbPrevBtn {
+    left: 0;
+    text-align: left;
+  }
+  &#pbNextBtn {
+    right: 0;
+    text-align: right;
+  }
+  #pbOverlay.on &:hover {
+    opacity: 1;
+    @include transform(scale(1));
+  }
+  b {
+    display: inline-block;
+    vertical-align: middle;
+    transition: $transition-fast;
+    color: $white;
+    @extend .icon;
+    @include font-size(40);
+  }
+  &#pbPrevBtn b {
+    @extend .icon-arrow-left;
+    margin-left: rem(60);
+  }
+  &#pbNextBtn b {
+    @extend .icon-arrow-right;
+    margin-right: rem(60);
+  }
+}
+
+//  Gallery Lightbox
+
+/* Normalizes box-sizing  */
+
+#pbOverlay *, #pbOverlay *:before, #pbOverlay *:after {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+#pbOverlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#pbOverlay {
+  opacity: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  text-align: center;
+  pointer-events: none;
+  -moz-user-select: none;
+  ;
+  -webkit-transform: translate3d(0);
+  transition: $transition;
+  @include linear-gradient(transparent-color($brandcolor, .75), transparent-color($brandcolor, 1));
+}
+
+#pbOverlay.msie {
+  background: transparent-color($brandcolor, .95);
+}
+
+.msie.pbLoading .pbWrapper {
+  background: url('../images/loading.gif') no-repeat center center;
+}
+
+@keyframes pbLoaderFrames {
+  50% {
+    height: 5px;
+  }
+}
+
+@-webkit-keyframes pbLoaderFrames {
+  50% {
+    height: 5px;
+  }
+}
+
+.thumbs .pbLoader {
+  -webkit-transform: translateY(-50px);
+  transform: translateY(-50px);
+}
+
+.pbLoader b:nth-child(2) {
+  -webkit-animation-delay: .3s;
+  animation-delay: .3s;
+}
+
+.pbLoader b:nth-child(3) {
+  -webkit-animation-delay: .6s;
+  animation-delay: .6s;
+}
+
+.pbWrapper:after, #pbCaption .pbThumbs ul:after, #pbOverlay .prevNext:after, #pbOverlay .pbLoader:before {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  margin-right: -.25em;
+  vertical-align: middle;
+}
+
+
+/* Animation when image was not loaded */
+
+@keyframes deadImage {
+  50% {
+    text-shadow: 0 0 25px rgba(255, 255, 255, .5);
+    transform: scale(.85);
+  }
+}
+
+@-webkit-keyframes deadImage {
+  50% {
+    text-shadow: 0 0 25px rgba(255, 255, 255, .5);
+    -webkit-transform: scale(.85);
+  }
+}
+
+.pbWrapper {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  transform: rotate(0deg);
+  vertical-align: middle;
+  height: 88%;
+  perspective: rem(1200);
+  //   position:relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.video > .pbWrapper {
+  z-index: 11;
+  display: inline-block;
+}
+
+.pbLoading .pbWrapper {
+  display: inline-block\9;
+  width: 100%;
+}
+
+
+/* ie8+9 hack */
+
+.pbWrapper:before {
+  content: '\2716';
+  color: transparent;
+  text-shadow: 0 2px 35px rgba(255, 255, 255, 0);
+  font-size: 0;
+  vertical-align: middle;
+  cursor: default;
+  transition: text-shadow .7s ease-out;
+}
+
+.error .pbWrapper:before {
+  font-size: 22em;
+  text-shadow: 0 0 0 #FFF;
+  -webkit-animation: 2s 1s deadImage infinite linear;
+  animation: 2s 1s deadImage infinite linear;
+}
+
+.thumbs .pbWrapper {
+  padding: 0;
+  margin: 0;
+}
+
+.error .pbWrapperr img {
+  width: 0;
+}
+
+.pbWrapper > div {
+  display: none;
+  width: 624px;
+  height: 351px;
+  vertical-align: middle;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, .5);
+}
+
+.video > .pbWrapper > div {
+  display: inline-block;
+}
+
+#pbOverlay iframe, #pbOverlay embed, #pbOverlay object {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  transition: .5s;
+}
+
+.pbWrapper .pbHide iframe {
+  opacity: 0;
+}
+
+.pbWrapper > div, .pbWrapper > img {
+  transition: $transition-lightbox;
+  -webkit-transform: none;
+  -ms-transform: none;
+  transform: none;
+  -webkit-backface-visibility: hidden;
+  box-shadow: $box-shadow-heavy;
+}
+
+.pbWrapper > *, .pbHide .pbWrapper > .prepare {
+  opacity: 1;
+  vertical-align: middle;
+  @include transform(scale(0) rotateX(80deg));
+  border: none;
+  max-height: 95%;
+  max-width: 100%;
+  border: 10px solid $white;
+}
+
+.on .pbWrapper > * {
+  transition-delay: 0s;
+}
+
+.pbWrapper .zoomable {
+  -webkit-transition: 0s;
+  transition: 0s;
+  position: relative;
+  z-index: 9;
+}
+
+.pbHide .pbWrapper > * {
+  @include transform(scale(1.2));
+  transform: none\9;
+  opacity: 0;
+  transition: .4s ease-out;
+}
+
+#pbCloseBtn {
+  position: absolute;
+  top: rem(50);
+  right: rem(50);
+  z-index: 999;
+  @include font-size(40);
+  line-height: 1;
+  display: block;
+  text-align: center;
+  cursor: pointer;
+  color: $white;
+  padding: rem(10);
+  transition: $transition;
+}
+
+.pbHide #pbCloseBtn {}
+
+.on #pbCloseBtn {}
+
+#pbCloseBtn:before {
+  @extend .icon;
+  @extend .icon-close;
+}
+
+#pbCloseBtn:before {}
+
+#pbCaption {
+  position: absolute;
+  bottom: rem(40);
+  left: 0;
+  width: 100%;
+}
+
+#pbOverlay.thumbs #pbCaption label, .pbCaptionText {
+  display: none;
+}
+
+.pbThumbs {
+  width: 100%;
+  ul {
+    @include list-reset;
+    white-space: pre;
+  }
+  li {
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    margin: 0 rem(2);
+    transition: $transition-fast;
+    opacity: .25;
+    &.active {
+      opacity: 1;
+      img {
+        @include transform(scale(1.3))
+      }
+    }
+  }
+  a {
+    display: block;
+    border: 0;
+  }
+  img {
+    border: 5px solid $white;
+    box-shadow: $box-shadow-heavy;
+    width: rem(60);
+    display: block;
+    transition: $transition-fast;
+  }
+}

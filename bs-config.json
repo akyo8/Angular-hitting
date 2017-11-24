@@ -1,0 +1,10 @@
+{
+  "port": 8080,
+  "tunnel": false,
+  "files": [
+    "build/**/*.{html,htm,css,js}"
+  ],
+  "server": {
+    "baseDir": "build"
+  }
+}

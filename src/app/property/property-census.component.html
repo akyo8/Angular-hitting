@@ -1,0 +1,73 @@
+<div class="padding">
+  <div class="community_sec" itemscope="" itemtype="http://schema.org/ListItem">
+    <!--COMMUNITY QUICK FACTS HEADING SECTION STARTS HERE-->
+    <div class="left_right_sec">
+      <div class="pull-left">
+        <h3 class="community_heading">Community Demographics for {{censusArea}}</h3>
+      </div>
+      <!--pull-left-->
+      <div class="pull-right">
+      </div>
+      <!--pull-right-->
+    </div>
+    <!--left_right_sec-->
+    <!--COMMUNITY QUICK FACTS HEADING SECTION ENDS HERE-->
+    <!--EACH SECTION STARTS HERE-->
+    <div class="col-sm-15 text-center">
+      <div class="quick_facts_txt" itemprop="position">
+        <p>People per<br>square mile</p>
+        <span>{{census.popdnsty}}</span>
+      </div>
+      <!--quick_facts_txt-->
+    </div>
+    <div class="col-sm-15 text-center" itemprop="position">
+      <!--quick_facts_img-->
+      <div class="quick_facts_txt">
+        <p>Median age<br></p>
+        <span>{{census.medianage}}</span>
+      </div>
+      <!--quick_facts_txt-->
+    </div>
+    <!--col-sm-15-->
+    <!--EACH SECTION ENDS HERE-->
+    <!--EACH SECTION STARTS HERE-->
+    <div class="col-sm-15 text-center" itemprop="position">
+      <!--quick_facts_img-->
+      <div class="quick_facts_txt">
+        <p>Median salary<br></p>
+        <span>${{census.salmedcy}}</span>
+      </div>
+      <!--quick_facts_txt-->
+    </div>
+    <!--col-sm-15-->
+    <!--EACH SECTION ENDS HERE-->
+    <!--EACH SECTION STARTS HERE-->
+    <div class="col-sm-15 text-center" itemprop="position">
+      <!--quick_facts_img-->
+      <div class="quick_facts_txt">
+        <p>People per<br>household</p>
+        <span>{{census.hhdavesz}}</span>
+      </div>
+      <!--quick_facts_txt-->
+    </div>
+    <!--col-sm-15-->
+    <!--EACH SECTION ENDS HERE-->
+    <!--EACH SECTION STARTS HERE-->
+    <div class="col-sm-15 text-center" itemprop="position">
+      <!--quick_facts_img-->
+      <div class="quick_facts_txt">
+        <p>Percent households<br>with children</p>
+        <span>{{getChildrenPct()}}</span>
+      </div>
+      <!--quick_facts_txt-->
+    </div>
+    <!--col-sm-15-->
+    <!--EACH SECTION ENDS HERE-->
+  </div>
+  <!-- <hr> -->
+  <div>
+    <div style="display: block">
+      <canvas id="canvas-census-age"></canvas>
+    </div>
+  </div>
+</div>

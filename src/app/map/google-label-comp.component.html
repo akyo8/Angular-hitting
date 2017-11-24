@@ -1,0 +1,3 @@
+<span class="information">{{getListPrice()}}</span>
+<span class="change" *ngIf="property.comp?.change"
+    [ngClass]="{positive: isPositiveChange(), negative: isNegativeChange()}">{{property.comp?.change}}</span>

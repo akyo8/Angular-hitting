@@ -1,0 +1,53 @@
+// Global Settings
+
+$susy: (
+  columns: 12,
+  gutters: 1/2,
+  global-box-sizing: border-box,
+  clearfix: true,
+  // gutter-position: inside,
+  container: 1200px,
+ //   debug: (
+ //   image: show,
+ //   color: rgba(#66f, .25),
+ //   output: overlay,
+ //   toggle: top right
+ // )
+);
+
+// Typey Settings
+$base-unit: rem;
+$base-font-size:    16px;
+$base-line-height:  22px;
+$line-height-method: rhythm;
+
+// $typey-debug: false;
+// $typey-debug-color: red;
+
+$font-size: (
+  xxl:  44px,
+  xl:   36px,
+  l:    32px,
+  ml:   26px,
+  m:    20px,
+  n:    16px,
+  s:    14.5px,
+  xs:   13px,
+  xxs:  11px
+);
+
+// Fonts
+$heading-font       : 'Museo', Helvetica, Arial, sans-serif !default;
+$sans-font          : 'proxima-nova', Helvetica, Arial, sans-serif !default;
+$serif-font         : 'noto', Georgia, 'Times New Roman', serif !default;
+$mono-font          : 'Lucida Console', Monaco, monospace !default;
+
+
+$breakpoints: (
+  'mobile'    : 320px,
+  'mobile-l'  : 480px,
+  'tablet'    : 480px,
+  'tablet-l'  : 920px,
+  'desktop'   : 1024px,
+  'wide'      : 1140px,
+);

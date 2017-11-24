@@ -1,0 +1,145 @@
+<div class="tabswrapper">
+  <ul class="infotabs general">
+    <li class="tab" data-pane-id="pane1">Info & Documents</li>
+    <li class="tab" data-pane-id="pane2">Liens</li>
+    <li class="tab" data-pane-id="pane3">Taxes</li>
+    <li class="tab" data-pane-id="pane4">O&E Report</li>
+  </ul>
+  <div class="panes">
+    <div class="inner_panes">
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent auction-tab">
+            <p class="address">
+              <span>{{getProperty().address?.line1}}</span>
+              <span style="float: right">{{getProperty().auction?.auctionDate | date:'MMMM d, yyyy':'UTC'}} Auction</span>
+            </p>
+            <h4 style="margin-bottom: 0px">Legal</h4>
+            <p>{{getProperty().auction?.legal}}</p>
+            <div>
+              <div class="leftside">
+                <div class="title">County</div>
+                <div class="value">{{getProperty().area?.countrysecsubd}}</div>
+                <div class="title">APN</div>
+                <div class="value">{{getProperty().identifier?.apn}}</div>
+                <div class="title">Grantee</div>
+                <div class="value">{{getProperty().auction?.grantee}}</div>
+                <div class="title">Trustee</div>
+                <div class="value">{{getProperty().auction?.trustee}}</div>
+              </div>
+              <div class="rightside">
+                <div class="title">Search</div>
+                <div class="value">{{getProperty().auction?.searchDate | date:'MMMM d, yyyy':'UTC'}}</div>
+                <div class="title">Effective</div>
+                <div class="value">{{getProperty().auction?.effectiveDate | date:'MMMM d, yyyy':'UTC'}}</div>
+                <div class="title">Auction</div>
+                <div class="value">{{getProperty().auction?.auctionDate | date:'MMMM d, yyyy':'UTC'}}</div>
+                <div class="title">Notice</div>
+                <div class="value">{{getProperty().auction?.noticeDate | date:'MMMM d, yyyy':'UTC'}}</div>
+              </div>
+            </div>
+            <div>
+              <div class="leftside" style="padding-bottom: 15px;float: left; text-align: center">
+                <a href="{{getProperty().auction?.postingUrl | placeholder:'#'}}" target="_blank">
+                  <button class="auction-doc-btn" type="button">Foreclosure Posting</button>
+                </a>
+              </div>
+              <div class="rightside" style="padding-bottom: 15px;float: left; text-align: center">
+                <a href="{{getProperty().auction?.noticeUrl | placeholder:'#'}}" target="_blank">
+                  <button class="auction-doc-btn" type="button">Notice to Trustee</button>
+                </a>
+              </div>
+              <!--div class="three-cols" style="float: left; text-align: center">
+                <a class="button" href="#">
+                  <button type="button" disabled>O&E Report</button>
+                </a>
+              </div-->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent auction-tab">
+            <!--h2>Other Information</h2-->
+            <p class="address">
+              <span>{{getProperty().address?.line1}}</span>
+              <span style="float: right">{{getProperty().auction?.auctionDate | date:'MMMM d, yyyy':'UTC'}} Auction</span>
+            </p>
+            <h4>Encumbrances</h4>
+            <div class="title five-cols">Routed As</div>
+            <div class="title five-cols">Type of Doc</div>
+            <div class="title five-cols">Recorded Date</div>
+            <div class="title five-cols">Bk/Pg/Institu#</div>
+            <div class="title five-cols">Comments</div>
+            <div *ngFor="let lien of getProperty().auction?.encumbrances">
+              <div class="value five-cols" style="float: left">{{lien.routedAs}}</div>
+              <div class="value five-cols" style="float: left">{{lien.docType}}</div>
+              <div class="value five-cols" style="float: left">{{lien.recDate}}</div>
+              <div class="value five-cols" style="float: left">{{lien.bkPgIn}}</div>
+              <div class="value five-cols" style="float: left">{{lien.comment}}</div>
+            </div>
+            <h4 style="margin-top: 10px">Involuntaries</h4>
+            <div class="title five-cols">Routed As</div>
+            <div class="title five-cols">Type of Doc</div>
+            <div class="title five-cols">Recorded Date</div>
+            <div class="title five-cols">Bk/Pg/Institu#</div>
+            <div class="title five-cols">Case#</div>
+            <div *ngFor="let lien of getProperty().auction?.involuntaries">
+              <div class="value five-cols" style="float: left">{{lien.routedAs}}</div>
+              <div class="value five-cols" style="float: left">{{lien.docType}}</div>
+              <div class="value five-cols" style="float: left">{{lien.recDate}}</div>
+              <div class="value five-cols" style="float: left">{{lien.bkPgIn}}</div>
+              <div class="value five-cols" style="float: left">{{lien.comment}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent auction-tab">
+            <p class="address">
+              <span>{{getProperty().address?.line1}}</span>
+              <span style="float: right">{{getProperty().auction?.auctionDate | date:'MMMM d, yyyy':'UTC'}} Auction</span>
+            </p>
+            <div>
+              <div class="leftside">
+                <div class="title">County</div>
+                <div class="value">{{getProperty().area?.countrysecsubd}}</div>
+                <div class="title">APN</div>
+                <div class="value">{{getProperty().identifier?.apn}}</div>
+              </div>
+              <div class="rightside">
+                <div class="title">Land Value</div>
+                <div class="value">{{getProperty().auction?.land | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Improved Value</div>
+                <div class="value">{{getProperty().auction?.impr | currency:'USD':true:'1.0-0'}}</div>
+                <div class="title">Total Value</div>
+                <div class="value">{{getProperty().auction?.total | currency:'USD':true:'1.0-0'}}</div>
+              </div>
+            </div>
+            <div style="margin-top: 140px">
+              <div class="value four-cols" style="float: left">Current Tax</div>
+              <div class="value four-cols" style="float: left">{{getProperty().auction?.currentAmt | currency:'USD':true:'1.0-0'}}</div>
+              <div class="value four-cols" style="float: left">{{getProperty().auction?.currentStatus}}</div>
+              <div class="value four-cols" style="float: left">{{getProperty().auction?.currentDue}}</div>
+            </div>
+            <div *ngFor="let delinq of getProperty().auction?.delinquencies">
+              <div class="value four-cols" style="float: left">{{delinq.taxYear}}</div>
+              <div class="value four-cols" style="float: left">{{delinq.delinquent | currency:'USD':true:'1.0-0'}}</div>
+              <div class="value four-cols" style="float: left">{{delinq.status}}</div>
+              <div class="value four-cols" style="float: left">{{delinq.through}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="inner_pane">
+          <div class="tabcontent auction-tab">
+            <p class="address"><span>Coming Soon</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

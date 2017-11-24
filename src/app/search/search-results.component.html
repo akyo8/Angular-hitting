@@ -1,0 +1,120 @@
+<template #addColumn let-c="close" let-d="dismiss">
+    <div class="modal-dialog">
+        <div class="modal-content widget selection">
+            <div class="modal-header">
+                <div class="modal-title">Add Columns</div>
+                <div class="actions">
+                  <a (click)="d('close')" class="clickable close">Close</a>
+                </div>
+            </div>
+            <div class="modal-body">
+              <p class="note">Choose which columns you wish to add to this table.</p>
+              <ol>
+                <li><a (click)="toggleModalColumn('mlsn')" class="clickable"
+                    [ngClass]="{'checked': hasModalColumn('mlsn')}">MLS Number</a></li>
+                <li><a (click)="toggleModalColumn('dom')" class="clickable"
+                    [ngClass]="{'checked': hasModalColumn('dom')}">Days on Market</a></li>
+                <li><a (click)="toggleModalColumn('pool')" class="clickable"
+                    [ngClass]="{'checked': hasModalColumn('pool')}">Pool Indicator</a></li>
+                <!--li><a (click)="toggleModalColumn('propertysize')" class="clickable"
+                     [ngClass]="{'checked': hasModalColumn('propertysize')}">Property Size</a></li>
+                <li><a (click)="toggleModalColumn('lotsize')" class="clickable"
+                     [ngClass]="{'checked': hasModalColumn('lotsize')}">Lot Size</a></li-->
+              </ol>
+            </div>
+            <div class="modal-footer">
+              <a (click)="addColumns(); c('close')" class="clickable button">Add Columns</a>
+            </div>
+        </div>
+    </div>
+</template>
+
+<div class="widget table" *ngIf="isSearchReady()">
+    <table>
+        <thead>
+            <tr>
+              <th><span class="icon-image"></span></th>
+              <th><span class="icon-star-full"></span></th>
+              <th class="left">Address</th>
+              <th><a>Status</a></th>
+              <th><a>Bed</a></th>
+              <th><a>Bath</a></th>
+              <th><a>Gar</a></th>
+              <th><a>GLA</a></th>
+              <th><a>Year</a></th>
+              <th><a>Lot</a></th>
+              <th><a>List</a></th>
+              <th [hidden]="!hasColumn('mlsn')"><a>MLS#</a></th>
+              <th [hidden]="!hasColumn('dom')"><a>DOM</a></th>
+              <th [hidden]="!hasColumn('pool')"><a>Pool</a></th>
+<!--              <th [hidden]="!hasColumn('yearbuilt')">Year</th>
+              <th [hidden]="!hasColumn('schooldistrict')">School</th>
+              <th [hidden]="!hasColumn('propertysize')">GLA</th>
+              <th [hidden]="!hasColumn('lotsize')">Lot</th-->
+              <th>&nbsp;</th>
+              <th class="right"><a (click)="showAddColumnModal(addColumn)" class="clickable add-column right">Add Column</a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <template ngFor let-property [ngForOf]="searchService.properties | paginate: { itemsPerPage: searchService.size, currentPage: page, totalItems: searchService.meta.totalElements }">
+              <tr [ngClass]="{'is-new': property.result?.newResult, 'is-watchlisted': searchService.inWatchlist(property.identifier.bippoId), 'is-ignored': searchService.inIgnorelist(property.identifier.bippoId)}">
+                <td class="picture">
+                  <div class="image"><img src="{{searchService.getFirstPhoto(property)}}" alt="" /></div>
+                </td>
+                <td class="watchlist-select">
+                  <a (click)="toggleWatchlistSearchListing(property.identifier.bippoId)"
+                      class="button icon watchlist" [ngClass]="{remove: searchService.inWatchlist(property.identifier.bippoId), add: !searchService.inWatchlist(property.identifier.bippoId)}">
+                    <span *ngIf="searchService.inWatchlist(property.identifier.bippoId)">Remove from watchlist</span>
+                    <span *ngIf="!searchService.inWatchlist(property.identifier.bippoId)">Add to watchlist</span>
+                  </a>
+                </td>
+                <td class="left"><a class="clickable" [routerLink]="['/property', searchService.getPropertyId(property)]"><b>{{property.address?.line1}}<br>{{property.address?.line2}}</b></a></td>
+                <td>{{property.mls?.statusShortValue}}</td>
+                <td>{{property.building.rooms.beds}}</td>
+                <td>{{property.building.rooms.bathsTotal}}</td>
+                <td>{{property.building?.parking?.prkgSpaces}}</td>
+                <td>{{property.building?.size?.livingSize || (property.building?.size?.bldgSize + '*')}}</td>
+                <td>{{property.summary?.yearBuilt}}</td>
+                <td>{{property.lot?.lotSizeInSQFT}}</td>
+                <td>{{property.mls?.listPrice}}</td>
+                <td [hidden]="!hasColumn('mlsn')">{{property.identifier?.mlsNumber}}</td>
+                <td [hidden]="!hasColumn('dom')">{{roundDom(property.mls?.dom)}}</td>
+                <td [hidden]="!hasColumn('pool')">{{property.lot?.poolInd ? 'Y' : 'N'}}</td>
+<!--                <td [hidden]="!hasColumn('yearbuilt')">{{property.summary?.yearBuilt}}</td>
+                <td [hidden]="!hasColumn('schooldistrict')">{{property.mls?.school?.schoolDistrict}}</td>
+                <td [hidden]="!hasColumn('propertysize')">{{property.building?.size?.bldgSize}} SQFT</td>
+                <td [hidden]="!hasColumn('lotsize')">{{property.lot?.lotSizeInAcres}} acres</td-->
+                <td>
+                  <a (click)="togglePropertySummary(property)" class="clickable" *ngIf="property.identifier?.mlsNumber && property.mls">
+                    {{ isPropertySummaryOpen(property) ? "Less" : "More" }}<br />Info
+                  </a>
+                </td>
+                <td class="hide-property"><a (click)="searchService.ignoreSearchListing(property.identifier.bippoId)" class="clickable button icon hide">Hide this property</a></td>
+              </tr>
+              <tr class="listing-summary" [ngClass]="{active: isPropertySummaryOpen(property)}">
+                <td colspan="16" *ngIf="property.identifier?.mlsNumber && property.mls">
+                  <app-property-info
+                      *ngIf="isPropertySummaryOpen(property)"
+                      [property]="property"
+                      hasClose="true"
+                      (close)="togglePropertySummary(property)"
+                      mode="summary-with-values">
+                  </app-property-info>
+                </td>
+                <!--td colspan="16" *ngIf="!property.mls && property.tax">
+                  <app-property-tax
+                      *ngIf="isPropertySummaryOpen(property)"
+                      [property]="">
+                  </app-property-tax>
+                </td-->
+              </tr>
+            </template>
+        </tbody>
+    </table>
+</div>
+<pagination-controls *ngIf="searchService.properties.length > 0"
+    (pageChange)="page = $event; search()" ></pagination-controls>
+
+<div *ngIf="!searchService.searchPending && 0 == searchService.properties.length">No results.</div>
+<div class="loading-image" *ngIf="searchService.searchPending && 0 == searchService.properties.length"></div>
+

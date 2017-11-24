@@ -1,0 +1,25 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitAny": false,
+    "outDir": "../dist/",
+    "rootDir": ".",
+    "sourceMap": false,
+    "removeComments": false,
+    "target": "es5"
+  },
+  /*
+  "exclude": [
+    "node_modules"
+  ],
+  */
+  "files": [
+    "main.ts"
+  ]
+}

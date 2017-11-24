@@ -1,0 +1,127 @@
+<template #addColumn let-c="close" let-d="dismiss">
+    <div class="modal-dialog">
+        <div class="modal-content widget selection">
+            <div class="modal-header">
+                <div class="modal-title">Add Columns</div>
+                <div class="actions">
+                  <a (click)="d('close')" class="clickable close">Close</a>
+                </div>
+            </div>
+            <div class="modal-body">
+              <p class="note">Choose which columns you wish to add to this table.</p>
+              <ol>
+                <li><a (click)="toggleModalColumn('mlsn')" class="clickable"
+                    [ngClass]="{'checked': hasModalColumn('mlsn')}">MLS Number</a></li>
+                <li><a (click)="toggleModalColumn('dom')" class="clickable"
+                    [ngClass]="{'checked': hasModalColumn('dom')}">Days on Market</a></li>
+                <li><a (click)="toggleModalColumn('pool')" class="clickable"
+                    [ngClass]="{'checked': hasModalColumn('pool')}">Pool Indicator</a></li>
+              </ol>
+            </div>
+            <div class="modal-footer">
+              <a (click)="addColumns(); c('close')" class="clickable button">Add Columns</a>
+            </div>
+        </div>
+    </div>
+</template>
+
+<!-- Page Title -->
+<div id="page-title">
+  <div class="container">
+
+    <h1>My Watchlist</h1>
+    <p>Here you can see properties that are on your watchlist.</p>
+
+  </div>
+</div>
+<!-- /Page Title -->
+
+<!-- Main -->
+<div id="main" class="section-main">
+  <div class="container">
+
+    <!-- Main content -->
+    <div class="main-content" role="main">
+
+      <!-- Tabs -->
+      <div id="tabs-container">
+
+        <div class="widget table" *ngIf="isSearchReady()">
+          <table>
+            <thead>
+              <tr>
+                <th><span class="icon-image"></span></th>
+                <th><span class="icon-star-full"></span></th>
+                <th class="left">Address</th>
+                <th class="left">Added</th>
+                <th>Bed</th>
+                <th>Bath</th>
+                <th>Car</th>
+                <th>GLA</th>
+                <th>Year</th>
+                <th>Lot</th>
+                <th>List</th>
+                <th [hidden]="!hasColumn('mlsn')"><a>MLS#</a></th>
+                <th [hidden]="!hasColumn('dom')"><a>DOM</a></th>
+                <th [hidden]="!hasColumn('pool')"><a>Pool</a></th>
+                <th>&nbsp;<a (click)="showAddColumnModal(addColumn)" class="clickable add-column right">Add Column</a></th>
+              </tr>
+            </thead>
+            <tbody>
+              <template ngFor let-property [ngForOf]="searchService.watchlistProperties | paginate: { itemsPerPage: searchService.size, currentPage: watchlistPage, totalItems: searchService.watchlistMeta.totalElements }">
+              <tr
+                class="is-watchlisted"
+                [ngClass]="{'is-new': property.isNew}">
+                <td class="picture">
+                    <div class="image"><img src="{{searchService.getFirstPhoto(property)}}" alt="" /></div>
+                </td>
+                <td class="watchlist-select"><a (click)="toggleWatchlistSearchListing(searchService.getWatchlistProperty(property))"
+                    class="button icon remove">Remove from watchlist</a></td>
+                <td class="left"><a class="clickable" [routerLink]="['/property', searchService.getPropertyId(property)]">{{searchService.getWatchlistProperty(property).address?.line1}}</a></td>
+                <td>{{formatDate(property.created, 'MM/DD/YYYY hh:mm:ss a')}}</td>
+                <td>{{searchService.getWatchlistProperty(property).building?.rooms?.beds}}</td>
+                <td>{{searchService.getWatchlistProperty(property).building?.rooms?.bathsTotal}}</td>
+                <td>{{searchService.getWatchlistProperty(property).building?.parking?.prkgSpaces}}</td>
+                <td>{{searchService.getWatchlistProperty(property).building?.size?.livingSize || (searchService.getWatchlistProperty(property).building?.size?.bldgSize)}}</td>
+                <td>{{searchService.getWatchlistProperty(property).summary?.yearBuilt}}</td>
+                <td>{{searchService.getWatchlistProperty(property).lot?.lotSizeInSQFT}}</td>
+                <td>{{searchService.getWatchlistProperty(property).mls?.listPrice}}</td>
+                <td [hidden]="!hasColumn('mlsn')">{{searchService.getWatchlistProperty(property).identifier?.mlsNumber}}</td>
+                <td [hidden]="!hasColumn('dom')">{{roundDom(searchService.getWatchlistProperty(property).mls?.dom)}}</td>
+                <td [hidden]="!hasColumn('pool')">{{searchService.getWatchlistProperty(property).lot?.poolInd ? 'Y' : 'N'}}</td>
+                <td>
+                  <a (click)="togglePropertySummary(property)" class="clickable" *ngIf="property.bippoProperty?.identifier?.mlsNumber || property.bippoProperty.identifier?.obPropId">
+                    {{ isPropertySummaryOpen(property) ? "Less" : "More" }}<br />Info
+                  </a>
+                </td>
+              </tr>
+              <tr class="listing-summary" [ngClass]="{active: isPropertySummaryOpen(property)}">
+                <td colspan="16" *ngIf="property.bippoProperty?.identifier?.mlsNumber">
+                  <app-property-info
+                      *ngIf="isPropertySummaryOpen(property)"
+                      [property]="property.bippoProperty"
+                      hasClose="true"
+                      (close)="togglePropertySummary(property)"
+                      mode="summary-with-values">
+                  </app-property-info>
+                </td>
+                <td colspan="16" *ngIf="property.bippoProperty?.identifier?.obPropId">
+                  <app-property-tax
+                      *ngIf="isPropertySummaryOpen(property)"
+                      [property]="property.bippoProperty">
+                  </app-property-tax>
+                </td>
+              </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+        <pagination-controls (pageChange)="page = $event; search()" ></pagination-controls>
+      </div>
+
+    </div>
+    <!-- /Main content -->
+
+  </div>
+</div>
+<!-- /Main -->
